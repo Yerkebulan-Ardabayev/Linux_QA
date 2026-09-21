@@ -1,0 +1,4497 @@
+{
+ "category": "Навигация и файлы",
+ "cards": [
+  {
+   "slug": "pwd",
+   "cmd": "pwd",
+   "text": "pwd: показать текущий каталог",
+   "summary": "<p><code>pwd</code> (print working directory) печатает абсолютный путь каталога, в котором вы сейчас находитесь. Команда встроена в bash, поэтому работает всегда, даже без coreutils.</p><p>Если вы вошли в каталог через символическую ссылку, <code>pwd</code> по умолчанию покажет путь через ссылку (логический), а <code>pwd -P</code> покажет настоящий путь на диске (физический).</p>",
+   "examples": [
+    {
+     "line": "pwd",
+     "d": "Показать, где вы находитесь. В учебном контейнере это /lab.",
+     "parts": [
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Печатает абсолютный путь текущего каталога."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/lab"
+    },
+    {
+     "line": "cd link && pwd -L && pwd -P",
+     "d": "Войти в каталог через символическую ссылку и сравнить логический и физический путь.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Перейти в каталог."
+      },
+      {
+       "t": "link",
+       "k": "path",
+       "d": "Символическая ссылка на каталог real/dir, её создал setup."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Выполнить pwd, только если cd завершился успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Показать текущий каталог."
+      },
+      {
+       "t": "-L",
+       "k": "opt",
+       "d": "logical, путь так, как вы пришли, со ссылкой link. Это поведение по умолчанию."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Следующая команда после успешной предыдущей.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Снова показать текущий каталог."
+      },
+      {
+       "t": "-P",
+       "k": "opt",
+       "d": "physical, путь без символических ссылок, /lab/real/dir."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p real/dir && ln -s real/dir link",
+     "output": "/lab/link\n/lab/real/dir"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Путать <code>pwd</code> и переменную <code>$PWD</code> не страшно, они совпадают. Но в скрипте, где важен настоящий путь на диске (например, для проверки, на каком разделе лежат файлы), берите <code>pwd -P</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/pwd.1.html",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
+   ]
+  },
+  {
+   "slug": "cd",
+   "cmd": "cd",
+   "text": "cd: перейти в другой каталог",
+   "summary": "<p><code>cd</code> (change directory) меняет текущий каталог оболочки. Это встроенная команда bash, отдельной программы для неё нет, потому что сменить каталог можно только внутри самой оболочки.</p><p>Путь бывает абсолютный (от корня, начинается с <code>/</code>) и относительный (от текущего каталога). Без аргументов <code>cd</code> ведёт в домашний каталог, <code>cd -</code> возвращает в предыдущий.</p>",
+   "examples": [
+    {
+     "line": "cd /var/log && pwd",
+     "d": "Перейти по абсолютному пути в каталог журналов и проверить результат.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Сменить текущий каталог."
+      },
+      {
+       "t": "/var/log",
+       "k": "path",
+       "d": "Абсолютный путь, начинается с корня /.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать каталог, только если переход удался.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Напечатать текущий каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/var/log"
+    },
+    {
+     "line": "cd ../.. && pwd",
+     "d": "Подняться на два уровня вверх из /lab/a/b/c.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Сменить текущий каталог."
+      },
+      {
+       "t": "../..",
+       "k": "path",
+       "d": "Относительный путь на два уровня вверх.",
+       "sub": [
+        {
+         "t": "..",
+         "k": "path",
+         "d": "Родительский каталог.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "/",
+         "k": "op",
+         "d": "Разделитель каталогов в пути.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "..",
+         "k": "path",
+         "d": "Ещё раз родительский, итого два уровня вверх.",
+         "ref": "sym-dot-paths"
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат после успешного перехода.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Напечатать текущий каталог, будет /lab/a."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p a/b/c && cd a/b/c",
+     "output": "/lab/a"
+    },
+    {
+     "line": "cd ~ && pwd",
+     "d": "Вернуться в домашний каталог. В контейнере вы root, поэтому это /root.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Сменить текущий каталог."
+      },
+      {
+       "t": "~",
+       "k": "op",
+       "d": "Тильда, bash заменяет её на домашний каталог пользователя.",
+       "ref": "sym-tilde"
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат после успешного перехода.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "pwd",
+       "k": "cmd",
+       "d": "Напечатать текущий каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/root"
+    },
+    {
+     "line": "cd /etc && cd /tmp && cd -",
+     "d": "Перейти в /etc, затем в /tmp и вернуться обратно одной командой cd -.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Первый переход."
+      },
+      {
+       "t": "/etc",
+       "k": "path",
+       "d": "Каталог настроек."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если переход удался.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Второй переход."
+      },
+      {
+       "t": "/tmp",
+       "k": "path",
+       "d": "Каталог временных файлов."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если переход удался.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Третий переход."
+      },
+      {
+       "t": "-",
+       "k": "arg",
+       "d": "Для cd дефис значит предыдущий каталог, его хранит переменная OLDPWD. cd при этом печатает, куда перешёл, здесь /etc."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/etc"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Имя каталога с пробелом без кавычек, <code>cd My Docs</code>, bash делит на два аргумента и сообщает об ошибке. Пишите <code>cd \"My Docs\"</code>.</p>",
+    "<p><code>cd</code> внутри скрипта меняет каталог только самого скрипта. После его завершения ваша оболочка останется там, где была.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#Tilde-Expansion"
+   ]
+  },
+  {
+   "slug": "ls",
+   "cmd": "ls",
+   "text": "ls: показать содержимое каталога",
+   "summary": "<p><code>ls</code> (list) выводит список файлов и каталогов. Без аргументов показывает текущий каталог, с аргументом показывает указанный каталог или сведения о файле.</p><p>Самая частая форма <code>ls -la</code> показывает права, владельца, размер, время изменения и скрытые файлы (имя начинается с точки). Скрытые файлы вроде <code>.env</code> и <code>.bashrc</code> без <code>-a</code> не видны.</p>",
+   "examples": [
+    {
+     "line": "ls",
+     "d": "Короткий список текущего каталога без скрытых файлов.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать имена файлов и каталогов."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir docs && echo hello > notes.txt && touch app.log .env",
+     "output": "app.log\ndocs\nnotes.txt"
+    },
+    {
+     "line": "ls -la",
+     "d": "Длинный список всех файлов, включая скрытые и записи . и ..",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое каталога."
+      },
+      {
+       "t": "-la",
+       "k": "opt",
+       "d": "Две опции склеены в одну.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "long, длинный формат. Права, число ссылок, владелец, группа, размер, время, имя."
+        },
+        {
+         "t": "a",
+         "k": "opt",
+         "d": "all, показывать и скрытые записи, чьё имя начинается с точки."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir docs && echo hello > notes.txt && touch app.log .env",
+     "output": "total 16\ndrwxr-xr-x 1 root root 4096 Sep 21 21:40 .\ndrwxr-xr-x 1 root root 4096 Sep 21 21:40 ..\n-rw-r--r-- 1 root root    0 Sep 21 21:40 .env\n-rw-r--r-- 1 root root    0 Sep 21 21:40 app.log\ndrwxr-xr-x 2 root root 4096 Sep 21 21:40 docs\n-rw-r--r-- 1 root root    6 Sep 21 21:40 notes.txt"
+    },
+    {
+     "line": "ls -lh /usr/bin/bash /usr/bin/tar",
+     "d": "Размер двух программ в удобных единицах.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения о файлах."
+      },
+      {
+       "t": "-lh",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат."
+        },
+        {
+         "t": "h",
+         "k": "opt",
+         "d": "human-readable, размер в K, M, G вместо байтов. Работает вместе с -l."
+        }
+       ]
+      },
+      {
+       "t": "/usr/bin/bash",
+       "k": "path",
+       "d": "Первый файл."
+      },
+      {
+       "t": "/usr/bin/tar",
+       "k": "path",
+       "d": "Второй файл."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "-rwxr-xr-x 1 root root 1.5M Mar 31  2024 /usr/bin/bash\n-rwxr-xr-x 1 root root 462K Jul 20 19:38 /usr/bin/tar"
+    },
+    {
+     "line": "ls -ld /etc",
+     "d": "Сведения о самом каталоге /etc, а не о его содержимом.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-ld",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат."
+        },
+        {
+         "t": "d",
+         "k": "opt",
+         "d": "directory, показать сам каталог, а не его содержимое."
+        }
+       ]
+      },
+      {
+       "t": "/etc",
+       "k": "path",
+       "d": "Каталог, о котором нужны сведения."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "drwxr-xr-x 1 root root 4096 Sep 21 21:40 /etc"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Чтобы посмотреть права каталога, пишут <code>ls -l /etc</code> и получают длинный список всего внутри. Для самого каталога нужна опция <code>-d</code>.</p>",
+    "<p>Разбирать вывод <code>ls</code> в скриптах ненадёжно, имена с пробелами и переводами строк ломают разбор. Для обхода файлов в скриптах используйте шаблон <code>for f in *</code> или <code>find</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html"
+   ]
+  },
+  {
+   "slug": "ls-sort",
+   "cmd": "ls",
+   "text": "ls: сортировка по времени и размеру, выбор по шаблону",
+   "summary": "<p>По умолчанию <code>ls</code> сортирует по имени. Опция <code>-t</code> сортирует по времени изменения (новые сверху), <code>-S</code> по размеру (большие сверху), <code>-r</code> переворачивает любой порядок.</p><p>Самый полезный на практике вариант <code>ls -ltr</code>, самый свежий файл окажется последней строкой прямо над приглашением. Так удобно искать свежий журнал или только что скачанный файл.</p>",
+   "examples": [
+    {
+     "line": "ls -lt",
+     "d": "Файлы по времени изменения, новые сверху.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое каталога."
+      },
+      {
+       "t": "-lt",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат, в нём видно время."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "time, сортировать по времени изменения, новые первыми."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"2026-01-10 09:00\" old.log && touch -d \"2026-05-01 12:00\" mid.log && touch new.log",
+     "output": "total 0\n-rw-r--r-- 1 root root 0 Sep 21 21:40 new.log\n-rw-r--r-- 1 root root 0 May  1 12:00 mid.log\n-rw-r--r-- 1 root root 0 Jan 10  2026 old.log"
+    },
+    {
+     "line": "ls -ltr",
+     "d": "Те же файлы в обратном порядке, самый новый в конце списка.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое каталога."
+      },
+      {
+       "t": "-ltr",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "Сортировать по времени изменения."
+        },
+        {
+         "t": "r",
+         "k": "opt",
+         "d": "reverse, обратный порядок сортировки."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"2026-01-10 09:00\" old.log && touch -d \"2026-05-01 12:00\" mid.log && touch new.log",
+     "output": "total 0\n-rw-r--r-- 1 root root 0 Jan 10  2026 old.log\n-rw-r--r-- 1 root root 0 May  1 12:00 mid.log\n-rw-r--r-- 1 root root 0 Sep 21 21:40 new.log"
+    },
+    {
+     "line": "ls -lS",
+     "d": "Файлы по размеру, самые большие сверху.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое каталога."
+      },
+      {
+       "t": "-lS",
+       "k": "opt",
+       "d": "Две опции склеены, S заглавная.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат, в нём видно размер."
+        },
+        {
+         "t": "S",
+         "k": "opt",
+         "d": "Сортировать по размеру, большие первыми."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "head -c 50000 /dev/zero > big.bin && head -c 700 /dev/zero > small.bin && touch empty.txt",
+     "output": "total 56\n-rw-r--r-- 1 root root 50000 Sep 21 21:40 big.bin\n-rw-r--r-- 1 root root   700 Sep 21 21:40 small.bin\n-rw-r--r-- 1 root root     0 Sep 21 21:40 empty.txt"
+    },
+    {
+     "line": "ls -1 *.log",
+     "d": "Только файлы с окончанием .log, по одному в строке.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать указанные файлы."
+      },
+      {
+       "t": "-1",
+       "k": "opt",
+       "d": "Цифра один, выводить по одному имени в строке."
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Шаблон всех файлов с окончанием .log в текущем каталоге.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Буквальный хвост имени .log."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "touch app.log error.log notes.txt",
+     "output": "app.log\nerror.log"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>ls -l *.log</code> в каталоге без таких файлов выдаёт ошибку <code>No such file or directory</code>. Шаблон ничего не нашёл, bash оставил его как есть, и ls ищет файл с именем <code>*.log</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/Sorting-the-output.html"
+   ]
+  },
+  {
+   "slug": "tree",
+   "cmd": "tree",
+   "text": "tree: показать каталог деревом",
+   "summary": "<p><code>tree</code> рисует содержимое каталога деревом со всеми вложенными уровнями и в конце пишет, сколько найдено каталогов и файлов. Удобно, чтобы быстро понять устройство проекта или конфигурации.</p><p>На Ubuntu Server программа ставится отдельно, <code>sudo apt install tree</code>. На больших каталогах ограничивайте глубину опцией <code>-L</code>, иначе вывод займёт тысячи строк.</p>",
+   "examples": [
+    {
+     "line": "tree project",
+     "d": "Дерево каталога project со всеми уровнями.",
+     "parts": [
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Каталог, с которого начинается дерево. Без аргумента берётся текущий."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/docs && touch project/src/main.py project/src/utils.py project/docs/README.md project/.env",
+     "output": "project\n├── docs\n│   └── README.md\n└── src\n    ├── main.py\n    └── utils.py\n\n3 directories, 3 files"
+    },
+    {
+     "line": "tree -a project",
+     "d": "То же дерево вместе со скрытыми файлами, здесь появится .env.",
+     "parts": [
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "All, показывать и файлы, чьё имя начинается с точки."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Каталог для обхода."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/docs && touch project/src/main.py project/src/utils.py project/docs/README.md project/.env",
+     "output": "project\n├── .env\n├── docs\n│   └── README.md\n└── src\n    ├── main.py\n    └── utils.py\n\n3 directories, 4 files"
+    },
+    {
+     "line": "tree -L 1 project",
+     "d": "Только первый уровень каталога.",
+     "parts": [
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "-L",
+       "k": "opt",
+       "d": "Level, ограничить глубину обхода."
+      },
+      {
+       "t": "1",
+       "k": "val",
+       "d": "Глубина, один уровень."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Каталог для обхода."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/docs && touch project/src/main.py project/src/utils.py project/docs/README.md project/.env",
+     "output": "project\n├── docs\n└── src\n\n3 directories, 0 files"
+    },
+    {
+     "line": "tree -d project",
+     "d": "Только каталоги, без файлов.",
+     "parts": [
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "List directories only, показывать только каталоги."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Каталог для обхода."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/docs && touch project/src/main.py project/src/utils.py project/docs/README.md project/.env",
+     "output": "project\n├── docs\n└── src\n\n3 directories"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>tree /</code> или <code>tree /usr</code> без <code>-L</code> печатает огромный вывод на минуты. Начинайте с <code>tree -L 2</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/tree.1.html"
+   ]
+  },
+  {
+   "slug": "mkdir",
+   "cmd": "mkdir",
+   "text": "mkdir: создать каталог",
+   "summary": "<p><code>mkdir</code> (make directory) создаёт каталоги. Опция <code>-p</code> создаёт всю цепочку родителей и не ругается, если каталог уже есть, поэтому её ставят почти всегда в скриптах.</p><p>Вместе с фигурными скобками bash одной командой создаётся целая структура проекта.</p>",
+   "examples": [
+    {
+     "line": "mkdir -v backups",
+     "d": "Создать один каталог и сообщить об этом.",
+     "parts": [
+      {
+       "t": "mkdir",
+       "k": "cmd",
+       "d": "Создать каталог."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, печатать сообщение о каждом созданном каталоге."
+      },
+      {
+       "t": "backups",
+       "k": "path",
+       "d": "Имя нового каталога, относительный путь."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "mkdir: created directory 'backups'"
+    },
+    {
+     "line": "mkdir -pv app/config/nginx",
+     "d": "Создать три вложенных каталога одной командой.",
+     "parts": [
+      {
+       "t": "mkdir",
+       "k": "cmd",
+       "d": "Создать каталоги."
+      },
+      {
+       "t": "-pv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "p",
+         "k": "opt",
+         "d": "parents, создать недостающих родителей и не считать ошибкой уже существующий каталог."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать каждый созданный каталог."
+        }
+       ]
+      },
+      {
+       "t": "app/config/nginx",
+       "k": "path",
+       "d": "Цепочка каталогов, ни одного из них ещё нет."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "mkdir: created directory 'app'\nmkdir: created directory 'app/config'\nmkdir: created directory 'app/config/nginx'"
+    },
+    {
+     "line": "mkdir -pv project/{src,docs,tests}",
+     "d": "Создать каталог проекта и три подкаталога.",
+     "parts": [
+      {
+       "t": "mkdir",
+       "k": "cmd",
+       "d": "Создать каталоги."
+      },
+      {
+       "t": "-pv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "p",
+         "k": "opt",
+         "d": "Создать родителя project, если его нет."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать каждый созданный каталог."
+        }
+       ]
+      },
+      {
+       "t": "project/{src,docs,tests}",
+       "k": "path",
+       "d": "bash раскрывает скобки в три пути, project/src, project/docs, project/tests.",
+       "sub": [
+        {
+         "t": "project/",
+         "k": "path",
+         "d": "Общее начало всех трёх путей."
+        },
+        {
+         "t": "{",
+         "k": "op",
+         "d": "Начало раскрытия скобок.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": "src",
+         "k": "arg",
+         "d": "Первый вариант."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель вариантов, пробелов вокруг быть не должно.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": "docs",
+         "k": "arg",
+         "d": "Второй вариант."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель вариантов.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": "tests",
+         "k": "arg",
+         "d": "Третий вариант."
+        },
+        {
+         "t": "}",
+         "k": "op",
+         "d": "Конец раскрытия скобок.",
+         "ref": "sym-brace-expansion"
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "mkdir: created directory 'project'\nmkdir: created directory 'project/src'\nmkdir: created directory 'project/docs'\nmkdir: created directory 'project/tests'"
+    },
+    {
+     "line": "mkdir -m 700 secret && ls -ld secret",
+     "d": "Создать каталог, доступный только владельцу, и проверить права.",
+     "parts": [
+      {
+       "t": "mkdir",
+       "k": "cmd",
+       "d": "Создать каталог."
+      },
+      {
+       "t": "-m",
+       "k": "opt",
+       "d": "mode, сразу задать права нового каталога."
+      },
+      {
+       "t": "700",
+       "k": "val",
+       "d": "Права в восьмеричном виде, rwx владельцу, ничего группе и остальным."
+      },
+      {
+       "t": "secret",
+       "k": "path",
+       "d": "Имя каталога."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить права, если каталог создан.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-ld",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат с правами."
+        },
+        {
+         "t": "d",
+         "k": "opt",
+         "d": "Сам каталог, а не содержимое."
+        }
+       ]
+      },
+      {
+       "t": "secret",
+       "k": "path",
+       "d": "Проверяемый каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "drwx------ 2 root root 4096 Sep 21 21:40 secret"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Без <code>-p</code> команда <code>mkdir app/config</code> падает с ошибкой, если нет каталога <code>app</code>, и падает на уже существующем каталоге. В скриптах это часто ломает повторный запуск.</p>",
+    "<p>Пробел внутри скобок, <code>{src, docs}</code>, отключает раскрытие, и вы получите каталоги с фигурными скобками в имени.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/mkdir.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html",
+    "https://www.gnu.org/software/bash/manual/bash.html#Brace-Expansion"
+   ]
+  },
+  {
+   "slug": "rmdir",
+   "cmd": "rmdir",
+   "text": "rmdir: удалить пустой каталог",
+   "summary": "<p><code>rmdir</code> удаляет только пустые каталоги. Если внутри есть хоть один файл, команда откажется. Это безопасный способ убрать ненужный каталог, случайно потерять данные с ним нельзя.</p><p>Каталог с содержимым удаляется через <code>rm -r</code>, это отдельная карточка.</p>",
+   "examples": [
+    {
+     "line": "rmdir -v empty",
+     "d": "Удалить пустой каталог.",
+     "parts": [
+      {
+       "t": "rmdir",
+       "k": "cmd",
+       "d": "Удалить пустой каталог."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, сообщить о каждом удалённом каталоге."
+      },
+      {
+       "t": "empty",
+       "k": "path",
+       "d": "Пустой каталог, его создал setup."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir empty",
+     "output": "rmdir: removing directory, 'empty'"
+    },
+    {
+     "line": "rmdir notempty",
+     "d": "Попытка удалить каталог с файлом. Ожидаемый результат, ошибка Directory not empty, файл цел.",
+     "parts": [
+      {
+       "t": "rmdir",
+       "k": "cmd",
+       "d": "Удалить пустой каталог."
+      },
+      {
+       "t": "notempty",
+       "k": "path",
+       "d": "Каталог, внутри которого лежит файл."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir notempty && touch notempty/file.txt",
+     "output": "rmdir: failed to remove 'notempty': Directory not empty"
+    },
+    {
+     "line": "rmdir -pv a/b/c",
+     "d": "Удалить цепочку пустых каталогов снизу вверх.",
+     "parts": [
+      {
+       "t": "rmdir",
+       "k": "cmd",
+       "d": "Удалить пустые каталоги."
+      },
+      {
+       "t": "-pv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "p",
+         "k": "opt",
+         "d": "parents, после a/b/c удалить a/b, затем a, если они стали пустыми."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Сообщать о каждом удалённом каталоге."
+        }
+       ]
+      },
+      {
+       "t": "a/b/c",
+       "k": "path",
+       "d": "Самый глубокий каталог цепочки."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p a/b/c",
+     "output": "rmdir: removing directory, 'a/b/c'\nrmdir: removing directory, 'a/b'\nrmdir: removing directory, 'a'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Скрытый файл, например <code>.gitkeep</code>, делает каталог непустым, хотя <code>ls</code> без <code>-a</code> его не покажет. Проверяйте через <code>ls -A</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/rmdir.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/rmdir-invocation.html"
+   ]
+  },
+  {
+   "slug": "touch",
+   "cmd": "touch",
+   "text": "touch: создать пустой файл или обновить время",
+   "summary": "<p><code>touch</code> ставит файлу время доступа и изменения равным текущему. Если файла нет, создаёт пустой. Поэтому команду чаще всего используют как быстрый способ создать пустой файл.</p><p>С опцией <code>-d</code> можно поставить любое время. Это нужно для проверки ротации журналов и поиска старых файлов через <code>find -mtime</code>.</p>",
+   "examples": [
+    {
+     "line": "touch notes.txt && ls -l notes.txt",
+     "d": "Создать пустой файл и посмотреть на него, размер 0.",
+     "parts": [
+      {
+       "t": "touch",
+       "k": "cmd",
+       "d": "Создать файл или обновить его время."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Имя файла, его ещё нет."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером и временем."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Проверяемый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "-rw-r--r-- 1 root root 0 Sep 21 21:40 notes.txt"
+    },
+    {
+     "line": "touch report{1..3}.txt && ls",
+     "d": "Создать три файла одной командой.",
+     "parts": [
+      {
+       "t": "touch",
+       "k": "cmd",
+       "d": "Создать файлы."
+      },
+      {
+       "t": "report{1..3}.txt",
+       "k": "path",
+       "d": "bash раскрывает в report1.txt report2.txt report3.txt.",
+       "sub": [
+        {
+         "t": "report",
+         "k": "arg",
+         "d": "Общее начало имён."
+        },
+        {
+         "t": "{",
+         "k": "op",
+         "d": "Начало раскрытия скобок.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": "1",
+         "k": "num",
+         "d": "Начало диапазона."
+        },
+        {
+         "t": "..",
+         "k": "op",
+         "d": "Две точки задают диапазон.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": "3",
+         "k": "num",
+         "d": "Конец диапазона."
+        },
+        {
+         "t": "}",
+         "k": "op",
+         "d": "Конец раскрытия скобок.",
+         "ref": "sym-brace-expansion"
+        },
+        {
+         "t": ".txt",
+         "k": "arg",
+         "d": "Общий хвост имён."
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов каталога."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "report1.txt\nreport2.txt\nreport3.txt"
+    },
+    {
+     "line": "touch -d \"2026-01-01 10:00\" old.txt && ls -l old.txt",
+     "d": "Создать файл с заданным временем изменения.",
+     "parts": [
+      {
+       "t": "touch",
+       "k": "cmd",
+       "d": "Создать файл или поменять его время."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "date, взять время из строки вместо текущего."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Кавычка, дата с пробелом должна дойти до touch одним аргументом.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "2026-01-01 10:00",
+       "k": "val",
+       "d": "Дата и время, год-месяц-день часы:минуты."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "old.txt",
+       "k": "path",
+       "d": "Файл, которому ставится время."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, видно время."
+      },
+      {
+       "t": "old.txt",
+       "k": "path",
+       "d": "Проверяемый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "-rw-r--r-- 1 root root 0 Jan  1  2026 old.txt"
+    },
+    {
+     "line": "touch -r old.txt copy.txt && ls -l old.txt copy.txt",
+     "d": "Дать новому файлу то же время, что у образца.",
+     "parts": [
+      {
+       "t": "touch",
+       "k": "cmd",
+       "d": "Создать файл или поменять время."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "reference, взять время у указанного файла."
+      },
+      {
+       "t": "old.txt",
+       "k": "path",
+       "d": "Файл-образец, его время 1 января 2026."
+      },
+      {
+       "t": "copy.txt",
+       "k": "path",
+       "d": "Файл, которому ставится время образца."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат."
+      },
+      {
+       "t": "old.txt",
+       "k": "path",
+       "d": "Образец."
+      },
+      {
+       "t": "copy.txt",
+       "k": "path",
+       "d": "Результат, время совпадает."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"2026-01-01 10:00\" old.txt",
+     "output": "-rw-r--r-- 1 root root 0 Jan  1  2026 copy.txt\n-rw-r--r-- 1 root root 0 Jan  1  2026 old.txt"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>touch</code> не очищает существующий файл, он меняет только время. Чтобы обнулить файл, используют <code>: &gt; file</code> или <code>truncate -s 0 file</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/touch.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/touch-invocation.html"
+   ]
+  },
+  {
+   "slug": "cp",
+   "cmd": "cp",
+   "text": "cp: копировать файлы и каталоги",
+   "summary": "<p><code>cp</code> (copy) копирует файл в новый файл или в каталог. Если последний аргумент это существующий каталог, файлы копируются в него под своими именами.</p><p>Каталоги копируются только с опцией <code>-r</code>. Без <code>-i</code> существующий файл назначения перезаписывается молча, поэтому перед правкой конфигурации сначала делают копию с суффиксом <code>.bak</code>.</p>",
+   "examples": [
+    {
+     "line": "cp -v nginx.conf nginx.conf.bak",
+     "d": "Сделать резервную копию конфигурации перед правкой.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, печатать, что куда скопировано."
+      },
+      {
+       "t": "nginx.conf",
+       "k": "path",
+       "d": "Источник."
+      },
+      {
+       "t": "nginx.conf.bak",
+       "k": "path",
+       "d": "Новый файл, копия. Суффикс .bak для людей, системе он ничего не значит."
+      }
+     ],
+     "run": "container",
+     "setup": "echo 'worker_processes auto;' > nginx.conf",
+     "output": "'nginx.conf' -> 'nginx.conf.bak'"
+    },
+    {
+     "line": "cp -rv project backup",
+     "d": "Скопировать каталог со всем содержимым.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-rv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "r",
+         "k": "opt",
+         "d": "recursive, копировать каталоги со всем содержимым."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать каждый скопированный файл."
+        }
+       ]
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Каталог-источник."
+      },
+      {
+       "t": "backup",
+       "k": "path",
+       "d": "Каталога backup ещё нет, поэтому копия получит это имя. Если бы он был, появился бы backup/project."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src && touch project/README.md project/src/app.py",
+     "output": "'project' -> 'backup'\n'project/README.md' -> 'backup/README.md'\n'project/src' -> 'backup/src'\n'project/src/app.py' -> 'backup/src/app.py'"
+    },
+    {
+     "line": "cp -v *.conf /tmp/",
+     "d": "Скопировать все файлы .conf в каталог /tmp.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать каждое копирование."
+      },
+      {
+       "t": "*.conf",
+       "k": "pat",
+       "d": "bash подставит сюда все файлы .conf текущего каталога.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".conf",
+         "k": "pat",
+         "d": "Буквальный хвост .conf."
+        }
+       ]
+      },
+      {
+       "t": "/tmp/",
+       "k": "path",
+       "d": "Каталог назначения. Когда источников несколько, последний аргумент обязан быть каталогом."
+      }
+     ],
+     "run": "container",
+     "setup": "touch app.conf db.conf notes.txt",
+     "output": "'app.conf' -> '/tmp/app.conf'\n'db.conf' -> '/tmp/db.conf'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Если каталог назначения уже существует, <code>cp -r src dst</code> создаст <code>dst/src</code>, а не заменит содержимое <code>dst</code>. Проверяйте, есть ли каталог, до копирования.</p>",
+    "<p><code>cp</code> без опций ставит копии текущее время и вашего владельца. Для резервной копии с сохранением прав, владельца и времени нужен <code>cp -a</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/cp.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html"
+   ]
+  },
+  {
+   "slug": "cp-archive",
+   "cmd": "cp",
+   "text": "cp: копия с сохранением атрибутов, обновление и резервные копии",
+   "summary": "<p>Для резервных копий у <code>cp</code> есть три полезных режима. <code>-a</code> (archive) копирует рекурсивно и сохраняет права, владельца, время и символические ссылки как ссылки. <code>-u</code> (update) копирует только то, что новее копии. <code>--backup</code> перед перезаписью сохраняет старый файл назначения.</p>",
+   "examples": [
+    {
+     "line": "cp -r project copy1 && cp -a project copy2 && ls -l copy1 copy2",
+     "d": "Сравнить обычную копию и архивную. У copy1 время текущее, у copy2 сохранено исходное 1 января 2026.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Первое копирование."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "Рекурсивно, без сохранения атрибутов."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Источник."
+      },
+      {
+       "t": "copy1",
+       "k": "path",
+       "d": "Обычная копия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если копирование удалось.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Второе копирование."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "archive, то же, что -dR --preserve=all. Рекурсивно, с правами, владельцем, временем, ссылки остаются ссылками."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Источник."
+      },
+      {
+       "t": "copy2",
+       "k": "path",
+       "d": "Архивная копия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, видно время."
+      },
+      {
+       "t": "copy1",
+       "k": "path",
+       "d": "Первая копия."
+      },
+      {
+       "t": "copy2",
+       "k": "path",
+       "d": "Вторая копия."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir project && touch -d \"2026-01-01 10:00\" project/app.py",
+     "output": "copy1:\ntotal 0\n-rw-r--r-- 1 root root 0 Sep 21 21:40 app.py\n\ncopy2:\ntotal 0\n-rw-r--r-- 1 root root 0 Jan  1  2026 app.py"
+    },
+    {
+     "line": "cp -uv *.txt backup/",
+     "d": "Докопировать в backup только новые и изменённые файлы.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-uv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "u",
+         "k": "opt",
+         "d": "update, копировать, только если источник новее файла назначения или такого файла нет."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать, что скопировано. b.txt не скопируется, его копия не старше."
+        }
+       ]
+      },
+      {
+       "t": "*.txt",
+       "k": "pat",
+       "d": "Все файлы .txt текущего каталога.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".txt",
+         "k": "pat",
+         "d": "Хвост имени .txt."
+        }
+       ]
+      },
+      {
+       "t": "backup/",
+       "k": "path",
+       "d": "Каталог назначения."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir backup && echo a > a.txt && echo b > b.txt && cp -p b.txt backup/",
+     "output": "'a.txt' -> 'backup/a.txt'"
+    },
+    {
+     "line": "cp -v --backup=numbered new.conf app.conf && ls",
+     "d": "Заменить файл, но сохранить старую версию с номером.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать копирование и имя резервной копии."
+      },
+      {
+       "t": "--backup=numbered",
+       "k": "opt",
+       "d": "Длинная опция со значением.",
+       "sub": [
+        {
+         "t": "--backup",
+         "k": "opt",
+         "d": "Перед перезаписью сделать резервную копию файла назначения."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Отделяет значение длинной опции."
+        },
+        {
+         "t": "numbered",
+         "k": "val",
+         "d": "Нумерованные копии вида app.conf.~1~, следующая будет ~2~."
+        }
+       ]
+      },
+      {
+       "t": "new.conf",
+       "k": "path",
+       "d": "Новая версия."
+      },
+      {
+       "t": "app.conf",
+       "k": "path",
+       "d": "Файл, который будет заменён."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов, появится app.conf.~1~."
+      }
+     ],
+     "run": "container",
+     "setup": "echo old > app.conf && echo new > new.conf",
+     "output": "'new.conf' -> 'app.conf' (backup: 'app.conf.~1~')\napp.conf\napp.conf.~1~\nnew.conf"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Владелец сохраняется при <code>cp -a</code>, только когда копирует root. Обычный пользователь получит копии на своё имя, это ограничение системы, а не ошибка команды.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/cp.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html"
+   ]
+  },
+  {
+   "slug": "mv",
+   "cmd": "mv",
+   "text": "mv: переместить или переименовать",
+   "summary": "<p><code>mv</code> (move) переименовывает файл или переносит его в другой каталог. Отдельной команды переименования в Linux нет, это и есть <code>mv</code>.</p><p>В пределах одной файловой системы перенос мгновенный, меняется только запись в каталоге. Между разными дисками <code>mv</code> копирует данные и удаляет исходник. Как и <code>cp</code>, без опций он молча перезаписывает существующий файл.</p>",
+   "examples": [
+    {
+     "line": "mv -v old.txt new.txt",
+     "d": "Переименовать файл.",
+     "parts": [
+      {
+       "t": "mv",
+       "k": "cmd",
+       "d": "Переместить или переименовать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, печатать, что куда перенесено."
+      },
+      {
+       "t": "old.txt",
+       "k": "path",
+       "d": "Текущее имя."
+      },
+      {
+       "t": "new.txt",
+       "k": "path",
+       "d": "Новое имя."
+      }
+     ],
+     "run": "container",
+     "setup": "echo data > old.txt",
+     "output": "renamed 'old.txt' -> 'new.txt'"
+    },
+    {
+     "line": "mv -v *.log logs/",
+     "d": "Перенести все журналы в каталог logs.",
+     "parts": [
+      {
+       "t": "mv",
+       "k": "cmd",
+       "d": "Переместить."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать каждый перенос."
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Все файлы .log текущего каталога.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Хвост имени .log."
+        }
+       ]
+      },
+      {
+       "t": "logs/",
+       "k": "path",
+       "d": "Каталог назначения. Косая черта в конце гарантирует, что это каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir logs && touch app.log error.log notes.txt",
+     "output": "renamed 'app.log' -> 'logs/app.log'\nrenamed 'error.log' -> 'logs/error.log'"
+    },
+    {
+     "line": "mv -nv draft.txt final.txt; cat final.txt",
+     "d": "Не затирать существующий файл. mv откажется, и final.txt останется прежним.",
+     "parts": [
+      {
+       "t": "mv",
+       "k": "cmd",
+       "d": "Переместить."
+      },
+      {
+       "t": "-nv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "n",
+         "k": "opt",
+         "d": "no-clobber, не перезаписывать существующий файл."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Сообщить о результате, здесь not replacing."
+        }
+       ]
+      },
+      {
+       "t": "draft.txt",
+       "k": "path",
+       "d": "Источник."
+      },
+      {
+       "t": "final.txt",
+       "k": "path",
+       "d": "Назначение, уже существует."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Выполнить cat в любом случае, даже если mv вернул ошибку.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Показать содержимое."
+      },
+      {
+       "t": "final.txt",
+       "k": "path",
+       "d": "Файл остался со словом final."
+      }
+     ],
+     "run": "container",
+     "setup": "echo draft > draft.txt && echo final > final.txt",
+     "output": "mv: not replacing 'final.txt'\nfinal"
+    },
+    {
+     "line": "mv -v -t archive/ a.txt b.txt",
+     "d": "Каталог назначения указан первым, удобно для find и xargs.",
+     "parts": [
+      {
+       "t": "mv",
+       "k": "cmd",
+       "d": "Переместить."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать каждый перенос."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "target-directory, следующий аргумент это каталог назначения."
+      },
+      {
+       "t": "archive/",
+       "k": "path",
+       "d": "Каталог назначения."
+      },
+      {
+       "t": "a.txt",
+       "k": "path",
+       "d": "Первый файл."
+      },
+      {
+       "t": "b.txt",
+       "k": "path",
+       "d": "Второй файл."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir archive && touch a.txt b.txt",
+     "output": "renamed 'a.txt' -> 'archive/a.txt'\nrenamed 'b.txt' -> 'archive/b.txt'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>mv file.txt backup</code> при отсутствии каталога <code>backup</code> не выдаст ошибку, а переименует файл в <code>backup</code>. Пишите каталог с косой чертой в конце, <code>backup/</code>, тогда mv сообщит об ошибке.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/mv.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html"
+   ]
+  },
+  {
+   "slug": "rm",
+   "cmd": "rm",
+   "text": "rm: удалить файлы",
+   "summary": "<p><code>rm</code> (remove) удаляет файлы. Корзины в командной строке нет, удалённое не восстановить обычными средствами. Перед удалением по шаблону сначала выполните <code>ls</code> с тем же шаблоном и посмотрите, что попадёт под удаление.</p><p>Опция <code>-f</code> убирает вопросы и ошибки о несуществующих файлах, поэтому её применяют в скриптах, где файла может не быть.</p>",
+   "examples": [
+    {
+     "line": "rm -v notes.txt",
+     "d": "Удалить один файл и сообщить об этом.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, печатать каждый удалённый файл."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Удаляемый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "touch notes.txt",
+     "output": "removed 'notes.txt'"
+    },
+    {
+     "line": "rm -v *.tmp && ls",
+     "d": "Удалить все временные файлы .tmp и убедиться, что остальное на месте.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать каждый удалённый файл."
+      },
+      {
+       "t": "*.tmp",
+       "k": "pat",
+       "d": "Все файлы .tmp текущего каталога.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".tmp",
+         "k": "pat",
+         "d": "Хвост имени .tmp."
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать, что осталось.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов, keep.txt на месте."
+      }
+     ],
+     "run": "container",
+     "setup": "touch a.tmp b.tmp keep.txt",
+     "output": "removed 'a.tmp'\nremoved 'b.tmp'\nkeep.txt"
+    },
+    {
+     "line": "rm -v -- -file.txt",
+     "d": "Удалить файл, имя которого начинается с дефиса.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать удалённый файл."
+      },
+      {
+       "t": "--",
+       "k": "op",
+       "d": "Конец опций. Всё дальше считается именем файла, даже если начинается с дефиса.",
+       "ref": "sym-dash-dash"
+      },
+      {
+       "t": "-file.txt",
+       "k": "path",
+       "d": "Без -- rm принял бы это за набор опций и выдал ошибку."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -- -file.txt",
+     "output": "removed '-file.txt'"
+    },
+    {
+     "line": "rm -f nosuch.txt; echo $?",
+     "d": "Удалить файл, которого нет, без ошибки. Код возврата 0.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-f",
+       "k": "opt",
+       "d": "force, не спрашивать и не считать ошибкой отсутствие файла."
+      },
+      {
+       "t": "nosuch.txt",
+       "k": "path",
+       "d": "Такого файла нет."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Следующая команда выполнится в любом случае.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать значение."
+      },
+      {
+       "t": "$?",
+       "k": "var",
+       "d": "Код возврата предыдущей команды, 0 значит успех.",
+       "ref": "sym-special-vars"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "0"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Лишний пробел в шаблоне, <code>rm * .tmp</code> вместо <code>rm *.tmp</code>, удаляет все файлы каталога. Сначала проверяйте шаблон через <code>ls</code>.</p>",
+    "<p>Удаление файла, который держит открытым работающая программа, не освобождает место на диске, пока программа его не закроет. Частая причина полного диска после чистки журналов.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/rm.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html"
+   ]
+  },
+  {
+   "slug": "rm-recursive",
+   "cmd": "rm",
+   "text": "rm -r: удалить каталог с содержимым",
+   "summary": "<p><code>rm -r</code> удаляет каталог вместе со всем, что внутри, на любой глубине. Вместе с <code>-f</code> команда не задаёт вопросов и не сообщает об ошибках. Это самая опасная обычная команда в Linux, ошибка в пути уничтожает данные без возможности вернуть.</p><p>Опция <code>-I</code> спросит один раз перед удалением больше трёх файлов или рекурсивным удалением, это разумная защита при ручной работе.</p>",
+   "examples": [
+    {
+     "line": "rm -rv build",
+     "d": "Удалить каталог сборки и увидеть каждый удалённый файл.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-rv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "r",
+         "k": "opt",
+         "d": "recursive, удалять каталоги и их содержимое."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать каждый удалённый файл и каталог."
+        }
+       ]
+      },
+      {
+       "t": "build",
+       "k": "path",
+       "d": "Каталог, созданный в setup."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p build/obj && touch build/app build/obj/main.o build/obj/util.o",
+     "output": "removed 'build/app'\nremoved 'build/obj/main.o'\nremoved 'build/obj/util.o'\nremoved directory 'build/obj'\nremoved directory 'build'"
+    },
+    {
+     "line": "rm -rf build/ && ls",
+     "d": "Удалить каталог без вопросов. Внимание, rm -rf не спрашивает и ничего не сообщает. Здесь это безопасно, потому что build создан в учебном контейнере. На своём сервере сначала проверьте путь через ls.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-rf",
+       "k": "opt",
+       "d": "Две опции склеены, опасное сочетание.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "r",
+         "k": "opt",
+         "d": "Рекурсивно, со всем содержимым."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "force, без вопросов и без ошибок о несуществующих файлах."
+        }
+       ]
+      },
+      {
+       "t": "build/",
+       "k": "path",
+       "d": "Удаляемый каталог. Проверяйте путь дважды, особенно если в нём есть переменная."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать, что осталось.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Остался только notes.txt, build удалён."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p build/obj && touch build/app build/obj/main.o build/obj/util.o && touch notes.txt",
+     "output": "notes.txt"
+    },
+    {
+     "line": "rm -I *.log",
+     "d": "rm спросит одно подтверждение, потому что файлов больше трёх. В контейнере ответа нет, поэтому файлы останутся.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-I",
+       "k": "opt",
+       "d": "Заглавная i, спросить один раз, если файлов больше трёх или удаление рекурсивное."
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Все файлы .log, здесь их четыре.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Хвост имени .log."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "touch a.log b.log c.log d.log",
+     "output": "rm: remove 4 arguments?"
+    },
+    {
+     "line": "rm -dv empty",
+     "d": "Удалить пустой каталог через rm, как rmdir.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить."
+      },
+      {
+       "t": "-dv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "d",
+         "k": "opt",
+         "d": "dir, удалять пустые каталоги."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Сообщить об удалении."
+        }
+       ]
+      },
+      {
+       "t": "empty",
+       "k": "path",
+       "d": "Пустой каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir empty",
+     "output": "removed directory 'empty'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>rm -rf \"$DIR/\"</code> с пустой переменной <code>DIR</code> превращается в <code>rm -rf /</code>. В скриптах пишите <code>\"${DIR:?}/\"</code>, тогда bash остановится с ошибкой, если переменная пуста.</p>",
+    "<p>Лишний пробел, <code>rm -rf / tmp/build</code> вместо <code>rm -rf /tmp/build</code>, указывает команде корень системы. От корня защищает встроенная проверка <code>--preserve-root</code>, но от <code>rm -rf ~ /build</code> не защищает ничего.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/rm.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html"
+   ]
+  },
+  {
+   "slug": "ln-hard",
+   "cmd": "ln",
+   "text": "ln: жёсткая ссылка",
+   "summary": "<p>Жёсткая ссылка это второе имя того же файла. Оба имени указывают на один inode, запись с данными на диске, поэтому равноправны. Данные удаляются, только когда исчезнет последнее имя.</p><p>Жёсткая ссылка работает только внутри одной файловой системы и не может указывать на каталог. Для всего остального используют символические ссылки, <code>ln -s</code>.</p>",
+   "examples": [
+    {
+     "line": "ln data.txt data-hard.txt && ls -li data.txt data-hard.txt",
+     "d": "Создать второе имя файла. У обоих имён один номер inode и счётчик ссылок 2.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать ссылку. Без -s ссылка жёсткая."
+      },
+      {
+       "t": "data.txt",
+       "k": "path",
+       "d": "Существующий файл."
+      },
+      {
+       "t": "data-hard.txt",
+       "k": "path",
+       "d": "Новое имя того же файла."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-li",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "Длинный формат, второе поле это число жёстких ссылок."
+        },
+        {
+         "t": "i",
+         "k": "opt",
+         "d": "inode, печатать номер inode первым столбцом."
+        }
+       ]
+      },
+      {
+       "t": "data.txt",
+       "k": "path",
+       "d": "Первое имя."
+      },
+      {
+       "t": "data-hard.txt",
+       "k": "path",
+       "d": "Второе имя."
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > data.txt",
+     "output": "414198 -rw-r--r-- 2 root root 6 Sep 21 21:40 data-hard.txt\n414198 -rw-r--r-- 2 root root 6 Sep 21 21:40 data.txt"
+    },
+    {
+     "line": "rm data.txt && cat data-hard.txt",
+     "d": "Удалить первое имя. Данные на месте, их видно через второе.",
+     "parts": [
+      {
+       "t": "rm",
+       "k": "cmd",
+       "d": "Удалить имя файла."
+      },
+      {
+       "t": "data.txt",
+       "k": "path",
+       "d": "Исходное имя."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если удаление прошло.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Вывести содержимое."
+      },
+      {
+       "t": "data-hard.txt",
+       "k": "path",
+       "d": "Жёсткая ссылка, её создал setup."
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > data.txt && ln data.txt data-hard.txt",
+     "output": "hello"
+    },
+    {
+     "line": "ln /etc etc-link",
+     "d": "Попытка сделать жёсткую ссылку на каталог. Ожидаемая ошибка hard link not allowed for directory.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать жёсткую ссылку."
+      },
+      {
+       "t": "/etc",
+       "k": "path",
+       "d": "Каталог, на него жёсткую ссылку сделать нельзя."
+      },
+      {
+       "t": "etc-link",
+       "k": "path",
+       "d": "Имя ссылки."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "ln: /etc: hard link not allowed for directory"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Жёсткая ссылка не резервная копия. Правка файла через любое имя меняет единственные данные, и изменения видны через все имена.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/ln.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html"
+   ]
+  },
+  {
+   "slug": "ln-symbolic",
+   "cmd": "ln",
+   "text": "ln -s: символическая ссылка",
+   "summary": "<p>Символическая ссылка это отдельный маленький файл, в котором записан путь к цели. Она может указывать на каталог и на другой диск. Если цель удалить, ссылка останется, но станет битой.</p><p>На серверах так переключают версии, <code>current</code> указывает на каталог нужного релиза, и для перехода достаточно перевести ссылку. Так же устроены <code>/etc/nginx/sites-enabled</code> и <code>/etc/systemd/system</code>.</p>",
+   "examples": [
+    {
+     "line": "ln -sv /var/log logs && ls -l logs",
+     "d": "Сделать в текущем каталоге ярлык на /var/log.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать ссылку."
+      },
+      {
+       "t": "-sv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "s",
+         "k": "opt",
+         "d": "symbolic, символическая ссылка вместо жёсткой."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать созданную ссылку."
+        }
+       ]
+      },
+      {
+       "t": "/var/log",
+       "k": "path",
+       "d": "Цель, порядок как у cp, сначала что, потом куда."
+      },
+      {
+       "t": "logs",
+       "k": "path",
+       "d": "Имя ссылки."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, у ссылки видно стрелку на цель и букву l в начале."
+      },
+      {
+       "t": "logs",
+       "k": "path",
+       "d": "Сама ссылка."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "'logs' -> '/var/log'\nlrwxrwxrwx 1 root root 8 Sep 21 21:40 logs -> /var/log"
+    },
+    {
+     "line": "ln -sfnv app-v2 current && ls -l current",
+     "d": "Переключить ссылку current с app-v1 на app-v2.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать ссылку."
+      },
+      {
+       "t": "-sfnv",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "s",
+         "k": "opt",
+         "d": "Символическая ссылка."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "force, удалить существующую ссылку current."
+        },
+        {
+         "t": "n",
+         "k": "opt",
+         "d": "no-dereference, считать current самой ссылкой, а не каталогом, на который она указывает. Без n новая ссылка попала бы внутрь app-v1."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать результат."
+        }
+       ]
+      },
+      {
+       "t": "app-v2",
+       "k": "path",
+       "d": "Новая цель."
+      },
+      {
+       "t": "current",
+       "k": "path",
+       "d": "Существующая ссылка, её перенаправляем."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат со стрелкой."
+      },
+      {
+       "t": "current",
+       "k": "path",
+       "d": "Ссылка, теперь current -> app-v2."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir app-v1 app-v2 && ln -s app-v1 current",
+     "output": "'current' -> 'app-v2'\nlrwxrwxrwx 1 root root 6 Sep 21 21:40 current -> app-v2"
+    },
+    {
+     "line": "ln -srv config/app.conf bin/app.conf && ls -l bin",
+     "d": "Сделать ссылку с относительным путём, сам путь посчитает ln.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать ссылку."
+      },
+      {
+       "t": "-srv",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "s",
+         "k": "opt",
+         "d": "Символическая ссылка."
+        },
+        {
+         "t": "r",
+         "k": "opt",
+         "d": "relative, записать в ссылку путь относительно её каталога, здесь ../config/app.conf."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Печатать результат."
+        }
+       ]
+      },
+      {
+       "t": "config/app.conf",
+       "k": "path",
+       "d": "Цель, путь от текущего каталога."
+      },
+      {
+       "t": "bin/app.conf",
+       "k": "path",
+       "d": "Где создать ссылку."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат."
+      },
+      {
+       "t": "bin",
+       "k": "path",
+       "d": "Каталог со ссылкой."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir config bin && echo port=80 > config/app.conf",
+     "output": "'bin/app.conf' -> '../config/app.conf'\ntotal 0\nlrwxrwxrwx 1 root root 18 Sep 21 21:40 app.conf -> ../config/app.conf"
+    },
+    {
+     "line": "ln -s nosuch.txt broken && cat broken",
+     "d": "Ссылка на несуществующий файл создаётся без ошибок, а чтение через неё падает.",
+     "parts": [
+      {
+       "t": "ln",
+       "k": "cmd",
+       "d": "Создать ссылку."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "Символическая."
+      },
+      {
+       "t": "nosuch.txt",
+       "k": "path",
+       "d": "Цели нет, ln это не проверяет."
+      },
+      {
+       "t": "broken",
+       "k": "path",
+       "d": "Имя ссылки."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Попробовать прочитать.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Вывести содержимое."
+      },
+      {
+       "t": "broken",
+       "k": "path",
+       "d": "Битая ссылка, ошибка No such file or directory."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "cat: broken: No such file or directory"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Относительная цель считается от каталога ссылки, а не от текущего. <code>ln -s app.conf /etc/app.conf</code> создаст ссылку на <code>/etc/app.conf</code> саму на себя. Берите абсолютный путь или опцию <code>-r</code>.</p>",
+    "<p><code>ln -sf новая current</code> без <code>-n</code>, когда current указывает на каталог, создаёт ссылку внутри старого каталога, а current не меняется.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/ln.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html"
+   ]
+  },
+  {
+   "slug": "find-name",
+   "cmd": "find",
+   "text": "find: искать файлы по имени и типу",
+   "summary": "<p><code>find</code> обходит дерево каталогов и проверяет каждый файл условиями. Сначала пишется, откуда искать, потом условия. Каждое условие начинается с одного дефиса, даже длинное, <code>-name</code>, <code>-type</code>, <code>-maxdepth</code>.</p><p>Шаблон имени берите в кавычки, иначе bash раскроет звёздочку сам по файлам текущего каталога, и find получит не то, что вы задумали.</p>",
+   "examples": [
+    {
+     "line": "find . -name \"*.log\"",
+     "d": "Найти все файлы .log во всех подкаталогах.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать файлы."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени файла, с учётом регистра."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Шаблон имени find.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любое число любых символов."
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Буквальный хвост .log."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p app/logs && touch app/logs/access.log app/logs/error.log app/main.py README.md Readme.old",
+     "output": "./app/logs/access.log\n./app/logs/error.log"
+    },
+    {
+     "line": "find . -iname \"readme*\"",
+     "d": "Найти файлы, начинающиеся с readme, в любом регистре.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать файлы."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-iname",
+       "k": "opt",
+       "d": "Как -name, но без учёта регистра, найдёт README.md и Readme.old."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Кавычка защищает звёздочку от bash.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "readme*",
+       "k": "pat",
+       "d": "Шаблон, начало readme и что угодно дальше.",
+       "sub": [
+        {
+         "t": "readme",
+         "k": "pat",
+         "d": "Буквальное начало имени."
+        },
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любое число любых символов."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p app/logs && touch app/logs/access.log app/logs/error.log app/main.py README.md Readme.old",
+     "output": "./README.md\n./Readme.old"
+    },
+    {
+     "line": "find . -type d",
+     "d": "Найти только каталоги.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "d",
+       "k": "val",
+       "d": "directory, каталог. Другие значения, f обычный файл, l символическая ссылка."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p app/logs && touch app/logs/access.log app/logs/error.log app/main.py README.md Readme.old",
+     "output": ".\n./app\n./app/logs"
+    },
+    {
+     "line": "find . -maxdepth 1 -type f",
+     "d": "Только файлы в самом текущем каталоге, без подкаталогов.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-maxdepth",
+       "k": "opt",
+       "d": "Ограничить глубину обхода. Ставьте её первой среди условий."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Глубина 1, только содержимое стартового каталога."
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p app/logs && touch app/logs/access.log app/logs/error.log app/main.py README.md Readme.old",
+     "output": "./README.md\n./Readme.old"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>find . -name *.log</code> без кавычек работает, пока в текущем каталоге нет файлов .log. Как только они появятся, bash подставит их имена, и find выдаст ошибку <code>paths must precede expression</code> или найдёт не то.</p>",
+    "<p><code>-name</code> проверяет только имя, без каталога. Чтобы искать по части пути, нужен <code>-path \"*/logs/*\"</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "find-time",
+   "cmd": "find",
+   "text": "find: искать по времени изменения",
+   "summary": "<p>Условие <code>-mtime</code> проверяет время последнего изменения содержимого в сутках, <code>-mmin</code> то же в минутах. Знак перед числом задаёт направление, <code>+30</code> значит больше 30, <code>-7</code> меньше 7, число без знака значит ровно.</p><p>Так находят старые журналы и бэкапы для удаления и файлы, изменённые недавно, например после инцидента.</p>",
+   "examples": [
+    {
+     "line": "find . -type f -mtime +30",
+     "d": "Файлы, которые не менялись больше 30 суток.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-mtime",
+       "k": "opt",
+       "d": "Время изменения в сутках, дробная часть отбрасывается."
+      },
+      {
+       "t": "+30",
+       "k": "num",
+       "d": "Плюс значит больше 30 полных суток назад."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"40 days ago\" old.log && touch -d \"3 days ago\" week.log && touch fresh.log",
+     "output": "./old.log"
+    },
+    {
+     "line": "find . -type f -mtime -7",
+     "d": "Файлы, изменённые за последние 7 суток.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-mtime",
+       "k": "opt",
+       "d": "Время изменения в сутках."
+      },
+      {
+       "t": "-7",
+       "k": "num",
+       "d": "Минус значит меньше 7 суток назад. Это число, а не опция."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"40 days ago\" old.log && touch -d \"3 days ago\" week.log && touch fresh.log",
+     "output": "./fresh.log\n./week.log"
+    },
+    {
+     "line": "find . -type f -mmin -60",
+     "d": "Файлы, изменённые за последний час.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-mmin",
+       "k": "opt",
+       "d": "Время изменения в минутах."
+      },
+      {
+       "t": "-60",
+       "k": "num",
+       "d": "Меньше 60 минут назад."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"40 days ago\" old.log && touch -d \"3 days ago\" week.log && touch fresh.log",
+     "output": "./fresh.log"
+    },
+    {
+     "line": "find . -type f -newer week.log",
+     "d": "Файлы, изменённые позже, чем week.log.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-newer",
+       "k": "opt",
+       "d": "Время изменения новее, чем у указанного файла."
+      },
+      {
+       "t": "week.log",
+       "k": "path",
+       "d": "Файл-образец, изменён 3 дня назад."
+      }
+     ],
+     "run": "container",
+     "setup": "touch -d \"40 days ago\" old.log && touch -d \"3 days ago\" week.log && touch fresh.log",
+     "output": "./fresh.log"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>-mtime +1</code> не значит «старше суток». Дробные сутки отбрасываются, поэтому файлу должно быть не меньше двух полных суток. Для точной границы используйте <code>-mmin</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "find-size",
+   "cmd": "find",
+   "text": "find: искать по размеру и пустые",
+   "summary": "<p>Условие <code>-size</code> сравнивает размер файла. Суффиксы <code>k</code>, <code>M</code>, <code>G</code> задают кибибайты, мебибайты и гибибайты, знак <code>+</code> значит больше, <code>-</code> меньше. <code>-empty</code> находит пустые файлы и каталоги.</p><p>Так ищут, чем занят диск, и остатки после неудачных сборок.</p>",
+   "examples": [
+    {
+     "line": "find . -type f -size +1M",
+     "d": "Файлы больше 1 МиБ.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-size",
+       "k": "opt",
+       "d": "Условие по размеру."
+      },
+      {
+       "t": "+1M",
+       "k": "num",
+       "d": "Больше 1 МиБ.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Больше указанного."
+        },
+        {
+         "t": "1",
+         "k": "num",
+         "d": "Число."
+        },
+        {
+         "t": "M",
+         "k": "val",
+         "d": "Единица, мебибайт, 1048576 байт."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "head -c 3M /dev/zero > big.iso && head -c 20k /dev/zero > mid.bin && touch empty.txt && mkdir emptydir",
+     "output": "./big.iso"
+    },
+    {
+     "line": "find . -type f -size +10k -size -500k",
+     "d": "Файлы от 10 до 500 КиБ. Два условия подряд объединяются через И.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-size",
+       "k": "opt",
+       "d": "Первое условие по размеру."
+      },
+      {
+       "t": "+10k",
+       "k": "num",
+       "d": "Больше 10 КиБ, k строчная."
+      },
+      {
+       "t": "-size",
+       "k": "opt",
+       "d": "Второе условие."
+      },
+      {
+       "t": "-500k",
+       "k": "num",
+       "d": "Меньше 500 КиБ. Здесь k, а не 1M, иначе сработает округление, о нём ниже в ошибках."
+      }
+     ],
+     "run": "container",
+     "setup": "head -c 3M /dev/zero > big.iso && head -c 20k /dev/zero > mid.bin && touch empty.txt && mkdir emptydir",
+     "output": "./mid.bin"
+    },
+    {
+     "line": "find . -empty",
+     "d": "Пустые файлы и пустые каталоги.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-empty",
+       "k": "opt",
+       "d": "Файл нулевого размера или каталог без содержимого."
+      }
+     ],
+     "run": "container",
+     "setup": "head -c 3M /dev/zero > big.iso && head -c 20k /dev/zero > mid.bin && touch empty.txt && mkdir emptydir",
+     "output": "./empty.txt\n./emptydir"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Размер округляется вверх до единицы. <code>-size -1M</code> найдёт только пустые файлы, ведь любой непустой файл занимает хотя бы одну единицу в 1 МиБ. Для малых порогов берите <code>k</code> или байты <code>c</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "find-exec",
+   "cmd": "find",
+   "text": "find -exec: выполнить команду для найденных файлов",
+   "summary": "<p>Действие <code>-exec</code> запускает команду для каждого найденного файла. Вместо <code>{}</code> find подставляет имя файла. Команда заканчивается либо <code>\\;</code> (запуск на каждый файл), либо <code>+</code> (много файлов за один запуск, быстрее).</p><p>Точку с запятой экранируют обратной косой чертой, иначе bash примет её за конец своей команды.</p>",
+   "examples": [
+    {
+     "line": "find . -name \"*.sh\" -exec chmod +x {} \\; && ls -l scripts",
+     "d": "Сделать все скрипты исполняемыми.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.sh",
+       "k": "pat",
+       "d": "Шаблон имени.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы."
+        },
+        {
+         "t": ".sh",
+         "k": "pat",
+         "d": "Хвост .sh."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "-exec",
+       "k": "opt",
+       "d": "Выполнить команду для каждого найденного файла."
+      },
+      {
+       "t": "chmod",
+       "k": "cmd",
+       "d": "Команда, которую запускает find."
+      },
+      {
+       "t": "+x",
+       "k": "val",
+       "d": "Добавить право на выполнение."
+      },
+      {
+       "t": "{}",
+       "k": "arg",
+       "d": "Сюда find подставит имя найденного файла."
+      },
+      {
+       "t": "\\;",
+       "k": "op",
+       "d": "Конец команды -exec, запуск на каждый файл отдельно.",
+       "sub": [
+        {
+         "t": "\\",
+         "k": "op",
+         "d": "Экранирует точку с запятой, чтобы bash передал её find.",
+         "ref": "sym-backslash"
+        },
+        {
+         "t": ";",
+         "k": "arg",
+         "d": "Для find это знак конца команды."
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с правами."
+      },
+      {
+       "t": "scripts",
+       "k": "path",
+       "d": "Каталог со скриптами."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir scripts && touch scripts/backup.sh scripts/deploy.sh",
+     "output": "total 0\n-rwxr-xr-x 1 root root 0 Sep 21 21:40 backup.sh\n-rwxr-xr-x 1 root root 0 Sep 21 21:40 deploy.sh"
+    },
+    {
+     "line": "find . -name \"*.log\" -exec grep -l ERROR {} +",
+     "d": "Найти журналы, в которых есть ERROR.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Шаблон имени.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы."
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Хвост .log."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "-exec",
+       "k": "opt",
+       "d": "Выполнить команду."
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Поиск текста."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Печатать только имена файлов с совпадением."
+      },
+      {
+       "t": "ERROR",
+       "k": "pat",
+       "d": "Искомое слово."
+      },
+      {
+       "t": "{}",
+       "k": "arg",
+       "d": "Сюда find подставит список найденных файлов."
+      },
+      {
+       "t": "+",
+       "k": "arg",
+       "d": "Конец команды, передать много файлов за один запуск grep."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'INFO start\\nERROR disk\\n' > app.log && printf 'INFO ok\\n' > web.log",
+     "output": "./app.log"
+    },
+    {
+     "line": "find . -name \"*.conf\" -exec cp -v {} {}.bak \\;",
+     "d": "Сделать копию .bak каждого файла конфигурации.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.conf",
+       "k": "pat",
+       "d": "Шаблон имени.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы."
+        },
+        {
+         "t": ".conf",
+         "k": "pat",
+         "d": "Хвост .conf."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "-exec",
+       "k": "opt",
+       "d": "Выполнить команду."
+      },
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копировать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать копирование."
+      },
+      {
+       "t": "{}",
+       "k": "arg",
+       "d": "Имя найденного файла, источник."
+      },
+      {
+       "t": "{}.bak",
+       "k": "arg",
+       "d": "GNU find подставляет имя и внутри аргумента, получится ./app.conf.bak.",
+       "sub": [
+        {
+         "t": "{}",
+         "k": "arg",
+         "d": "Имя файла."
+        },
+        {
+         "t": ".bak",
+         "k": "arg",
+         "d": "Добавленный суффикс."
+        }
+       ]
+      },
+      {
+       "t": "\\;",
+       "k": "op",
+       "d": "Конец команды, запуск на каждый файл.",
+       "sub": [
+        {
+         "t": "\\",
+         "k": "op",
+         "d": "Экранирует точку с запятой от bash.",
+         "ref": "sym-backslash"
+        },
+        {
+         "t": ";",
+         "k": "arg",
+         "d": "Знак конца команды для find."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "touch app.conf db.conf",
+     "output": "'./db.conf' -> './db.conf.bak'\n'./app.conf' -> './app.conf.bak'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Забытый <code>\\;</code> или <code>+</code> даёт ошибку <code>missing argument to `-exec'</code>. Без обратной косой черты точка с запятой уходит bash, и find её не получает.</p>",
+    "<p>С <code>+</code> фигурные скобки должны стоять последними перед <code>+</code>. Если имя нужно в середине команды, как в <code>cp {} {}.bak</code>, используйте <code>\\;</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "find-delete",
+   "cmd": "find",
+   "text": "find -delete: удалить найденное",
+   "summary": "<p>Действие <code>-delete</code> удаляет каждый найденный файл. Это стандартный способ чистить старые журналы и временные файлы, в том числе по расписанию через cron.</p><p>Порядок безопасной работы такой. Сначала запустите ту же команду без <code>-delete</code> и прочитайте список. Потом добавьте <code>-delete</code> последним словом.</p>",
+   "examples": [
+    {
+     "line": "find cache -type f -name \"*.tmp\" -print -delete",
+     "d": "Удалить временные файлы в cache и напечатать каждый удалённый. Удаление без возврата, но здесь работа идёт с файлами из setup.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": "cache",
+       "k": "path",
+       "d": "Где искать. Ограничивайте поиск конкретным каталогом."
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Только файлы."
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.tmp",
+       "k": "pat",
+       "d": "Шаблон имени.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы."
+        },
+        {
+         "t": ".tmp",
+         "k": "pat",
+         "d": "Хвост .tmp."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "-print",
+       "k": "opt",
+       "d": "Напечатать имя, до удаления."
+      },
+      {
+       "t": "-delete",
+       "k": "opt",
+       "d": "Удалить файл. Стоит последним, после всех условий."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir cache && touch cache/a.tmp cache/b.tmp cache/keep.dat",
+     "output": "cache/b.tmp\ncache/a.tmp"
+    },
+    {
+     "line": "find logs -type f -mtime +30 -delete && ls logs",
+     "d": "Удалить журналы старше 30 суток и показать, что осталось.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": "logs",
+       "k": "path",
+       "d": "Каталог журналов."
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Только файлы."
+      },
+      {
+       "t": "-mtime",
+       "k": "opt",
+       "d": "Время изменения в сутках."
+      },
+      {
+       "t": "+30",
+       "k": "num",
+       "d": "Старше 30 суток."
+      },
+      {
+       "t": "-delete",
+       "k": "opt",
+       "d": "Удалить найденное."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать остаток.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов."
+      },
+      {
+       "t": "logs",
+       "k": "path",
+       "d": "Останется только свежий журнал."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir logs && touch -d \"45 days ago\" logs/app-old.log && touch logs/app.log",
+     "output": "app.log"
+    },
+    {
+     "line": "find . -type d -empty -print -delete",
+     "d": "Удалить пустые каталоги, включая вложенные.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "d",
+       "k": "val",
+       "d": "Только каталоги."
+      },
+      {
+       "t": "-empty",
+       "k": "opt",
+       "d": "Пустые."
+      },
+      {
+       "t": "-print",
+       "k": "opt",
+       "d": "Напечатать имя перед удалением."
+      },
+      {
+       "t": "-delete",
+       "k": "opt",
+       "d": "Удалить. Оно включает обход в глубину, поэтому сначала удаляется a/b, и a тоже становится пустым."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p a/b keep && touch keep/file.txt",
+     "output": "./a/b\n./a"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>-delete</code> в начале, <code>find . -delete -name \"*.tmp\"</code>, удаляет всё в каталоге. find выполняет условия слева направо, и удаление срабатывает раньше проверки имени.</p>",
+    "<p><code>find /</code> с <code>-delete</code> и ошибкой в условии уничтожает систему. Всегда указывайте конкретный каталог и проверяйте список без <code>-delete</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "find-perm",
+   "cmd": "find",
+   "text": "find: искать по правам, владельцу, ссылкам и отрицанию",
+   "summary": "<p>Условия <code>-perm</code>, <code>-user</code>, <code>-type l</code> помогают при аудите. Так находят файлы, которые может менять любой пользователь, файлы определённого владельца и символические ссылки.</p><p>Восклицательный знак <code>!</code> перед условием отрицает его.</p>",
+   "examples": [
+    {
+     "line": "find . -type f -perm -002",
+     "d": "Файлы, которые может изменять любой пользователь. Такие файлы ищут при проверке безопасности.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-perm",
+       "k": "opt",
+       "d": "Условие по правам."
+      },
+      {
+       "t": "-002",
+       "k": "val",
+       "d": "Минус значит, что все указанные биты установлены, остальные неважны. 002 это право записи для остальных."
+      }
+     ],
+     "run": "container",
+     "setup": "touch a.sh b.txt c.txt && chmod 755 a.sh && chmod 644 b.txt && chmod 666 c.txt",
+     "output": "./c.txt"
+    },
+    {
+     "line": "find . -type f -perm 755",
+     "d": "Файлы с правами ровно 755.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-perm",
+       "k": "opt",
+       "d": "Условие по правам."
+      },
+      {
+       "t": "755",
+       "k": "val",
+       "d": "Без знака, права совпадают точно, rwxr-xr-x."
+      }
+     ],
+     "run": "container",
+     "setup": "touch a.sh b.txt c.txt && chmod 755 a.sh && chmod 644 b.txt && chmod 666 c.txt",
+     "output": "./a.sh"
+    },
+    {
+     "line": "find /home -user ubuntu",
+     "d": "Всё, чем владеет пользователь ubuntu. Он есть в образе Ubuntu 24.04.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": "/home",
+       "k": "path",
+       "d": "Каталог домашних каталогов."
+      },
+      {
+       "t": "-user",
+       "k": "opt",
+       "d": "Условие по владельцу, имя или числовой UID."
+      },
+      {
+       "t": "ubuntu",
+       "k": "arg",
+       "d": "Имя пользователя."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/home/ubuntu\n/home/ubuntu/.profile\n/home/ubuntu/.bashrc\n/home/ubuntu/.bash_logout"
+    },
+    {
+     "line": "find . -type l ! -name \"*.conf\"",
+     "d": "Символические ссылки, кроме тех, что кончаются на .conf.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Искать."
+      },
+      {
+       "t": ".",
+       "k": "path",
+       "d": "Текущий каталог, отсюда find начинает обход.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Условие по типу."
+      },
+      {
+       "t": "l",
+       "k": "val",
+       "d": "Символическая ссылка."
+      },
+      {
+       "t": "!",
+       "k": "op",
+       "d": "Отрицание следующего условия. Для find это аргумент, bash его не трогает, потому что он стоит не в начале команды."
+      },
+      {
+       "t": "-name",
+       "k": "opt",
+       "d": "Условие по имени."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, find получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.conf",
+       "k": "pat",
+       "d": "Шаблон имени.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы."
+        },
+        {
+         "t": ".conf",
+         "k": "pat",
+         "d": "Хвост .conf."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "touch target && ln -s target link1 && ln -s target app.conf",
+     "output": "./link1"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>-perm 644</code> и <code>-perm -644</code> разные условия. Первое ищет права ровно 644, второе любые права, в которых есть хотя бы биты 644, например 755 не подойдёт, а 666 подойдёт.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+   ]
+  },
+  {
+   "slug": "stat",
+   "cmd": "stat",
+   "text": "stat: подробные сведения о файле",
+   "summary": "<p><code>stat</code> показывает всё, что система знает о файле. Размер, число блоков, inode, число жёстких ссылок, права в двух видах, владельца и три времени, доступ (Access), изменение содержимого (Modify) и изменение метаданных (Change).</p><p>Опция <code>-c</code> выводит только нужные поля по формату, это удобно в скриптах вместо разбора <code>ls -l</code>.</p>",
+   "examples": [
+    {
+     "line": "stat notes.txt",
+     "d": "Полные сведения о файле.",
+     "parts": [
+      {
+       "t": "stat",
+       "k": "cmd",
+       "d": "Показать сведения о файле."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Файл."
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > notes.txt",
+     "output": "  File: notes.txt\n  Size: 6         \tBlocks: 8          IO Block: 4096   regular file\nDevice: 0,81\tInode: 414161      Links: 1\nAccess: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)\nAccess: 2026-09-21 21:40:36.091714945 +0500\nModify: 2026-09-21 21:40:36.091714945 +0500\nChange: 2026-09-21 21:40:36.091714945 +0500\n Birth: 2026-09-21 21:40:36.091714945 +0500"
+    },
+    {
+     "line": "stat -c \"%a %U %s %n\" notes.txt",
+     "d": "Только права числом, владелец, размер и имя.",
+     "parts": [
+      {
+       "t": "stat",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "format, печатать по заданному формату."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Кавычка, формат с пробелами должен быть одним аргументом.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "%a %U %s %n",
+       "k": "pat",
+       "d": "Формат из четырёх полей.",
+       "sub": [
+        {
+         "t": "%a",
+         "k": "pat",
+         "d": "Права в восьмеричном виде, например 644."
+        },
+        {
+         "t": "%U",
+         "k": "pat",
+         "d": "Имя владельца."
+        },
+        {
+         "t": "%s",
+         "k": "pat",
+         "d": "Размер в байтах."
+        },
+        {
+         "t": "%n",
+         "k": "pat",
+         "d": "Имя файла."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Файл."
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > notes.txt",
+     "output": "644 root 6 notes.txt"
+    },
+    {
+     "line": "stat -c \"%A %U:%G %n\" /etc/passwd /etc/shadow",
+     "d": "Права и владельцы двух системных файлов учётных записей.",
+     "parts": [
+      {
+       "t": "stat",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Печатать по формату."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Начало формата.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "%A %U:%G %n",
+       "k": "pat",
+       "d": "Формат.",
+       "sub": [
+        {
+         "t": "%A",
+         "k": "pat",
+         "d": "Права в виде букв, как в ls -l."
+        },
+        {
+         "t": "%U",
+         "k": "pat",
+         "d": "Владелец."
+        },
+        {
+         "t": ":",
+         "k": "pat",
+         "d": "Обычный символ, печатается как есть."
+        },
+        {
+         "t": "%G",
+         "k": "pat",
+         "d": "Группа."
+        },
+        {
+         "t": "%n",
+         "k": "pat",
+         "d": "Имя файла."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "/etc/passwd",
+       "k": "path",
+       "d": "Список пользователей, читать может любой."
+      },
+      {
+       "t": "/etc/shadow",
+       "k": "path",
+       "d": "Хэши паролей, читать может только root и группа shadow."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "-rw-r--r-- root:root /etc/passwd\n-rw-r----- root:shadow /etc/shadow"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Время Change (ctime) это не время создания. Оно меняется при смене прав, владельца или переименовании. Время создания stat показывает в строке Birth, если файловая система его хранит.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/stat.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html"
+   ]
+  },
+  {
+   "slug": "file",
+   "cmd": "file",
+   "text": "file: определить тип файла по содержимому",
+   "summary": "<p>В Linux расширение имени ничего не решает. <code>file</code> читает начало файла и по сигнатурам определяет, что внутри, текст, скрипт, архив, программа, картинка.</p><p>Полезно перед распаковкой скачанного архива, при разборе незнакомого файла и чтобы понять, почему скрипт не запускается (например, в нём окончания строк Windows).</p>",
+   "examples": [
+    {
+     "line": "file *",
+     "d": "Типы всех файлов текущего каталога.",
+     "parts": [
+      {
+       "t": "file",
+       "k": "cmd",
+       "d": "Определить тип."
+      },
+      {
+       "t": "*",
+       "k": "op",
+       "d": "bash подставит все файлы текущего каталога.",
+       "ref": "sym-glob-star"
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > notes.txt && printf '#!/bin/bash\\necho hi\\n' > run.sh && gzip -k notes.txt && cp /usr/bin/ls ls-copy",
+     "output": "ls-copy:      ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=00a639537eef557c0dcb20ad52892bc84863ed94, for GNU/Linux 3.7.0, stripped\nnotes.txt:    ASCII text\nnotes.txt.gz: gzip compressed data, was \"notes.txt\", last modified: Mon Sep 21 16:40:36 2026, from Unix, original size modulo 2^32 6\nrun.sh:       Bourne-Again shell script, ASCII text executable"
+    },
+    {
+     "line": "file -b /usr/bin/ls",
+     "d": "Только тип, без имени файла впереди.",
+     "parts": [
+      {
+       "t": "file",
+       "k": "cmd",
+       "d": "Определить тип."
+      },
+      {
+       "t": "-b",
+       "k": "opt",
+       "d": "brief, не печатать имя файла."
+      },
+      {
+       "t": "/usr/bin/ls",
+       "k": "path",
+       "d": "Программа ls."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=00a639537eef557c0dcb20ad52892bc84863ed94, for GNU/Linux 3.7.0, stripped"
+    },
+    {
+     "line": "file -i notes.txt",
+     "d": "Тип в формате MIME и кодировка текста.",
+     "parts": [
+      {
+       "t": "file",
+       "k": "cmd",
+       "d": "Определить тип."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "mime, вывести тип вида text/plain; charset=us-ascii."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Текстовый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "echo hello > notes.txt",
+     "output": "notes.txt: text/plain; charset=us-ascii"
+    },
+    {
+     "line": "file /bin/sh && file -L /bin/sh",
+     "d": "Сначала сама ссылка, потом файл, на который она указывает.",
+     "parts": [
+      {
+       "t": "file",
+       "k": "cmd",
+       "d": "Определить тип."
+      },
+      {
+       "t": "/bin/sh",
+       "k": "path",
+       "d": "На Ubuntu это символическая ссылка на dash."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если первая команда прошла.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "file",
+       "k": "cmd",
+       "d": "Определить тип ещё раз."
+      },
+      {
+       "t": "-L",
+       "k": "opt",
+       "d": "dereference, идти по символической ссылке к цели."
+      },
+      {
+       "t": "/bin/sh",
+       "k": "path",
+       "d": "Та же ссылка, теперь будет ELF, программа."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/bin/sh: symbolic link to dash\n/bin/sh: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=e295d9e20071b9ac77c9642478c08eb93d224243, for GNU/Linux 3.7.0, stripped"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Если <code>./script.sh</code> выдаёт <code>bad interpreter</code>, проверьте <code>file script.sh</code>. Слова <code>with CRLF line terminators</code> значат, что файл сохранён в Windows.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/file.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/file.1.html"
+   ]
+  },
+  {
+   "slug": "basename",
+   "cmd": "basename",
+   "text": "basename и dirname: имя файла и каталог из пути",
+   "summary": "<p><code>basename</code> отрезает от пути всё до последней косой черты и оставляет имя файла. Вторым аргументом можно убрать ещё и окончание. <code>dirname</code> наоборот оставляет путь к каталогу.</p><p>Обе команды работают только со строкой и не проверяют, есть ли такой файл. Их используют в скриптах для построения новых имён.</p>",
+   "examples": [
+    {
+     "line": "basename /var/log/nginx/access.log",
+     "d": "Получить имя файла из пути.",
+     "parts": [
+      {
+       "t": "basename",
+       "k": "cmd",
+       "d": "Оставить последнюю часть пути."
+      },
+      {
+       "t": "/var/log/nginx/access.log",
+       "k": "path",
+       "d": "Путь, результат access.log."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "access.log"
+    },
+    {
+     "line": "basename /var/log/nginx/access.log .log",
+     "d": "Имя файла без окончания.",
+     "parts": [
+      {
+       "t": "basename",
+       "k": "cmd",
+       "d": "Оставить последнюю часть пути."
+      },
+      {
+       "t": "/var/log/nginx/access.log",
+       "k": "path",
+       "d": "Путь."
+      },
+      {
+       "t": ".log",
+       "k": "arg",
+       "d": "Окончание, которое нужно отрезать, результат access."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "access"
+    },
+    {
+     "line": "dirname /var/log/nginx/access.log",
+     "d": "Получить каталог, в котором лежит файл.",
+     "parts": [
+      {
+       "t": "dirname",
+       "k": "cmd",
+       "d": "Оставить путь без последней части."
+      },
+      {
+       "t": "/var/log/nginx/access.log",
+       "k": "path",
+       "d": "Путь, результат /var/log/nginx."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/var/log/nginx"
+    },
+    {
+     "line": "for f in *.txt; do mv -v \"$f\" \"$(basename \"$f\" .txt).md\"; done",
+     "d": "Переименовать все файлы .txt в .md.",
+     "parts": [
+      {
+       "t": "for",
+       "k": "kw",
+       "d": "Начало цикла по списку."
+      },
+      {
+       "t": "f",
+       "k": "var",
+       "d": "Имя переменной цикла, без знака доллара."
+      },
+      {
+       "t": "in",
+       "k": "kw",
+       "d": "Дальше список значений."
+      },
+      {
+       "t": "*.txt",
+       "k": "pat",
+       "d": "bash подставит все файлы .txt.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Звёздочка оболочки, любое число любых символов в имени. bash раскрывает шаблон в список файлов до запуска команды.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".txt",
+         "k": "pat",
+         "d": "Хвост .txt."
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Конец списка значений.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "do",
+       "k": "kw",
+       "d": "Начало тела цикла."
+      },
+      {
+       "t": "mv",
+       "k": "cmd",
+       "d": "Переименовать."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать каждое переименование."
+      },
+      {
+       "t": "\"$f\"",
+       "k": "str",
+       "d": "Текущее имя файла в кавычках, чтобы не сломались имена с пробелами.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая кавычка.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$f",
+         "k": "var",
+         "d": "Значение переменной f, например a.txt.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": "\"$(basename \"$f\" .txt).md\"",
+       "k": "str",
+       "d": "Новое имя, a.md.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая кавычка всего имени.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$(",
+         "k": "op",
+         "d": "Начало подстановки команды, сюда встанет вывод basename.",
+         "ref": "sym-cmd-subst"
+        },
+        {
+         "t": "basename",
+         "k": "cmd",
+         "d": "Отрезать окончание."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Кавычка вокруг имени внутри подстановки.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$f",
+         "k": "var",
+         "d": "Текущее имя файла.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая кавычка имени.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": ".txt",
+         "k": "arg",
+         "d": "Окончание, которое убирает basename."
+        },
+        {
+         "t": ")",
+         "k": "op",
+         "d": "Конец подстановки.",
+         "ref": "sym-cmd-subst"
+        },
+        {
+         "t": ".md",
+         "k": "arg",
+         "d": "Новое окончание."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая кавычка всего имени.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Конец команды в теле цикла.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "done",
+       "k": "kw",
+       "d": "Конец цикла."
+      }
+     ],
+     "run": "container",
+     "setup": "touch a.txt b.txt",
+     "output": "renamed 'a.txt' -> 'a.md'\nrenamed 'b.txt' -> 'b.md'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>В bash то же самое быстрее делается раскрытием параметров, <code>${f%.txt}</code> вместо <code>$(basename \"$f\" .txt)</code>. Но basename понятнее и отрезает ещё и каталоги.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/basename.1.html",
+    "https://man7.org/linux/man-pages/man1/dirname.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/basename-invocation.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/dirname-invocation.html"
+   ]
+  },
+  {
+   "slug": "realpath",
+   "cmd": "realpath",
+   "text": "realpath: полный путь без ссылок и точек",
+   "summary": "<p><code>realpath</code> превращает любой путь в абсолютный. Раскрывает <code>.</code> и <code>..</code>, лишние косые черты и символические ссылки. Результат это настоящее место файла на диске.</p><p>В скриптах так получают надёжный путь к файлу, переданному относительным путём, и выясняют, куда на самом деле указывает ссылка.</p>",
+   "examples": [
+    {
+     "line": "realpath notes.txt",
+     "d": "Абсолютный путь к файлу из текущего каталога.",
+     "parts": [
+      {
+       "t": "realpath",
+       "k": "cmd",
+       "d": "Показать абсолютный путь."
+      },
+      {
+       "t": "notes.txt",
+       "k": "path",
+       "d": "Относительный путь, результат /lab/notes.txt."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir app-v2 && ln -s app-v2 current && touch notes.txt",
+     "output": "/lab/notes.txt"
+    },
+    {
+     "line": "realpath current",
+     "d": "Куда на самом деле указывает ссылка.",
+     "parts": [
+      {
+       "t": "realpath",
+       "k": "cmd",
+       "d": "Показать абсолютный путь."
+      },
+      {
+       "t": "current",
+       "k": "path",
+       "d": "Символическая ссылка, результат /lab/app-v2."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir app-v2 && ln -s app-v2 current && touch notes.txt",
+     "output": "/lab/app-v2"
+    },
+    {
+     "line": "realpath -s current/../notes.txt",
+     "d": "Абсолютный путь без раскрытия ссылок.",
+     "parts": [
+      {
+       "t": "realpath",
+       "k": "cmd",
+       "d": "Показать абсолютный путь."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "strip, не раскрывать символические ссылки, только убрать . и .."
+      },
+      {
+       "t": "current/../notes.txt",
+       "k": "path",
+       "d": "Путь с переходом наверх, результат /lab/notes.txt.",
+       "sub": [
+        {
+         "t": "current",
+         "k": "path",
+         "d": "Ссылка."
+        },
+        {
+         "t": "/",
+         "k": "op",
+         "d": "Разделитель.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "..",
+         "k": "path",
+         "d": "Родительский каталог.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "/notes.txt",
+         "k": "path",
+         "d": "Файл."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir app-v2 && ln -s app-v2 current && touch notes.txt",
+     "output": "/lab/notes.txt"
+    },
+    {
+     "line": "realpath --relative-to=/var/log /etc/hosts",
+     "d": "Относительный путь от одного каталога до другого файла.",
+     "parts": [
+      {
+       "t": "realpath",
+       "k": "cmd",
+       "d": "Вычислить путь."
+      },
+      {
+       "t": "--relative-to=/var/log",
+       "k": "opt",
+       "d": "Длинная опция со значением.",
+       "sub": [
+        {
+         "t": "--relative-to",
+         "k": "opt",
+         "d": "Печатать путь относительно указанного каталога."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Отделяет значение опции."
+        },
+        {
+         "t": "/var/log",
+         "k": "path",
+         "d": "Точка отсчёта."
+        }
+       ]
+      },
+      {
+       "t": "/etc/hosts",
+       "k": "path",
+       "d": "Цель, результат ../../etc/hosts."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "../../etc/hosts"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>По умолчанию <code>realpath</code> не требует, чтобы последняя часть пути существовала. Чтобы получить ошибку на несуществующем файле, добавьте <code>-e</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/realpath.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/realpath-invocation.html"
+   ]
+  }
+ ]
+}

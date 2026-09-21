@@ -1,0 +1,1906 @@
+{
+ "category": "Архивы и сжатие",
+ "cards": [
+  {
+   "slug": "tar-create",
+   "cmd": "tar",
+   "text": "tar: создать архив",
+   "summary": "<p><code>tar</code> (tape archive) собирает много файлов и каталогов в один файл архива с сохранением прав, владельцев и структуры каталогов. Сам по себе tar не сжимает, сжатие включают опции <code>z</code> (gzip, .tar.gz), <code>j</code> (bzip2, .tar.bz2), <code>J</code> (xz, .tar.xz).</p><p>Запомнить порядок помогает правило, сначала действие (<code>c</code> создать), потом сжатие, потом <code>f</code> и сразу за ней имя архива, в конце что упаковать.</p>",
+   "examples": [
+    {
+     "line": "tar -czvf backup.tar.gz project",
+     "d": "Упаковать каталог project в сжатый архив и показать каждый файл.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "arg",
+       "d": "Имя архива. .tar значит архив, .gz значит сжат gzip."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать, относительный путь. В архиве пути начнутся с project/."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "tar -cvf project.tar project && ls -l project.tar",
+     "d": "Архив без сжатия.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-cvf",
+       "k": "opt",
+       "d": "Три опции склеены, без сжатия.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "project.tar",
+       "k": "arg",
+       "d": "Имя архива без сжатия."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером."
+      },
+      {
+       "t": "project.tar",
+       "k": "path",
+       "d": "Созданный архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py\n-rw-r--r-- 1 root root 10240 Sep 21 21:40 project.tar"
+    },
+    {
+     "line": "tar -cJf project.tar.xz project && ls -l project.tar.xz",
+     "d": "Архив со сжатием xz, оно плотнее gzip, но медленнее.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-cJf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "J",
+         "k": "opt",
+         "d": "Заглавная J, сжатие xz."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "project.tar.xz",
+       "k": "arg",
+       "d": "Имя архива, окончание .tar.xz."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером."
+      },
+      {
+       "t": "project.tar.xz",
+       "k": "path",
+       "d": "Созданный архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "-rw-r--r-- 1 root root 288 Sep 21 21:40 project.tar.xz"
+    },
+    {
+     "line": "tar -czf backup-$(date +%F).tar.gz project && ls",
+     "d": "Архив с сегодняшней датой в имени, так делают ежедневные копии.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup-$(date +%F).tar.gz",
+       "k": "arg",
+       "d": "Имя архива, в которое bash подставит дату.",
+       "sub": [
+        {
+         "t": "backup-",
+         "k": "arg",
+         "d": "Начало имени."
+        },
+        {
+         "t": "$(",
+         "k": "op",
+         "d": "Начало подстановки команды, сюда встанет вывод date.",
+         "ref": "sym-cmd-subst"
+        },
+        {
+         "t": "date",
+         "k": "cmd",
+         "d": "Команда даты."
+        },
+        {
+         "t": "+%F",
+         "k": "val",
+         "d": "Формат даты.",
+         "sub": [
+          {
+           "t": "+",
+           "k": "op",
+           "d": "Для date плюс означает начало формата вывода."
+          },
+          {
+           "t": "%F",
+           "k": "pat",
+           "d": "Полная дата, год-месяц-день, например 2026-09-21."
+          }
+         ]
+        },
+        {
+         "t": ")",
+         "k": "op",
+         "d": "Конец подстановки.",
+         "ref": "sym-cmd-subst"
+        },
+        {
+         "t": ".tar.gz",
+         "k": "arg",
+         "d": "Окончание имени."
+        }
+       ]
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов, появится архив с датой."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "backup-2026-09-21.tar.gz\nproject"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>tar -cfz backup.tar.gz project</code> с f не в конце создаёт архив с именем <code>z</code>, а backup.tar.gz ищет как файл для упаковки и сообщает <code>Cannot stat</code>. После f должно сразу идти имя архива.</p>",
+    "<p>Абсолютный путь, <code>tar -czf etc.tar.gz /etc</code>, tar сохранит без начальной косой черты и сообщит <code>Removing leading '/'</code>. Это защита, при распаковке файлы не перезапишут системные.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://www.gnu.org/software/tar/manual/tar.html"
+   ]
+  },
+  {
+   "slug": "tar-extract",
+   "cmd": "tar",
+   "text": "tar: распаковать архив",
+   "summary": "<p>Распаковка это опция <code>x</code> (extract). Файлы извлекаются в текущий каталог с путями, которые записаны в архиве, а опция <code>-C</code> задаёт другой каталог назначения.</p><p>При чтении GNU tar сам определяет тип сжатия, поэтому <code>tar -xf</code> распакует и .tar.gz, и .tar.xz, и .tar.bz2.</p>",
+   "examples": [
+    {
+     "line": "tar -xzvf backup.tar.gz",
+     "d": "Распаковать архив в текущий каталог.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-xzvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "x",
+         "k": "opt",
+         "d": "extract, извлечь файлы из архива."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Архив сжат gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив, его создал setup."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "mkdir restore && tar -xzf backup.tar.gz -C restore && tree restore",
+     "d": "Распаковать в отдельный каталог и посмотреть результат.",
+     "parts": [
+      {
+       "t": "mkdir",
+       "k": "cmd",
+       "d": "Создать каталог. tar сам его не создаёт."
+      },
+      {
+       "t": "restore",
+       "k": "path",
+       "d": "Каталог назначения."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, если каталог создан.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-xzf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "x",
+         "k": "opt",
+         "d": "extract, извлечь файлы из архива."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Архив сжат gzip."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      },
+      {
+       "t": "-C",
+       "k": "opt",
+       "d": "directory, перейти в каталог перед распаковкой."
+      },
+      {
+       "t": "restore",
+       "k": "path",
+       "d": "Каталог назначения."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "restore",
+       "k": "path",
+       "d": "Распакованный каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "restore\n└── project\n    ├── README.md\n    ├── logs\n    │   └── app.log\n    └── src\n        └── app.py\n\n4 directories, 3 files"
+    },
+    {
+     "line": "tar -xzvf backup.tar.gz project/README.md",
+     "d": "Достать из архива один файл.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-xzvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "x",
+         "k": "opt",
+         "d": "extract, извлечь файлы из архива."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Архив сжат gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      },
+      {
+       "t": "project/README.md",
+       "k": "path",
+       "d": "Путь внутри архива точно так, как его показывает tar -t."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "project/README.md"
+    },
+    {
+     "line": "tar -xf backup.tar.gz && ls project",
+     "d": "Распаковать без указания сжатия, tar определит его сам.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-xf",
+       "k": "opt",
+       "d": "Две опции склеены, z не нужна.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "x",
+         "k": "opt",
+         "d": "extract, извлечь файлы из архива."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Распакованный каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "README.md\nlogs\nsrc"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Распаковка молча перезаписывает файлы с теми же именами. Сначала посмотрите содержимое через <code>tar -tf</code> или распакуйте в пустой каталог через <code>-C</code>.</p>",
+    "<p>Если в архиве нет общего каталога верхнего уровня, файлы рассыплются по текущему каталогу. Это тоже видно заранее по <code>tar -tf</code>.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://www.gnu.org/software/tar/manual/tar.html"
+   ]
+  },
+  {
+   "slug": "tar-list",
+   "cmd": "tar",
+   "text": "tar: посмотреть содержимое архива",
+   "summary": "<p>Опция <code>t</code> (list) выводит список файлов архива без распаковки. С <code>v</code> добавляются права, владелец, размер и время, как в <code>ls -l</code>.</p><p>Проверять содержимое стоит перед каждой распаковкой чужого архива и после создания резервной копии, чтобы убедиться, что нужные файлы в неё попали.</p>",
+   "examples": [
+    {
+     "line": "tar -tzf backup.tar.gz",
+     "d": "Список файлов архива.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-tzf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "list, показать список файлов архива."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Архив сжат gzip."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "tar -tvf backup.tar.gz",
+     "d": "Подробный список с правами, размерами и временем.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-tvf",
+       "k": "opt",
+       "d": "Три опции склеены, сжатие tar определит сам.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "list, показать список файлов архива."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Подробный формат, как ls -l."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "drwxr-xr-x root/root         0 2026-09-21 21:40 project/\ndrwxr-xr-x root/root         0 2026-09-21 21:40 project/logs/\n-rw-r--r-- root/root        11 2026-09-21 21:40 project/logs/app.log\n-rw-r--r-- root/root        10 2026-09-21 21:40 project/README.md\ndrwxr-xr-x root/root         0 2026-09-21 21:40 project/src/\n-rw-r--r-- root/root         9 2026-09-21 21:40 project/src/app.py"
+    },
+    {
+     "line": "tar -tf backup.tar.gz | grep \"\\.log$\"",
+     "d": "Проверить, попали ли в архив журналы.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-tf",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "list, показать список файлов архива."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Архив."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать список файлов на вход grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки по шаблону."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Кавычка защищает шаблон от bash.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "\\.log$",
+       "k": "pat",
+       "d": "Регулярное выражение, строка кончается на .log.",
+       "sub": [
+        {
+         "t": "\\.",
+         "k": "pat",
+         "d": "Обратная косая черта делает точку буквальной, без неё точка значит любой символ."
+        },
+        {
+         "t": "log",
+         "k": "pat",
+         "d": "Буквы log."
+        },
+        {
+         "t": "$",
+         "k": "pat",
+         "d": "Конец строки."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && tar -czf backup.tar.gz project && rm -r project",
+     "output": "project/logs/app.log"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Список печатается с путями как в архиве, например <code>project/src/app.py</code>. Именно такой путь нужно указать, чтобы извлечь один файл.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://www.gnu.org/software/tar/manual/tar.html"
+   ]
+  },
+  {
+   "slug": "tar-exclude",
+   "cmd": "tar",
+   "text": "tar: исключить файлы из архива",
+   "summary": "<p>Опция <code>--exclude</code> не даёт попасть в архив файлам, чьё имя или путь совпадает с шаблоном. Так из резервной копии убирают журналы, кэш, каталоги <code>.git</code> и <code>node_modules</code>. Длинный список шаблонов удобнее держать в файле и передавать через <code>-X</code>.</p>",
+   "examples": [
+    {
+     "line": "tar -czvf backup.tar.gz --exclude=\"*.log\" project",
+     "d": "Архив без файлов журналов.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "--exclude=\"*.log\"",
+       "k": "opt",
+       "d": "Опция исключения с шаблоном.",
+       "sub": [
+        {
+         "t": "--exclude",
+         "k": "opt",
+         "d": "Не добавлять файлы, совпавшие с шаблоном."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Отделяет значение опции."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Кавычка, чтобы bash не раскрыл звёздочку.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "*.log",
+         "k": "pat",
+         "d": "Шаблон tar.",
+         "sub": [
+          {
+           "t": "*",
+           "k": "pat",
+           "d": "Любые символы."
+          },
+          {
+           "t": ".log",
+           "k": "pat",
+           "d": "Хвост имени .log."
+          }
+         ]
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать. Исключения стоят до списка файлов."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "project/\nproject/logs/\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "tar -czvf backup.tar.gz --exclude=project/logs project",
+     "d": "Исключить целый каталог.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "--exclude=project/logs",
+       "k": "opt",
+       "d": "Исключение по пути.",
+       "sub": [
+        {
+         "t": "--exclude",
+         "k": "opt",
+         "d": "Не добавлять совпавшее."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Отделяет значение."
+        },
+        {
+         "t": "project/logs",
+         "k": "path",
+         "d": "Каталог, путь как он будет записан в архиве, без косой черты в конце."
+        }
+       ]
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "project/\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "tar -czvf backup.tar.gz -X exclude.txt project",
+     "d": "Взять шаблоны исключений из файла.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "-X",
+       "k": "opt",
+       "d": "exclude-from, читать шаблоны исключений из файла, по одному в строке."
+      },
+      {
+       "t": "exclude.txt",
+       "k": "path",
+       "d": "Файл с шаблонами, здесь *.log и .git."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && mkdir project/.git && touch project/.git/config && printf '*.log\\n.git\\n' > exclude.txt",
+     "output": "project/\nproject/logs/\nproject/README.md\nproject/src/\nproject/src/app.py"
+    },
+    {
+     "line": "tar -czvf backup.tar.gz --exclude-vcs project",
+     "d": "Исключить служебные каталоги систем контроля версий.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-czvf",
+       "k": "opt",
+       "d": "Четыре опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "z",
+         "k": "opt",
+         "d": "Сжатие gzip."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "verbose, печатать имя каждого файла."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "--exclude-vcs",
+       "k": "opt",
+       "d": "Пропускать каталоги систем контроля версий, например .git, .svn, .hg."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && mkdir project/.git && touch project/.git/config",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>В GNU tar исключения действуют только на файлы, указанные после них. <code>tar -czf b.tar.gz project --exclude=\"*.log\"</code> сообщит, что опция стоит после аргументов и не действует, и журналы попадут в архив.</p>",
+    "<p>Шаблон без кавычек, <code>--exclude=*.log</code>, bash может раскрыть по файлам текущего каталога. Берите шаблон в кавычки.</p>"
+   ],
+   "sources": [
+    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://www.gnu.org/software/tar/manual/tar.html",
+    "https://www.gnu.org/software/tar/manual/html_node/exclude.html"
+   ]
+  },
+  {
+   "slug": "gzip",
+   "cmd": "gzip",
+   "text": "gzip и gunzip: сжать и распаковать файл",
+   "summary": "<p><code>gzip</code> сжимает один файл и заменяет его файлом с окончанием <code>.gz</code>. Исходник удаляется, если не указать <code>-k</code>. <code>gunzip</code> (то же, что <code>gzip -d</code>) распаковывает обратно.</p><p>gzip не умеет упаковывать каталоги, для них сначала tar, отсюда .tar.gz. Так сжаты старые журналы в <code>/var/log</code>, например <code>syslog.2.gz</code>.</p>",
+   "examples": [
+    {
+     "line": "gzip -v access.log && ls -l",
+     "d": "Сжать журнал. Исходный файл заменяется на access.log.gz.",
+     "parts": [
+      {
+       "t": "gzip",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, показать степень сжатия."
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия, 20000 строк."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "access.log:\t 58.7% -- replaced with access.log.gz\ntotal 44\n-rw-r--r-- 1 root root 45015 Sep 21 21:40 access.log.gz"
+    },
+    {
+     "line": "gzip -kv access.log && ls -l",
+     "d": "Сжать и оставить исходник.",
+     "parts": [
+      {
+       "t": "gzip",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-kv",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "k",
+         "k": "opt",
+         "d": "keep, не удалять исходный файл."
+        },
+        {
+         "t": "v",
+         "k": "opt",
+         "d": "Показать степень сжатия."
+        }
+       ]
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, оба файла на месте."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "access.log:\t 58.7% -- created access.log.gz\ntotal 152\n-rw-r--r-- 1 root root 108894 Sep 21 21:40 access.log\n-rw-r--r-- 1 root root  45015 Sep 21 21:40 access.log.gz"
+    },
+    {
+     "line": "gzip -l access.log.gz",
+     "d": "Размер до и после сжатия, без распаковки.",
+     "parts": [
+      {
+       "t": "gzip",
+       "k": "cmd",
+       "d": "Работа с .gz."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "list, показать размеры сжатого и исходного файла и степень сжатия."
+      },
+      {
+       "t": "access.log.gz",
+       "k": "path",
+       "d": "Сжатый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log && gzip access.log",
+     "output": "         compressed        uncompressed  ratio uncompressed_name\n              45015              108894  58.7% access.log"
+    },
+    {
+     "line": "gunzip -v access.log.gz && ls -l",
+     "d": "Распаковать обратно.",
+     "parts": [
+      {
+       "t": "gunzip",
+       "k": "cmd",
+       "d": "Распаковать .gz, то же, что gzip -d."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать сведения о распаковке."
+      },
+      {
+       "t": "access.log.gz",
+       "k": "path",
+       "d": "Сжатый файл, после распаковки останется access.log."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log && gzip access.log",
+     "output": "access.log.gz:\t 58.7% -- replaced with access.log\ntotal 108\n-rw-r--r-- 1 root root 108894 Sep 21 21:40 access.log"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>gzip file</code> удаляет исходник. Если он ещё нужен, добавьте <code>-k</code> или пишите в поток, <code>gzip -c file &gt; file.gz</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/gzip/manual/gzip.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gzip.1.html"
+   ]
+  },
+  {
+   "slug": "zip",
+   "cmd": "zip",
+   "text": "zip и unzip: архивы формата ZIP",
+   "summary": "<p><code>zip</code> и <code>unzip</code> работают с форматом ZIP, который понимает любая система, в том числе Windows без дополнительных программ. Для обмена с коллегами на Windows берите ZIP, для резервных копий на Linux обычно tar.gz, он сохраняет владельцев и права.</p><p>В отличие от tar, у zip сначала имя архива, потом что упаковать, а каталоги упаковываются только с <code>-r</code>.</p>",
+   "examples": [
+    {
+     "line": "zip -r project.zip project",
+     "d": "Упаковать каталог в ZIP.",
+     "parts": [
+      {
+       "t": "zip",
+       "k": "cmd",
+       "d": "Создать или дополнить ZIP-архив."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "recurse, заходить в каталоги."
+      },
+      {
+       "t": "project.zip",
+       "k": "arg",
+       "d": "Имя архива, первым аргументом."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "  adding: project/ (stored 0%)\n  adding: project/logs/ (stored 0%)\n  adding: project/logs/app.log (stored 0%)\n  adding: project/README.md (stored 0%)\n  adding: project/src/ (stored 0%)\n  adding: project/src/app.py (stored 0%)"
+    },
+    {
+     "line": "zip -r project.zip project -x \"*.log\"",
+     "d": "Упаковать без журналов.",
+     "parts": [
+      {
+       "t": "zip",
+       "k": "cmd",
+       "d": "Создать ZIP-архив."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "Рекурсивно."
+      },
+      {
+       "t": "project.zip",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      },
+      {
+       "t": "-x",
+       "k": "opt",
+       "d": "exclude, не добавлять файлы, совпавшие с шаблонами дальше."
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Открывающая кавычка. Оболочка не раскрывает звёздочку, zip получает шаблон как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": "*.log",
+       "k": "pat",
+       "d": "Шаблон zip.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "pat",
+         "d": "Любые символы, включая косую черту пути."
+        },
+        {
+         "t": ".log",
+         "k": "pat",
+         "d": "Хвост .log."
+        }
+       ]
+      },
+      {
+       "t": "\"",
+       "k": "op",
+       "d": "Закрывающая кавычка.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "  adding: project/ (stored 0%)\n  adding: project/logs/ (stored 0%)\n  adding: project/README.md (stored 0%)\n  adding: project/src/ (stored 0%)\n  adding: project/src/app.py (stored 0%)"
+    },
+    {
+     "line": "unzip -l project.zip",
+     "d": "Посмотреть содержимое без распаковки.",
+     "parts": [
+      {
+       "t": "unzip",
+       "k": "cmd",
+       "d": "Работа с ZIP-архивом."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "list, список файлов с размером и временем."
+      },
+      {
+       "t": "project.zip",
+       "k": "path",
+       "d": "Архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && zip -qr project.zip project",
+     "output": "Archive:  project.zip\n  Length      Date    Time    Name\n---------  ---------- -----   ----\n        0  2026-09-21 21:40   project/\n        0  2026-09-21 21:40   project/logs/\n       11  2026-09-21 21:40   project/logs/app.log\n       10  2026-09-21 21:40   project/README.md\n        0  2026-09-21 21:40   project/src/\n        9  2026-09-21 21:40   project/src/app.py\n---------                     -------\n       30                     6 files"
+    },
+    {
+     "line": "unzip -q project.zip -d restore && tree restore",
+     "d": "Распаковать в отдельный каталог молча и посмотреть результат.",
+     "parts": [
+      {
+       "t": "unzip",
+       "k": "cmd",
+       "d": "Распаковать ZIP."
+      },
+      {
+       "t": "-q",
+       "k": "opt",
+       "d": "quiet, не печатать имена файлов."
+      },
+      {
+       "t": "project.zip",
+       "k": "path",
+       "d": "Архив."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "Каталог, куда распаковать, unzip создаст его сам."
+      },
+      {
+       "t": "restore",
+       "k": "path",
+       "d": "Каталог назначения."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "tree",
+       "k": "cmd",
+       "d": "Нарисовать дерево."
+      },
+      {
+       "t": "restore",
+       "k": "path",
+       "d": "Распакованный каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log && zip -qr project.zip project",
+     "output": "restore\n└── project\n    ├── README.md\n    ├── logs\n    │   └── app.log\n    └── src\n        └── app.py\n\n4 directories, 3 files"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>zip project.zip project</code> без <code>-r</code> добавит только пустой каталог, без файлов внутри.</p>",
+    "<p>Если файл уже есть, unzip спросит, перезаписать ли его, и скрипт остановится в ожидании ответа. Для скриптов указывайте явно <code>-o</code> (перезаписывать) или <code>-n</code> (не перезаписывать).</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/zip.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/unzip.1.html"
+   ]
+  },
+  {
+   "slug": "xz",
+   "cmd": "xz",
+   "text": "xz: сильное сжатие",
+   "summary": "<p><code>xz</code> сжимает плотнее gzip и bzip2, но медленнее и с большим расходом памяти. Им сжаты многие пакеты и образы. Использование такое же, как у gzip, исходник заменяется файлом <code>.xz</code>, <code>-d</code> или <code>unxz</code> распаковывает.</p>",
+   "examples": [
+    {
+     "line": "xz -v access.log && ls -l",
+     "d": "Сжать файл, исходник заменяется на access.log.xz.",
+     "parts": [
+      {
+       "t": "xz",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, показать итог сжатия."
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "access.log: 4948 B / 106.3 KiB = 0.045\ntotal 8\n-rw-r--r-- 1 root root 4948 Sep 21 21:40 access.log.xz"
+    },
+    {
+     "line": "xz -k -T0 access.log && ls -l",
+     "d": "Сжать на всех ядрах процессора и оставить исходник.",
+     "parts": [
+      {
+       "t": "xz",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "keep, не удалять исходный файл."
+      },
+      {
+       "t": "-T0",
+       "k": "opt",
+       "d": "Опция с приклеенным значением.",
+       "sub": [
+        {
+         "t": "-T",
+         "k": "opt",
+         "d": "threads, число потоков сжатия."
+        },
+        {
+         "t": "0",
+         "k": "val",
+         "d": "Ноль значит столько потоков, сколько ядер процессора."
+        }
+       ]
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, оба файла на месте."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "total 116\n-rw-r--r-- 1 root root 108894 Sep 21 21:40 access.log\n-rw-r--r-- 1 root root   4956 Sep 21 21:40 access.log.xz"
+    },
+    {
+     "line": "xz -l access.log.xz",
+     "d": "Сведения о сжатом файле, размеры и степень сжатия.",
+     "parts": [
+      {
+       "t": "xz",
+       "k": "cmd",
+       "d": "Работа с .xz."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "list, показать сведения о файле .xz."
+      },
+      {
+       "t": "access.log.xz",
+       "k": "path",
+       "d": "Сжатый файл."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log && xz access.log",
+     "output": "Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename\n    1       1       4948 B    106.3 KiB  0.045  CRC64   access.log.xz"
+    },
+    {
+     "line": "xz -dc access.log.xz | tail -n 3",
+     "d": "Прочитать сжатый файл без распаковки на диск.",
+     "parts": [
+      {
+       "t": "xz",
+       "k": "cmd",
+       "d": "Работа с .xz."
+      },
+      {
+       "t": "-dc",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "d",
+         "k": "opt",
+         "d": "decompress, распаковать."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "stdout, писать результат в стандартный вывод, файл на диске не меняется."
+        }
+       ]
+      },
+      {
+       "t": "access.log.xz",
+       "k": "path",
+       "d": "Сжатый файл."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать распакованный текст в tail.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "tail",
+       "k": "cmd",
+       "d": "Показать конец текста."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Число строк."
+      },
+      {
+       "t": "3",
+       "k": "num",
+       "d": "Последние три строки."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log && xz access.log",
+     "output": "19998\n19999\n20000"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Высокие уровни сжатия, <code>-9</code> и <code>-e</code>, требуют много памяти. На маленькой виртуальной машине это может закончиться нехваткой памяти, начинайте с уровня по умолчанию 6.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/xz.1.html"
+   ]
+  },
+  {
+   "slug": "bzip2",
+   "cmd": "bzip2",
+   "text": "bzip2: сжатие bzip2",
+   "summary": "<p><code>bzip2</code> сжимает плотнее gzip, но медленнее. Сейчас его чаще встречают в старых архивах <code>.tar.bz2</code>, для новых обычно выбирают gzip (быстро) или xz (плотно). Опции те же, что у gzip, <code>-k</code> оставить исходник, <code>-d</code> или <code>bunzip2</code> распаковать.</p>",
+   "examples": [
+    {
+     "line": "bzip2 -v access.log && ls -l",
+     "d": "Сжать файл, исходник заменяется на access.log.bz2.",
+     "parts": [
+      {
+       "t": "bzip2",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, показать степень сжатия."
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с размером."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "  access.log:  4.330:1,  1.847 bits/byte, 76.91% saved, 108894 in, 25147 out.\ntotal 28\n-rw-r--r-- 1 root root 25147 Sep 21 21:40 access.log.bz2"
+    },
+    {
+     "line": "bzip2 -k access.log && ls -l",
+     "d": "Сжать и оставить исходник.",
+     "parts": [
+      {
+       "t": "bzip2",
+       "k": "cmd",
+       "d": "Сжать файл."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "keep, не удалять исходный файл."
+      },
+      {
+       "t": "access.log",
+       "k": "path",
+       "d": "Файл для сжатия."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат, оба файла на месте."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log",
+     "output": "total 136\n-rw-r--r-- 1 root root 108894 Sep 21 21:40 access.log\n-rw-r--r-- 1 root root  25147 Sep 21 21:40 access.log.bz2"
+    },
+    {
+     "line": "bunzip2 -v access.log.bz2 && ls -l",
+     "d": "Распаковать обратно.",
+     "parts": [
+      {
+       "t": "bunzip2",
+       "k": "cmd",
+       "d": "Распаковать .bz2, то же, что bzip2 -d."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать сведения о распаковке."
+      },
+      {
+       "t": "access.log.bz2",
+       "k": "path",
+       "d": "Сжатый файл."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать результат.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать сведения."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат."
+      }
+     ],
+     "run": "container",
+     "setup": "seq 1 20000 > access.log && bzip2 access.log",
+     "output": "  access.log.bz2: done\ntotal 108\n-rw-r--r-- 1 root root 108894 Sep 21 21:40 access.log"
+    },
+    {
+     "line": "tar -cjf project.tar.bz2 project && tar -tjf project.tar.bz2",
+     "d": "Архив tar со сжатием bzip2 и проверка его содержимого.",
+     "parts": [
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-cjf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "c",
+         "k": "opt",
+         "d": "create, создать новый архив."
+        },
+        {
+         "t": "j",
+         "k": "opt",
+         "d": "Сжатие bzip2."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "project.tar.bz2",
+       "k": "arg",
+       "d": "Имя архива."
+      },
+      {
+       "t": "project",
+       "k": "path",
+       "d": "Что упаковать."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить архив.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "tar",
+       "k": "cmd",
+       "d": "Программа архивации."
+      },
+      {
+       "t": "-tjf",
+       "k": "opt",
+       "d": "Три опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "t",
+         "k": "opt",
+         "d": "list, показать список файлов архива."
+        },
+        {
+         "t": "j",
+         "k": "opt",
+         "d": "Архив сжат bzip2."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "file, следующий аргумент это имя архива. Поэтому f стоит последней."
+        }
+       ]
+      },
+      {
+       "t": "project.tar.bz2",
+       "k": "path",
+       "d": "Созданный архив."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p project/src project/logs && echo 'print(1)' > project/src/app.py && echo '# Project' > project/README.md && echo 'debug line' > project/logs/app.log",
+     "output": "project/\nproject/logs/\nproject/logs/app.log\nproject/README.md\nproject/src/\nproject/src/app.py"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>bzip2, как и gzip, сжимает только отдельные файлы. <code>bzip2 project</code> на каталоге выдаст ошибку, для каталога нужен <code>tar -cjf</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/bzip2.1.html",
+    "https://man7.org/linux/man-pages/man1/tar.1.html"
+   ]
+  }
+ ]
+}

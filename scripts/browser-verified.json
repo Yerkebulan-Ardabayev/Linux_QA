@@ -1,0 +1,75 @@
+{
+  "_comment": "Сайты, которые отвечают скриптам 403/202, но открываются в браузере. Каждый адрес открыт вручную во встроенном браузере, указан заголовок страницы. Проверка ссылок считает их рабочими и перечисляет отдельно.",
+  "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html": {
+    "checked": "2026-09-21",
+    "title": "systemctl"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.service"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.unit"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/journalctl.html": {
+    "checked": "2026-09-21",
+    "title": "journalctl"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.time"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html": {
+    "checked": "2026-09-21",
+    "title": "journald.conf"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.exec"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.special"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html": {
+    "checked": "2026-09-21",
+    "title": "systemd-analyze"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html": {
+    "checked": "2026-09-21",
+    "title": "systemd.timer"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/hostnamectl.html": {
+    "checked": "2026-09-21",
+    "title": "hostnamectl"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/timedatectl.html": {
+    "checked": "2026-09-21",
+    "title": "timedatectl"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html": {
+    "checked": "2026-09-21",
+    "title": "resolvectl"
+  },
+  "https://www.freedesktop.org/software/systemd/man/latest/systemd-resolved.service.html": {
+    "checked": "2026-09-21",
+    "title": "systemd-resolved.service"
+  },
+  "https://manpages.ubuntu.com/manpages/noble/man1/tree.1.html": {
+    "checked": "2026-09-21",
+    "title": "Ubuntu Manpage: tree - list contents of directories in a tree-like format."
+  },
+  "https://manpages.ubuntu.com/manpages/noble/man1/file.1.html": {
+    "checked": "2026-09-21",
+    "title": "Ubuntu Manpage: file - determine file type"
+  },
+  "https://manpages.ubuntu.com/manpages/noble/man1/zip.1.html": {
+    "checked": "2026-09-21",
+    "title": "Ubuntu Manpage: zip - package and compress (archive) files"
+  },
+  "https://manpages.ubuntu.com/manpages/noble/man8/apt-get.8.html": {
+    "checked": "2026-09-21",
+    "title": "Ubuntu Manpage: apt-get - APT package handling utility - command-line interface (сайт ограничивает частоту запросов, 200 получен повторной попыткой curl)"
+  }
+}

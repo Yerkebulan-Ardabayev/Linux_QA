@@ -1,0 +1,2570 @@
+{
+ "category": "systemd и журналы",
+ "cards": [
+  {
+   "slug": "systemctl-status",
+   "cmd": "systemctl status",
+   "text": "systemctl status: состояние службы и последние строки её журнала",
+   "summary": "<p><code>systemctl status</code> показывает, загружен ли юнит и откуда (строка Loaded), работает ли он (строка Active), главный PID, дерево процессов в контрольной группе и последние 10 строк журнала службы. Без аргументов показывает состояние всей системы.</p><p>Строка Active бывает <code>active (running)</code> работает, <code>inactive (dead)</code> остановлена, <code>failed</code> завершилась с ошибкой. По man systemctl, status предназначен для человека, для скриптов есть <code>systemctl show</code> и <code>is-active</code>.</p>",
+   "examples": [
+    {
+     "line": "systemctl status ssh",
+     "d": "Состояние службы SSH-сервера, в Ubuntu она называется ssh.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Показать состояние юнита и последние строки журнала."
+      },
+      {
+       "t": "ssh",
+       "k": "arg",
+       "d": "Юнит ssh.service."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl status nginx --no-pager -n 30",
+     "d": "Состояние nginx и 30 строк журнала, без постраничного просмотра.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Показать состояние."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "--no-pager",
+       "k": "opt",
+       "d": "Не передавать вывод в пейджер, весь текст сразу в терминал."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Сколько строк журнала показать, по умолчанию 10."
+      },
+      {
+       "t": "30",
+       "k": "num",
+       "d": "Тридцать строк."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl status",
+     "d": "Состояние всей системы, дерево юнитов и число сбойных.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Без аргументов показывает состояние всей системы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl status 1234",
+     "d": "Какому юниту принадлежит процесс с PID 1234.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Показать состояние."
+      },
+      {
+       "t": "1234",
+       "k": "num",
+       "d": "PID, systemctl покажет юнит, в котором работает этот процесс."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>status по умолчанию показывает 10 строк журнала и обрезает длинные строки по ширине терминала. Полные строки даёт <code>-l</code> (<code>--full</code>), больше строк <code>-n</code>, а весь журнал службы <code>journalctl -u</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-start-stop-restart",
+   "cmd": "systemctl start, stop, restart",
+   "text": "systemctl start, stop, restart: запустить, остановить, перезапустить службу",
+   "summary": "<p><code>start</code> запускает юнит, <code>stop</code> останавливает, <code>restart</code> останавливает и запускает снова, а если служба не работала, просто запускает. Эти команды действуют сейчас и не меняют автозапуск при загрузке, для этого есть <code>enable</code> и <code>disable</code>.</p><p>Команды меняют состояние системы, поэтому нужны права root.</p>",
+   "examples": [
+    {
+     "line": "sudo systemctl start nginx",
+     "d": "Запустить nginx.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "start",
+       "k": "sub",
+       "d": "Запустить юнит."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl stop nginx",
+     "d": "Остановить nginx.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "stop",
+       "k": "sub",
+       "d": "Остановить юнит."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl restart nginx && systemctl is-active nginx",
+     "d": "Перезапустить nginx и сразу проверить, что он поднялся.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "restart",
+       "k": "sub",
+       "d": "Остановить и снова запустить юнит."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверка выполнится, только если restart завершился успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "is-active",
+       "k": "sub",
+       "d": "Напечатать active, если юнит работает."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>После <code>start</code> служба не запустится при следующей загрузке. Чтобы запустить сейчас и включить автозапуск, используйте <code>systemctl enable --now</code>.</p>",
+    "<p>Если restart вернул ошибку, причину ищите в <code>systemctl status</code> и <code>journalctl -u имя -n 50</code>, а не повторяйте restart.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-reload",
+   "cmd": "systemctl reload",
+   "text": "systemctl reload: перечитать конфигурацию без остановки службы",
+   "summary": "<p><code>reload</code> просит службу перечитать свою конфигурацию, процесс при этом не останавливается, соединения не рвутся. Работает только у служб, где задан <code>ExecReload=</code>. <code>reload-or-restart</code> делает reload, если служба его поддерживает, иначе restart.</p><p>По man systemctl, reload перечитывает конфигурацию самой службы, а не unit-файл. Изменения в unit-файле подхватывает <code>systemctl daemon-reload</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo systemctl reload nginx",
+     "d": "Перечитать конфигурацию nginx без разрыва соединений.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "reload",
+       "k": "sub",
+       "d": "Попросить юнит перечитать конфигурацию."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo sshd -t && sudo systemctl reload ssh",
+     "d": "Проверить конфигурацию SSH-сервера и только при успехе перечитать её.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "sshd",
+       "k": "cmd",
+       "d": "SSH-сервер."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "Режим проверки, sshd проверяет конфигурацию и ключи и завершается."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "reload выполнится, только если проверка прошла без ошибок.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "reload",
+       "k": "sub",
+       "d": "Перечитать конфигурацию."
+      },
+      {
+       "t": "ssh",
+       "k": "arg",
+       "d": "Юнит ssh.service."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl reload-or-restart myapp",
+     "d": "Перечитать конфигурацию, а если служба не умеет reload, перезапустить её.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "reload-or-restart",
+       "k": "sub",
+       "d": "reload, если поддерживается, иначе stop и start. Незапущенная служба будет запущена."
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>reload с ошибкой в конфигурации может оставить службу со старыми настройками или уронить её. Сначала проверяйте конфигурацию средствами самой программы, как <code>sshd -t</code> в примере.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html",
+    "https://man.openbsd.org/sshd"
+   ]
+  },
+  {
+   "slug": "systemctl-enable-disable",
+   "cmd": "systemctl enable, disable",
+   "text": "systemctl enable и disable: автозапуск при загрузке",
+   "summary": "<p><code>enable</code> создаёт символические ссылки по секции <code>[Install]</code> unit-файла, чаще всего в <code>multi-user.target.wants</code>, и служба стартует при загрузке. <code>disable</code> удаляет эти ссылки. Сами по себе они не запускают и не останавливают службу сейчас, это делает опция <code>--now</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo systemctl enable nginx",
+     "d": "Включить автозапуск nginx при загрузке.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "enable",
+       "k": "sub",
+       "d": "Создать ссылки из секции [Install]."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl enable --now nginx",
+     "d": "Включить автозапуск и сразу запустить.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "enable",
+       "k": "sub",
+       "d": "Включить автозапуск."
+      },
+      {
+       "t": "--now",
+       "k": "opt",
+       "d": "Вместе с enable ещё и запустить юнит."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl disable --now apache2",
+     "d": "Выключить автозапуск apache2 и сразу остановить его.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "disable",
+       "k": "sub",
+       "d": "Удалить ссылки автозапуска."
+      },
+      {
+       "t": "--now",
+       "k": "opt",
+       "d": "Вместе с disable ещё и остановить юнит."
+      },
+      {
+       "t": "apache2",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl is-enabled nginx",
+     "d": "Проверить, включён ли автозапуск.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "is-enabled",
+       "k": "sub",
+       "d": "Напечатать статус автозапуска, enabled, disabled, static, masked и другие."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Статус <code>static</code> у is-enabled значит, что в unit-файле нет секции [Install], такой юнит нельзя включить через enable, его запускает другой юнит или таймер.</p>",
+    "<p><code>enable</code> без <code>--now</code> не запускает службу. После установки новой службы частая ошибка, enable выполнен, а служба не работает до перезагрузки.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-is-active",
+   "cmd": "systemctl is-active",
+   "text": "systemctl is-active и is-failed: проверка состояния для скриптов",
+   "summary": "<p><code>is-active</code> печатает состояние юнита одним словом и возвращает код 0, если хотя бы один из указанных юнитов работает. <code>is-failed</code> возвращает 0, если юнит в состоянии failed. С <code>--quiet</code> ничего не печатается, остаётся только код возврата, это удобно в условиях <code>if</code> и цепочках <code>&amp;&amp;</code>.</p>",
+   "examples": [
+    {
+     "line": "systemctl is-active nginx",
+     "d": "Напечатать active или inactive.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "is-active",
+       "k": "sub",
+       "d": "Проверить, работает ли юнит."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl is-active --quiet nginx || echo \"nginx не работает\"",
+     "d": "Сообщить, только если служба не работает.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "is-active",
+       "k": "sub",
+       "d": "Проверить, работает ли юнит."
+      },
+      {
+       "t": "--quiet",
+       "k": "opt",
+       "d": "Ничего не печатать, только код возврата."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "||",
+       "k": "op",
+       "d": "echo выполнится при ненулевом коде, то есть когда nginx не работает.",
+       "ref": "sym-or"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать."
+      },
+      {
+       "t": "\"nginx не работает\"",
+       "k": "str",
+       "d": "Сообщение.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая двойная кавычка, пробелы внутри не делят строку на аргументы.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "nginx не работает",
+         "k": "str",
+         "d": "Текст."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая двойная кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl is-failed myapp",
+     "d": "Проверить, упала ли служба.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "is-failed",
+       "k": "sub",
+       "d": "Проверить состояние failed."
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Не разбирайте вывод <code>systemctl status</code> через grep в скриптах, его формат рассчитан на человека. Для скрипта есть код возврата is-active и вывод <code>systemctl show</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-list-units",
+   "cmd": "systemctl list-units, --failed",
+   "text": "systemctl list-units и --failed: список юнитов",
+   "summary": "<p><code>list-units</code> показывает юниты, которые systemd держит в памяти, с колонками UNIT, LOAD, ACTIVE, SUB, DESCRIPTION. <code>--type</code> фильтрует по типу (service, timer, socket, mount), <code>--state</code> по состоянию. <code>--failed</code> равно <code>--state=failed</code>, это первое, что стоит проверить после загрузки сервера.</p><p><code>list-unit-files</code> показывает установленные unit-файлы и их статус автозапуска, включая службы, которые сейчас не загружены.</p>",
+   "examples": [
+    {
+     "line": "systemctl list-units --type=service --state=running",
+     "d": "Все работающие службы.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "list-units",
+       "k": "sub",
+       "d": "Список юнитов в памяти systemd."
+      },
+      {
+       "t": "--type=service",
+       "k": "opt",
+       "d": "Фильтр по типу.",
+       "sub": [
+        {
+         "t": "--type",
+         "k": "opt",
+         "d": "Показывать только юниты указанных типов."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "service",
+         "k": "val",
+         "d": "Только службы."
+        }
+       ]
+      },
+      {
+       "t": "--state=running",
+       "k": "opt",
+       "d": "Фильтр по состоянию.",
+       "sub": [
+        {
+         "t": "--state",
+         "k": "opt",
+         "d": "Показывать только юниты в указанных состояниях."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "running",
+         "k": "val",
+         "d": "Состояние SUB running, процесс работает."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl --failed",
+     "d": "Все юниты в состоянии failed.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "--failed",
+       "k": "opt",
+       "d": "Показать юниты в состоянии failed, то же что --state=failed."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl list-unit-files --type=service --state=enabled",
+     "d": "Службы с включённым автозапуском.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "list-unit-files",
+       "k": "sub",
+       "d": "Список установленных unit-файлов и их статуса автозапуска."
+      },
+      {
+       "t": "--type=service",
+       "k": "opt",
+       "d": "Фильтр по типу.",
+       "sub": [
+        {
+         "t": "--type",
+         "k": "opt",
+         "d": "Тип юнитов."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "service",
+         "k": "val",
+         "d": "Службы."
+        }
+       ]
+      },
+      {
+       "t": "--state=enabled",
+       "k": "opt",
+       "d": "Фильтр по статусу.",
+       "sub": [
+        {
+         "t": "--state",
+         "k": "opt",
+         "d": "Статус unit-файла."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "enabled",
+         "k": "val",
+         "d": "Автозапуск включён."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl reset-failed",
+     "d": "Сбросить состояние failed у всех юнитов после того, как причина устранена.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "reset-failed",
+       "k": "sub",
+       "d": "Сбросить состояние failed, без аргументов у всех юнитов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>list-units без <code>--all</code> не показывает неактивные юниты, которых нет в памяти. Если службы нет в списке, проверьте <code>list-unit-files</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-daemon-reload",
+   "cmd": "systemctl daemon-reload",
+   "text": "systemctl daemon-reload: перечитать unit-файлы",
+   "summary": "<p>systemd читает unit-файлы при загрузке и держит их в памяти. После того как вы создали или изменили файл в <code>/etc/systemd/system/</code> вручную, выполните <code>daemon-reload</code>, иначе systemd продолжит работать со старой версией и выдаст предупреждение в status.</p><p>По man systemctl, <code>enable</code>, <code>disable</code> и <code>edit</code> перечитывают конфигурацию сами.</p>",
+   "examples": [
+    {
+     "line": "sudo systemctl daemon-reload",
+     "d": "Перечитать все unit-файлы и пересобрать дерево зависимостей.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "daemon-reload",
+       "k": "sub",
+       "d": "Перезагрузить конфигурацию менеджера systemd, все unit-файлы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl daemon-reload && sudo systemctl restart myapp",
+     "d": "После правки myapp.service применить изменения к работающей службе.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "daemon-reload",
+       "k": "sub",
+       "d": "Перечитать unit-файлы."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Перезапуск только после успешной перезагрузки конфигурации.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "restart",
+       "k": "sub",
+       "d": "Перезапустить службу, новые ExecStart и Environment применятся только при новом запуске."
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>daemon-reload не перезапускает службы. Новые параметры запуска применятся только после restart службы.</p>",
+    "<p>daemon-reload не перечитывает конфигурацию самих программ, например nginx.conf. Для этого есть <code>systemctl reload</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "systemctl-cat-edit",
+   "cmd": "systemctl cat, edit",
+   "text": "systemctl cat и edit: посмотреть и переопределить unit-файл",
+   "summary": "<p><code>cat</code> печатает unit-файл и все его дополнения (drop-in) с комментарием, из какого файла взята каждая часть. <code>edit</code> открывает редактор для drop-in файла <code>/etc/systemd/system/имя.service.d/override.conf</code>, в котором вы переопределяете только нужные строки. С <code>--full</code> редактируется копия всего unit-файла.</p><p>Unit-файлы пакетов лежат в <code>/usr/lib/systemd/system/</code>, файлы администратора в <code>/etc/systemd/system/</code>. Файлы пакета принадлежат пакету, поэтому изменения вносите через <code>edit</code>, они попадут в /etc.</p>",
+   "examples": [
+    {
+     "line": "systemctl cat ssh",
+     "d": "Показать unit-файл ssh.service со всеми дополнениями.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "cat",
+       "k": "sub",
+       "d": "Показать исходные файлы юнита."
+      },
+      {
+       "t": "ssh",
+       "k": "arg",
+       "d": "Юнит ssh.service."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl edit nginx",
+     "d": "Создать или изменить drop-in для nginx, после выхода из редактора конфигурация перечитается сама.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "edit",
+       "k": "sub",
+       "d": "Редактировать drop-in файл юнита."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl edit --full myapp",
+     "d": "Редактировать копию всего unit-файла myapp.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "edit",
+       "k": "sub",
+       "d": "Редактировать юнит."
+      },
+      {
+       "t": "--full",
+       "k": "opt",
+       "d": "Создать или изменить замену основного unit-файла вместо drop-in."
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Чтобы в drop-in заменить <code>ExecStart=</code>, сначала очистите его пустой строкой <code>ExecStart=</code>, затем задайте новое значение. Иначе у службы окажется две команды запуска, а для всех типов, кроме oneshot, допустима ровно одна.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html"
+   ]
+  },
+  {
+   "slug": "journalctl-unit",
+   "cmd": "journalctl -u, -f, -n",
+   "text": "journalctl -u, -f, -n: журнал конкретной службы",
+   "summary": "<p>systemd собирает stdout, stderr и syslog-сообщения всех служб в единый журнал. <code>journalctl</code> его читает. <code>-u</code> оставляет записи одного юнита, <code>-n</code> последние N записей, <code>-f</code> показывает новые записи по мере появления, выход по Ctrl+C.</p>",
+   "examples": [
+    {
+     "line": "journalctl -u nginx -n 50 --no-pager",
+     "d": "Последние 50 записей nginx сразу в терминал.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-u",
+       "k": "opt",
+       "d": "Записи указанного юнита."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Показать самые свежие записи, ограничив их число."
+      },
+      {
+       "t": "50",
+       "k": "num",
+       "d": "Пятьдесят записей."
+      },
+      {
+       "t": "--no-pager",
+       "k": "opt",
+       "d": "Не передавать вывод в пейджер."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl -fu myapp",
+     "d": "Следить за журналом myapp в реальном времени.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-fu",
+       "k": "opt",
+       "d": "Две опции склеены, u последняя, потому что ждёт имя юнита.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "f",
+         "k": "opt",
+         "d": "follow, печатать новые записи по мере появления."
+        },
+        {
+         "t": "u",
+         "k": "opt",
+         "d": "Записи указанного юнита."
+        }
+       ]
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl -u ssh -u nginx --since today",
+     "d": "Записи двух служб за сегодня, вперемешку по времени.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-u",
+       "k": "opt",
+       "d": "Первый юнит."
+      },
+      {
+       "t": "ssh",
+       "k": "arg",
+       "d": "Юнит ssh.service."
+      },
+      {
+       "t": "-u",
+       "k": "opt",
+       "d": "Опцию можно повторить, записи юнитов объединятся."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "--since",
+       "k": "opt",
+       "d": "Начало интервала."
+      },
+      {
+       "t": "today",
+       "k": "val",
+       "d": "С 00:00 текущего дня."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Обычный пользователь видит только свой журнал. Системный журнал и журналы других пользователей читают root и члены групп <code>systemd-journal</code>, <code>adm</code> и <code>wheel</code>. Если записей служб не видно, запустите journalctl через sudo.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/journalctl.html"
+   ]
+  },
+  {
+   "slug": "journalctl-boot-since",
+   "cmd": "journalctl -b, --since",
+   "text": "journalctl -b и --since: записи за загрузку и за период",
+   "summary": "<p><code>-b</code> оставляет записи одной загрузки, без аргумента текущей, <code>-b -1</code> предыдущей. Так ищут причину неожиданной перезагрузки. Список загрузок даёт <code>--list-boots</code>.</p><p><code>--since</code> и <code>--until</code> задают интервал времени. Формат <code>\"2026-09-21 09:00:00\"</code>, слова <code>yesterday</code>, <code>today</code>, <code>now</code> и относительное время вроде <code>\"1 hour ago\"</code>, синтаксис описан в systemd.time.</p>",
+   "examples": [
+    {
+     "line": "journalctl -b -p err",
+     "d": "Ошибки текущей загрузки.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-b",
+       "k": "opt",
+       "d": "Записи текущей загрузки."
+      },
+      {
+       "t": "-p",
+       "k": "opt",
+       "d": "Фильтр по приоритету."
+      },
+      {
+       "t": "err",
+       "k": "val",
+       "d": "err и важнее, то есть err, crit, alert, emerg."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl -b -1 -n 100",
+     "d": "Последние 100 записей перед предыдущей перезагрузкой.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-b",
+       "k": "opt",
+       "d": "Выбрать загрузку."
+      },
+      {
+       "t": "-1",
+       "k": "num",
+       "d": "Смещение, предыдущая загрузка."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Последние записи."
+      },
+      {
+       "t": "100",
+       "k": "num",
+       "d": "Сто записей."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl --since \"1 hour ago\"",
+     "d": "Все записи за последний час.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "--since",
+       "k": "opt",
+       "d": "Показывать записи начиная с этого момента."
+      },
+      {
+       "t": "\"1 hour ago\"",
+       "k": "val",
+       "d": "Относительное время одним аргументом.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая двойная кавычка, пробелы внутри не делят строку на аргументы.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "1 hour ago",
+         "k": "val",
+         "d": "Час назад, формат из systemd.time."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая двойная кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl -u nginx --since \"2026-09-21 09:00\" --until \"2026-09-21 10:00\"",
+     "d": "Записи nginx за один час.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-u",
+       "k": "opt",
+       "d": "Записи юнита."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      },
+      {
+       "t": "--since",
+       "k": "opt",
+       "d": "Начало интервала."
+      },
+      {
+       "t": "\"2026-09-21 09:00\"",
+       "k": "val",
+       "d": "Дата и время, секунды можно не писать.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая двойная кавычка, пробелы внутри не делят строку на аргументы.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "2026-09-21 09:00",
+         "k": "val",
+         "d": "ГГГГ-ММ-ДД чч:мм."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая двойная кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": "--until",
+       "k": "opt",
+       "d": "Конец интервала."
+      },
+      {
+       "t": "\"2026-09-21 10:00\"",
+       "k": "val",
+       "d": "Дата и время.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая двойная кавычка, пробелы внутри не делят строку на аргументы.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "2026-09-21 10:00",
+         "k": "val",
+         "d": "ГГГГ-ММ-ДД чч:мм."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая двойная кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Если журнал хранится только в памяти, <code>-b -1</code> ответит, что загрузок нет. Проверьте, что существует каталог <code>/var/log/journal</code> и значение <code>Storage=</code> в journald.conf.</p>",
+    "<p>Дата с пробелом без кавычек распадётся на два аргумента, и journalctl не поймёт время. Берите её в кавычки.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/journalctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html"
+   ]
+  },
+  {
+   "slug": "journalctl-priority-disk",
+   "cmd": "journalctl -p, --disk-usage",
+   "text": "journalctl -p и --disk-usage: уровни важности и место под журнал",
+   "summary": "<p><code>-p</code> фильтрует по приоритету syslog, 0 emerg, 1 alert, 2 crit, 3 err, 4 warning, 5 notice, 6 info, 7 debug. Одно значение показывает этот уровень и более важные, диапазон <code>FROM..TO</code> показывает уровни внутри диапазона.</p><p><code>--disk-usage</code> показывает, сколько места занимают файлы журнала. Старые архивные файлы удаляются через <code>--vacuum-size</code> или <code>--vacuum-time</code>, постоянный лимит задаёт <code>SystemMaxUse=</code> в journald.conf.</p>",
+   "examples": [
+    {
+     "line": "journalctl -p warning..err --since today",
+     "d": "Предупреждения и ошибки за сегодня, без crit и выше.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "-p",
+       "k": "opt",
+       "d": "Фильтр по приоритету."
+      },
+      {
+       "t": "warning..err",
+       "k": "val",
+       "d": "Диапазон уровней.",
+       "sub": [
+        {
+         "t": "warning",
+         "k": "val",
+         "d": "Уровень 4, нижняя граница по важности."
+        },
+        {
+         "t": "..",
+         "k": "op",
+         "d": "Диапазон от и до включительно."
+        },
+        {
+         "t": "err",
+         "k": "val",
+         "d": "Уровень 3, верхняя граница."
+        }
+       ]
+      },
+      {
+       "t": "--since",
+       "k": "opt",
+       "d": "Начало интервала."
+      },
+      {
+       "t": "today",
+       "k": "val",
+       "d": "С начала дня."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "journalctl --disk-usage",
+     "d": "Сколько места занимает журнал.",
+     "parts": [
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "--disk-usage",
+       "k": "opt",
+       "d": "Сумма размеров всех архивных и активных файлов журнала."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo journalctl --vacuum-size=500M",
+     "d": "Удалять старые архивные файлы журнала, пока они не займут меньше 500 МБ.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Файлы журнала принадлежат системе."
+      },
+      {
+       "t": "journalctl",
+       "k": "cmd",
+       "d": "Чтение журнала systemd."
+      },
+      {
+       "t": "--vacuum-size=500M",
+       "k": "opt",
+       "d": "Очистка по размеру.",
+       "sub": [
+        {
+         "t": "--vacuum-size",
+         "k": "opt",
+         "d": "Удалять самые старые архивные файлы, пока их размер больше заданного."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "500M",
+         "k": "val",
+         "d": "500 мебибайт, допустимы суффиксы K, M, G, T по основанию 1024."
+        }
+       ]
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>--vacuum-size</code> удаляет записи без возможности восстановления и работает только с архивными файлами, активный файл журнала не трогает. Поэтому <code>--disk-usage</code> после очистки может уменьшиться меньше, чем вы ждали.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/journalctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html"
+   ]
+  },
+  {
+   "slug": "systemd-unit-file",
+   "cmd": "myapp.service",
+   "text": "Unit-файл службы: разбор myapp.service построчно",
+   "summary": "<p>Unit-файл описывает, как systemd запускает службу. Свои файлы кладите в <code>/etc/systemd/system/</code>. Файл состоит из секций в квадратных скобках, внутри строки вида <code>Ключ=значение</code>.</p><ul><li><code>[Unit]</code>, описание и зависимости (systemd.unit).</li><li><code>[Service]</code>, как запускать процесс (systemd.service, systemd.exec).</li><li><code>[Install]</code>, куда подключить службу при enable.</li></ul>",
+   "examples": [
+    {
+     "line": "sudo cp myapp.service /etc/systemd/system/",
+     "d": "Положить unit-файл в каталог администратора.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Каталог /etc/systemd/system принадлежит root."
+      },
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Скопировать файл."
+      },
+      {
+       "t": "myapp.service",
+       "k": "path",
+       "d": "Ваш unit-файл."
+      },
+      {
+       "t": "/etc/systemd/system/",
+       "k": "path",
+       "d": "Каталог для unit-файлов администратора, у него приоритет над файлами пакетов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl daemon-reload && sudo systemctl enable --now myapp",
+     "d": "Перечитать unit-файлы, включить автозапуск и запустить службу.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "daemon-reload",
+       "k": "sub",
+       "d": "systemd узнает о новом файле."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, только если перечитывание прошло успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "enable",
+       "k": "sub",
+       "d": "Включить автозапуск по секции [Install]."
+      },
+      {
+       "t": "--now",
+       "k": "opt",
+       "d": "И сразу запустить."
+      },
+      {
+       "t": "myapp",
+       "k": "arg",
+       "d": "Имя юнита. Суффикс .service можно не писать, systemctl допишет его сам."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemd-analyze verify /etc/systemd/system/myapp.service",
+     "d": "Проверить unit-файл на ошибки.",
+     "parts": [
+      {
+       "t": "systemd-analyze",
+       "k": "cmd",
+       "d": "Инструмент анализа systemd."
+      },
+      {
+       "t": "verify",
+       "k": "sub",
+       "d": "Загрузить unit-файл и вывести предупреждения, если найдены ошибки."
+      },
+      {
+       "t": "/etc/systemd/system/myapp.service",
+       "k": "path",
+       "d": "Проверяемый файл."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": {
+    "name": "myapp.service",
+    "d": "Unit-файл службы для Python-приложения, работает от отдельного пользователя, перезапускается при сбое, стартует при загрузке.",
+    "lines": [
+     {
+      "line": "[Unit]",
+      "d": "Секция общих свойств юнита, описание и зависимости.",
+      "parts": [
+       {
+        "t": "[Unit]",
+        "k": "kw",
+        "d": "Секция [Unit], есть в любом юните.",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Unit",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "Description=My Python web app",
+      "d": "Описание, его показывают status и list-units.",
+      "parts": [
+       {
+        "t": "Description",
+        "k": "kw",
+        "d": "Человекочитаемое описание юнита."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "My Python web app",
+        "k": "str",
+        "d": "Короткое понятное название службы."
+       }
+      ]
+     },
+     {
+      "line": "After=network-online.target",
+      "d": "Запускать после того, как сеть поднята.",
+      "parts": [
+       {
+        "t": "After",
+        "k": "kw",
+        "d": "Порядок запуска, этот юнит стартует после перечисленных."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "network-online.target",
+        "k": "arg",
+        "d": "Цель, которая достигается, когда сеть настроена."
+       }
+      ]
+     },
+     {
+      "line": "Wants=network-online.target",
+      "d": "Попросить запустить network-online.target вместе с этой службой.",
+      "parts": [
+       {
+        "t": "Wants",
+        "k": "kw",
+        "d": "Слабая зависимость, перечисленные юниты будут запущены, но их сбой не остановит эту службу. After задаёт порядок, Wants задаёт сам запуск, поэтому их пишут парой."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "network-online.target",
+        "k": "arg",
+        "d": "Цель сети."
+       }
+      ]
+     },
+     {
+      "line": "",
+      "d": ""
+     },
+     {
+      "line": "[Service]",
+      "d": "Секция параметров службы.",
+      "parts": [
+       {
+        "t": "[Service]",
+        "k": "kw",
+        "d": "Секция [Service], есть только у юнитов .service.",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Service",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "Type=simple",
+      "d": "Служба считается запущенной сразу после старта процесса.",
+      "parts": [
+       {
+        "t": "Type",
+        "k": "kw",
+        "d": "Как systemd понимает, что служба запустилась."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "simple",
+        "k": "val",
+        "d": "Значение по умолчанию, если задан ExecStart. Главный процесс не уходит в фон сам."
+       }
+      ]
+     },
+     {
+      "line": "User=myapp",
+      "d": "Запускать от отдельного пользователя, а не от root.",
+      "parts": [
+       {
+        "t": "User",
+        "k": "kw",
+        "d": "Пользователь, от имени которого работают процессы службы."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "myapp",
+        "k": "arg",
+        "d": "Системный пользователь службы, создаётся заранее через useradd."
+       }
+      ]
+     },
+     {
+      "line": "WorkingDirectory=/opt/myapp",
+      "d": "Текущий каталог процесса.",
+      "parts": [
+       {
+        "t": "WorkingDirectory",
+        "k": "kw",
+        "d": "Рабочий каталог процессов службы."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "/opt/myapp",
+        "k": "path",
+        "d": "Каталог приложения, относительные пути в программе будут считаться от него."
+       }
+      ]
+     },
+     {
+      "line": "EnvironmentFile=/etc/myapp/env",
+      "d": "Взять переменные окружения из файла.",
+      "parts": [
+       {
+        "t": "EnvironmentFile",
+        "k": "kw",
+        "d": "Файл с переменными окружения."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "/etc/myapp/env",
+        "k": "path",
+        "d": "Файл со строками вида ИМЯ=значение, удобно для паролей и настроек, которые не должны лежать в unit-файле."
+       }
+      ]
+     },
+     {
+      "line": "ExecStart=/opt/myapp/venv/bin/python /opt/myapp/app.py",
+      "d": "Команда запуска.",
+      "parts": [
+       {
+        "t": "ExecStart",
+        "k": "kw",
+        "d": "Команда, которую выполняет systemd при start. Это не оболочка, конвейеры и перенаправления здесь не работают."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "/opt/myapp/venv/bin/python /opt/myapp/app.py",
+        "k": "arg",
+        "d": "Команда с аргументами.",
+        "sub": [
+         {
+          "t": "/opt/myapp/venv/bin/python",
+          "k": "path",
+          "d": "Интерпретатор из виртуального окружения, путь абсолютный."
+         },
+         {
+          "t": "/opt/myapp/app.py",
+          "k": "path",
+          "d": "Скрипт приложения."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "ExecReload=/bin/kill -HUP $MAINPID",
+      "d": "Что делать при systemctl reload.",
+      "parts": [
+       {
+        "t": "ExecReload",
+        "k": "kw",
+        "d": "Команда для systemctl reload."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "/bin/kill -HUP $MAINPID",
+        "k": "arg",
+        "d": "Команда перечитывания конфигурации.",
+        "sub": [
+         {
+          "t": "/bin/kill",
+          "k": "path",
+          "d": "Программа kill."
+         },
+         {
+          "t": "-HUP",
+          "k": "opt",
+          "d": "Сигнал HUP, приложение должно уметь его обрабатывать."
+         },
+         {
+          "t": "$MAINPID",
+          "k": "var",
+          "d": "Переменная, которую подставляет systemd, PID главного процесса службы. Это подстановка systemd, а не оболочки."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "Restart=on-failure",
+      "d": "Перезапускать службу, если она упала.",
+      "parts": [
+       {
+        "t": "Restart",
+        "k": "kw",
+        "d": "Когда перезапускать службу."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "on-failure",
+        "k": "val",
+        "d": "Перезапуск при ненулевом коде выхода, завершении по сигналу, таймауте или срабатывании watchdog. После обычного stop не перезапускает."
+       }
+      ]
+     },
+     {
+      "line": "RestartSec=5",
+      "d": "Пауза перед перезапуском.",
+      "parts": [
+       {
+        "t": "RestartSec",
+        "k": "kw",
+        "d": "Сколько ждать перед перезапуском."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "5",
+        "k": "num",
+        "d": "Пять секунд, по умолчанию 100 мс."
+       }
+      ]
+     },
+     {
+      "line": "",
+      "d": ""
+     },
+     {
+      "line": "[Install]",
+      "d": "Секция для enable и disable.",
+      "parts": [
+       {
+        "t": "[Install]",
+        "k": "kw",
+        "d": "Секция [Install], её читают только enable и disable.",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Install",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "WantedBy=multi-user.target",
+      "d": "При enable подключить службу к обычной многопользовательской загрузке.",
+      "parts": [
+       {
+        "t": "WantedBy",
+        "k": "kw",
+        "d": "enable создаст ссылку в каталоге multi-user.target.wants."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "multi-user.target",
+        "k": "arg",
+        "d": "Цель обычной загрузки сервера без графики."
+       }
+      ]
+     }
+    ],
+    "run": "system",
+    "setup": "",
+    "args": "",
+    "output": ""
+   },
+   "mistakes": [
+    "<p>В <code>ExecStart=</code> пишите полный путь и не используйте <code>|</code>, <code>&gt;</code>, <code>&amp;&amp;</code>. Это не строка оболочки. Если оболочка нужна, запускайте <code>/bin/bash -c '...'</code> или отдельный скрипт.</p>",
+    "<p>Программа в ExecStart не должна уходить в фон сама. С <code>Type=simple</code> systemd следит за главным процессом, и если он завершился, служба считается остановленной.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html"
+   ]
+  },
+  {
+   "slug": "systemd-timer",
+   "cmd": "backup.timer",
+   "text": "Таймер systemd: разбор backup.timer построчно",
+   "summary": "<p>Таймер это юнит <code>.timer</code>, который по расписанию запускает другой юнит, обычно <code>.service</code> с <code>Type=oneshot</code>. По сравнению с cron у таймера есть журнал в journalctl, догон пропущенных запусков (<code>Persistent=</code>) и случайная задержка.</p><p>Включается сам таймер, а не служба, <code>systemctl enable --now backup.timer</code>.</p>",
+   "examples": [
+    {
+     "line": "systemctl list-timers",
+     "d": "Все активные таймеры, когда сработают в следующий раз и когда срабатывали.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "list-timers",
+       "k": "sub",
+       "d": "Список таймеров в памяти, по времени следующего срабатывания."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl enable --now backup.timer",
+     "d": "Включить и запустить таймер.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами и юнитами systemd."
+      },
+      {
+       "t": "enable",
+       "k": "sub",
+       "d": "Включить автозапуск."
+      },
+      {
+       "t": "--now",
+       "k": "opt",
+       "d": "И сразу запустить."
+      },
+      {
+       "t": "backup.timer",
+       "k": "arg",
+       "d": "Имя таймера, суффикс .timer обязателен, иначе systemctl поймёт имя как .service."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemd-analyze calendar \"*-*-* 02:00:00\"",
+     "d": "Проверить календарное выражение и узнать ближайшее срабатывание.",
+     "parts": [
+      {
+       "t": "systemd-analyze",
+       "k": "cmd",
+       "d": "Инструмент анализа systemd."
+      },
+      {
+       "t": "calendar",
+       "k": "sub",
+       "d": "Разобрать календарное выражение и показать, когда оно сработает."
+      },
+      {
+       "t": "\"*-*-* 02:00:00\"",
+       "k": "pat",
+       "d": "Выражение в кавычках, чтобы оболочка не раскрыла звёздочки и не разделила по пробелу.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открывающая двойная кавычка, пробелы внутри не делят строку на аргументы.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "*-*-* 02:00:00",
+         "k": "pat",
+         "d": "То же выражение, что в OnCalendar."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрывающая двойная кавычка.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": {
+    "name": "backup.timer",
+    "d": "Таймер, который каждую ночь в 02:00 с небольшим случайным сдвигом запускает backup.service и догоняет пропущенный запуск после выключения.",
+    "lines": [
+     {
+      "line": "[Unit]",
+      "d": "Общие свойства таймера.",
+      "parts": [
+       {
+        "t": "[Unit]",
+        "k": "kw",
+        "d": "Секция [Unit].",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Unit",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "Description=Nightly backup",
+      "d": "Описание для list-timers и status.",
+      "parts": [
+       {
+        "t": "Description",
+        "k": "kw",
+        "d": "Описание юнита."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "Nightly backup",
+        "k": "str",
+        "d": "Ночная резервная копия."
+       }
+      ]
+     },
+     {
+      "line": "",
+      "d": ""
+     },
+     {
+      "line": "[Timer]",
+      "d": "Секция расписания.",
+      "parts": [
+       {
+        "t": "[Timer]",
+        "k": "kw",
+        "d": "Секция [Timer], есть только у юнитов .timer.",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Timer",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "OnCalendar=*-*-* 02:00:00",
+      "d": "Запускать каждый день в 02:00.",
+      "parts": [
+       {
+        "t": "OnCalendar",
+        "k": "kw",
+        "d": "Расписание по календарю, как у cron."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "*-*-* 02:00:00",
+        "k": "pat",
+        "d": "Календарное выражение из systemd.time, дата и время.",
+        "sub": [
+         {
+          "t": "*-*-*",
+          "k": "pat",
+          "d": "Дата, год-месяц-день.",
+          "sub": [
+           {
+            "t": "*",
+            "k": "pat",
+            "d": "Любой год. Это синтаксис systemd, оболочка здесь не участвует."
+           },
+           {
+            "t": "-",
+            "k": "op",
+            "d": "Разделитель."
+           },
+           {
+            "t": "*",
+            "k": "pat",
+            "d": "Любой месяц."
+           },
+           {
+            "t": "-",
+            "k": "op",
+            "d": "Разделитель."
+           },
+           {
+            "t": "*",
+            "k": "pat",
+            "d": "Любой день."
+           }
+          ]
+         },
+         {
+          "t": "02:00:00",
+          "k": "val",
+          "d": "Время, часы:минуты:секунды."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "RandomizedDelaySec=15min",
+      "d": "Случайная задержка до 15 минут, чтобы много серверов не стартовали одновременно.",
+      "parts": [
+       {
+        "t": "RandomizedDelaySec",
+        "k": "kw",
+        "d": "Задержать срабатывание на случайное время от нуля до указанного."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "15min",
+        "k": "val",
+        "d": "Верхняя граница случайной задержки."
+       }
+      ]
+     },
+     {
+      "line": "Persistent=true",
+      "d": "Если сервер был выключен в 02:00, запустить задачу сразу после включения.",
+      "parts": [
+       {
+        "t": "Persistent",
+        "k": "kw",
+        "d": "Догонять пропущенные запуски."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "true",
+        "k": "val",
+        "d": "Время последнего срабатывания хранится на диске."
+       }
+      ]
+     },
+     {
+      "line": "Unit=backup.service",
+      "d": "Какую службу запускать.",
+      "parts": [
+       {
+        "t": "Unit",
+        "k": "kw",
+        "d": "Юнит, который активирует таймер."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "backup.service",
+        "k": "arg",
+        "d": "Служба с Type=oneshot, которая делает саму копию. Если строки нет, запускается служба с тем же именем, что у таймера."
+       }
+      ]
+     },
+     {
+      "line": "",
+      "d": ""
+     },
+     {
+      "line": "[Install]",
+      "d": "Секция для enable.",
+      "parts": [
+       {
+        "t": "[Install]",
+        "k": "kw",
+        "d": "Секция [Install].",
+        "sub": [
+         {
+          "t": "[",
+          "k": "op",
+          "d": "Начало заголовка секции."
+         },
+         {
+          "t": "Install",
+          "k": "kw",
+          "d": "Имя секции."
+         },
+         {
+          "t": "]",
+          "k": "op",
+          "d": "Конец заголовка секции."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "line": "WantedBy=timers.target",
+      "d": "При enable подключить таймер к цели всех таймеров.",
+      "parts": [
+       {
+        "t": "WantedBy",
+        "k": "kw",
+        "d": "Куда подключить при enable."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель ключа и значения, пробелов вокруг не нужно."
+       },
+       {
+        "t": "timers.target",
+        "k": "arg",
+        "d": "Специальная цель, которая запускает таймеры при загрузке."
+       }
+      ]
+     }
+    ],
+    "run": "system",
+    "setup": "",
+    "args": "",
+    "output": ""
+   },
+   "mistakes": [
+    "<p>Если включить через enable только backup.service, таймер работать не будет. Включать нужно backup.timer.</p>",
+    "<p>Без кавычек <code>*-*-*</code> в командной строке раскроет оболочка, если в каталоге найдутся подходящие имена файлов. В самом файле таймера кавычки не нужны.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+   ]
+  },
+  {
+   "slug": "hostnamectl",
+   "cmd": "hostnamectl",
+   "text": "hostnamectl: имя хоста и сведения о системе",
+   "summary": "<p><code>hostnamectl</code> без аргументов показывает имя хоста, тип машины (chassis), виртуализацию, ОС, ядро и архитектуру. С командой <code>hostname ИМЯ</code> меняет имя хоста, по умолчанию сразу статическое, временное и красивое (pretty).</p>",
+   "examples": [
+    {
+     "line": "hostnamectl",
+     "d": "Имя хоста, ОС, ядро, архитектура, виртуализация.",
+     "parts": [
+      {
+       "t": "hostnamectl",
+       "k": "cmd",
+       "d": "Без команды выполняется status."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo hostnamectl hostname web01",
+     "d": "Сменить имя хоста на web01.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Имя хоста меняет только root."
+      },
+      {
+       "t": "hostnamectl",
+       "k": "cmd",
+       "d": "Управление именем хоста."
+      },
+      {
+       "t": "hostname",
+       "k": "sub",
+       "d": "С аргументом меняет имя хоста, без аргумента печатает его."
+      },
+      {
+       "t": "web01",
+       "k": "arg",
+       "d": "Новое имя, не длиннее 64 символов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "hostnamectl hostname",
+     "d": "Напечатать только имя хоста.",
+     "parts": [
+      {
+       "t": "hostnamectl",
+       "k": "cmd",
+       "d": "Управление именем хоста."
+      },
+      {
+       "t": "hostname",
+       "k": "sub",
+       "d": "Без аргумента печатает имя хоста."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Статическое имя ограничено символами, принятыми в доменных именах, и длиной 64 символа. Имя с пробелами или кириллицей попадёт только в красивое (pretty) имя, а статическое будет упрощено.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/hostnamectl.html"
+   ]
+  },
+  {
+   "slug": "timedatectl",
+   "cmd": "timedatectl",
+   "text": "timedatectl: часовой пояс и синхронизация времени",
+   "summary": "<p><code>timedatectl</code> без аргументов показывает местное время, UTC, время аппаратных часов (RTC), часовой пояс и включена ли синхронизация по NTP. Точное время важно для журналов, TLS-сертификатов и кластеров.</p>",
+   "examples": [
+    {
+     "line": "timedatectl",
+     "d": "Время, часовой пояс и статус синхронизации.",
+     "parts": [
+      {
+       "t": "timedatectl",
+       "k": "cmd",
+       "d": "Без команды выполняется status."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "timedatectl list-timezones | grep Almaty",
+     "d": "Найти точное имя часового пояса.",
+     "parts": [
+      {
+       "t": "timedatectl",
+       "k": "cmd",
+       "d": "Управление временем."
+      },
+      {
+       "t": "list-timezones",
+       "k": "sub",
+       "d": "Список известных часовых поясов, по одному в строке."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать список в grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Оставить совпадающие строки."
+      },
+      {
+       "t": "Almaty",
+       "k": "pat",
+       "d": "Часть имени пояса."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo timedatectl set-timezone Asia/Almaty",
+     "d": "Установить часовой пояс.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Часовой пояс меняет только root."
+      },
+      {
+       "t": "timedatectl",
+       "k": "cmd",
+       "d": "Управление временем."
+      },
+      {
+       "t": "set-timezone",
+       "k": "sub",
+       "d": "Установить часовой пояс, команда меняет ссылку /etc/localtime."
+      },
+      {
+       "t": "Asia/Almaty",
+       "k": "arg",
+       "d": "Имя пояса из list-timezones."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "timedatectl timesync-status",
+     "d": "Подробности синхронизации, сервер NTP, смещение, интервал опроса.",
+     "parts": [
+      {
+       "t": "timedatectl",
+       "k": "cmd",
+       "d": "Управление временем."
+      },
+      {
+       "t": "timesync-status",
+       "k": "sub",
+       "d": "Состояние systemd-timesyncd, работает только если синхронизацию ведёт он."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Неверное время на сервере часто пытаются исправить сменой часового пояса. Пояс влияет только на отображение местного времени, а сами часы должны приходить по NTP. Проверьте строку <code>NTP service</code> в выводе timedatectl и включите синхронизацию через <code>sudo timedatectl set-ntp true</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/timedatectl.html"
+   ]
+  }
+ ]
+}
