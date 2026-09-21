@@ -59,7 +59,7 @@ async function fetchPage(url) {
       const r = await fetch(url, {
         redirect: 'follow',
         headers: { 'User-Agent': UA, Accept: 'text/html,*/*' },
-        signal: AbortSignal.timeout(30000),
+        signal: AbortSignal.timeout(20000),
       });
       const text = r.status === 200 ? await r.text() : (await r.body?.cancel(), '');
       if (r.status === 200 || attempt === 2) return { status: r.status, final: r.url, text };
@@ -73,13 +73,20 @@ async function fetchPage(url) {
   }
 }
 
+// www.gnu.org бывает недоступен из отдельных сетей целиком (таймаут соединения,
+// и в браузере тоже). Тогда страница и якорь сверяются по последнему снимку
+// web.archive.org, а в отчёте такая ссылка идёт отдельным пунктом.
+const ARCHIVE_FALLBACK = /^https:\/\/www\.gnu\.org\//;
+
 // Часть сайтов (manpages.ubuntu.com) обрывает соединение при частых запросах.
 // Поэтому к одному сайту идёт один запрос за раз, а обрыв повторяется с паузой.
 const hostQueue = new Map();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function politeFetch(url) {
   let r;
-  for (let attempt = 0; attempt < 4; attempt++) {
+  // Недоступный целиком сайт повторять бессмысленно, он проверяется по архиву.
+  const tries = ARCHIVE_FALLBACK.test(url) ? 1 : 4;
+  for (let attempt = 0; attempt < tries; attempt++) {
     if (attempt) await sleep(10000 * attempt);
     r = await fetchPage(url);
     if (r.status !== 'ERR') return r;
@@ -102,10 +109,6 @@ const page = (base) => {
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// www.gnu.org бывает недоступен из отдельных сетей целиком (таймаут соединения,
-// и в браузере тоже). Тогда страница и якорь сверяются по последнему снимку
-// web.archive.org, а в отчёте такая ссылка идёт отдельным пунктом.
-const ARCHIVE_FALLBACK = /^https:\/\/www\.gnu\.org\//;
 
 async function check(url) {
   const [base, hash] = url.split('#');
