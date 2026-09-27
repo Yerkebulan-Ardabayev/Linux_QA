@@ -4476,7 +4476,7 @@
     "<p>Путать <code>-I</code> и <code>-i</code>. Маленькая <code>-i</code> ищет адрес по имени машины через DNS или hosts и часто возвращает 127.0.1.1.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/bookworm/hostname/hostname.1.en.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/hostname.1.html",
     "https://man7.org/linux/man-pages/man1/gawk.1.html"
    ]
   },
