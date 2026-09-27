@@ -833,7 +833,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Удалять пакеты через <code>dpkg -r</code>. Документация Ubuntu предупреждает, что так можно удалить пакет, от которого зависят другие, пользуйтесь apt.</p>"
+    "<p>Удалять пакеты через <code>dpkg -r</code>. dpkg не разрешает зависимости сам, при зависимых пакетах он откажет в удалении, а с <code>--force-depends</code> оставит их сломанными. Пользуйтесь apt.</p>"
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/dpkg.1.html",
