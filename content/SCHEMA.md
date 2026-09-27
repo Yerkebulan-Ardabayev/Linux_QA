@@ -118,6 +118,7 @@ docker run --rm linuxqa-lab bash -c 'cd /lab; <setup>; <line>'
 Только первичные, ссылка на конкретную страницу.
 
 - Man-страницы, `https://man7.org/linux/man-pages/man1/<cmd>.1.html` (раздел 1, 5, 7, 8 по факту).
+- cron, crontab(1), crontab(5), cron(8) из пакета `cron`, который стоит в Ubuntu по умолчанию, `https://git.launchpad.net/ubuntu/+source/cron/tree/<page>?h=applied/ubuntu/noble`. На manpages.ubuntu.com для noble эти страницы взяты из другого пакета, cronie.
 - Bash, `https://www.gnu.org/software/bash/manual/bash.html` с якорем раздела, например `#Pipelines`, `#Redirections`, `#Shell-Parameter-Expansion`.
 - GNU Coreutils, `https://www.gnu.org/software/coreutils/manual/html_node/<page>.html`.
 - GNU grep, sed, gawk, tar, findutils manuals на gnu.org.
