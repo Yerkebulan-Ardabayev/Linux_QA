@@ -6513,7 +6513,7 @@
    "script": null,
    "mistakes": [
     "<p>Не ставить кавычки вокруг переменных. <code>touch $file</code> при значении <code>my report.txt</code> создаст два файла, <code>my</code> и <code>report.txt</code>.</p>",
-    "<p>Ждать, что <code>!</code> внутри двойных кавычек безопасен. В интерактивной оболочке <code>echo \"Hi!\"</code> может запустить подстановку из истории. Используйте одинарные кавычки.</p>"
+    "<p>Ждать, что <code>!</code> внутри двойных кавычек безопасен. В интерактивной оболочке <code>echo \"Hi!!\"</code> может запустить подстановку из истории. Используйте одинарные кавычки.</p>"
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Double-Quotes",
