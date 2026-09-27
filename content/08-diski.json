@@ -516,7 +516,7 @@
       {
        "t": "-f",
        "k": "opt",
-       "d": "--fs, колонки о файловых системах, FSTYPE, LABEL, UUID, FSAVAIL, FSUSE%, MOUNTPOINTS."
+       "d": "--fs, колонки о файловых системах, FSTYPE, FSVER, LABEL, UUID, FSAVAIL, FSUSE%, MOUNTPOINTS."
       }
      ],
      "run": "container",
