@@ -2488,3 +2488,26 @@
 | man1/chgrp.1 | [man1/chgrp.1](https://manpages.ubuntu.com/manpages/noble/man1/chgrp.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
 | man1/bc.1p | [man1/bc.1](https://manpages.ubuntu.com/manpages/noble/man1/bc.1.html) | bc (Version: 1.07.1-3ubuntu4) | На manpages.ubuntu.com страница bc.1p для noble из пакета 9base (bc из Plan 9), а в Ubuntu bc из пакета bc. |
 | man1/basename.1 | [man1/basename.1](https://manpages.ubuntu.com/manpages/noble/man1/basename.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+
+# Часть 4. Разбор 14 неподтверждённых утверждений (27.09.2026)
+
+Утверждения со статусом «не подтверждено» из части 2 проверены повторно. Способ проверки, man-страница Ubuntu 24.04 или запуск на Ubuntu 24.04 с теми же версиями пакетов. Команды шли в контейнере `linuxqa-lab` (bash 5.2.21, curl 8.5.0, cron 3.0pl1, openssh-server из noble), systemd и swap проверены в виртуальной машине Colima (Ubuntu 24.04.4, systemd 255.4-1ubuntu8.15, util-linux 2.39.3), временные файлы после проверки удалены.
+
+**Итог.** Подтверждено запуском 10, исправлено как неверное 1 (плюс то же место в карточке `file`), убрано как неподтверждённое 3.
+
+| Раздел | slug | Что | Решение | Доказательство |
+|---|---|---|---|---|
+| 01 | sym-shebang | ошибка 2 | оставлено | Скрипт с CRLF, `./s.sh` выводит `cannot execute: required file not found`, код 127. |
+| 02 | stat | ошибка 1 | оставлено | `touch f; mv f g`, `stat -c %z` до и после отличаются, ctime меняется при переименовании. |
+| 03 | sed-inplace | ошибка 3 | убрано | Про BSD sed в macOS нет источника из списка SCHEMA.md, сайт про Ubuntu. |
+| 05 | vmstat | ошибка 2 | переписано | Вывод «не хватает памяти» убран, оставлено определение si/so из vmstat(8) и прямое следствие из него. |
+| 06 | systemctl-daemon-reload | summary | оставлено | После правки unit-файла без daemon-reload `systemctl status` выводит `Warning: The unit file, source configuration file or drop-ins of lqtest.service changed on disk. Run 'systemctl daemon-reload' to reload units.` |
+| 08 | umount | summary | убрано | Сброс кэша на диск не описан в umount(8) и umount(2), фраза «и сбрасывает на диск всё, что ещё в кэше» удалена. |
+| 08 | swap | summary | оставлено | `swapon` на файл 644 выводит `insecure permissions 0644, 0600 suggested.` |
+| 08 | swap | ошибка 1 | оставлено, дописано | То же предупреждение swapon добавлено в текст ошибки. |
+| 12 | cron-logging | summary | оставлено, дописано | Без почтовой программы cron пишет в журнал `(CRON) info (No MTA installed, discarding output)`, сообщение добавлено в текст. |
+| 12 | cron-logging | ошибка 3 | оставлено, дописано | Задача cron получила `PATH=/usr/bin:/bin`, значение добавлено в текст. Что cron задаёт PATH сам, следует из cron(8), опция `-P` «Don't set PATH for child processes». |
+| 13 | bash-shebang-zapusk | ошибка 2 | исправлено | Было «Ошибка «bad interpreter»», bash 5.2.21 выводит `cannot execute: required file not found`. Та же ошибка была в карточке `file` (раздел 02), исправлена там же. |
+| 13 | skript-proverka-sayta | ошибка 2 | оставлено | `curl -s -o /dev/null -w "%{http_code}"` на закрытый порт выводит `000`, код возврата 7 (ошибка соединения). |
+| 13 | skript-obnovlenie-konfiga | ошибка 2 | оставлено | `sed "s|^path=.*|path=/a|b|"` падает с `unknown option to 's'`, с разделителем `#` замена проходит. |
+| 14 | diag-ssh-denied | ошибка 1 | оставлено | Чужой ключ, права 777 на домашний каталог и несуществующий пользователь дают у клиента одно и то же `Permission denied (publickey).`, а в журнале sshd три разные записи (`Failed publickey`, `Authentication refused: bad ownership or modes`, `Invalid user`). |

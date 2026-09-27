@@ -4100,7 +4100,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Если <code>./script.sh</code> выдаёт <code>bad interpreter</code>, проверьте <code>file script.sh</code>. Слова <code>with CRLF line terminators</code> значат, что файл сохранён в Windows.</p>"
+    "<p>Если <code>./script.sh</code> выдаёт <code>cannot execute: required file not found</code>, хотя файл на месте, проверьте <code>file script.sh</code>. Слова <code>with CRLF line terminators</code> значат, что файл сохранён в Windows.</p>"
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/file.1.html"

@@ -271,7 +271,7 @@
    },
    "mistakes": [
     "<p>Запуск <code>hello.sh</code> без <code>./</code> даёт «command not found». Текущий каталог не входит в PATH, поэтому путь нужно указать явно.</p>",
-    "<p>Файл, сохранённый в Windows, содержит в конце строк символ <code>\\r</code>, и шебанг превращается в <code>/bin/bash\\r</code>. Ошибка «bad interpreter». Лечится <code>sed -i 's/\\r$//' hello.sh</code>.</p>",
+    "<p>Файл, сохранённый в Windows, содержит в конце строк символ <code>\\r</code>, и шебанг превращается в <code>/bin/bash\\r</code>. Запуск завершается ошибкой <code>cannot execute: required file not found</code>. Лечится <code>sed -i 's/\\r$//' hello.sh</code>.</p>",
     "<p>«Permission denied» при <code>./hello.sh</code> значит, что нет права на выполнение. Нужен <code>chmod +x</code>.</p>"
    ],
    "sources": [
