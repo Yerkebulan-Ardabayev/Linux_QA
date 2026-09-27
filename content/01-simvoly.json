@@ -1845,7 +1845,7 @@
     "<p>Прятать все ошибки через <code>&> /dev/null</code> в скриптах. Когда что-то сломается, диагностики не будет. Скрывайте только тот поток, который точно не нужен.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man4/null.4.html",
+    "https://manpages.ubuntu.com/manpages/noble/man4/null.4.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Redirections"
    ]
   },
@@ -6093,7 +6093,7 @@
     "<p>Путать точку в пути с командой <code>.</code>. <code>. script.sh</code> через пробел выполняет скрипт в текущей оболочке (как <code>source</code>), а <code>./script.sh</code> запускает его отдельным процессом.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man7/path_resolution.7.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/path_resolution.7.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution"
    ]
   },
@@ -8041,8 +8041,8 @@
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Builtin-Commands",
-    "https://man7.org/linux/man-pages/man3/getopt.3.html",
-    "https://man7.org/linux/man-pages/man1/cat.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man3/getopt.3.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cat.1.html"
    ]
   },
   {

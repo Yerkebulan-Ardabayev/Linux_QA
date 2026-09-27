@@ -837,7 +837,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/dpkg.1.html",
-    "https://man7.org/linux/man-pages/man1/dpkg-query.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/dpkg-query.1.html",
     "https://documentation.ubuntu.com/server/how-to/software/package-management/"
    ]
   },

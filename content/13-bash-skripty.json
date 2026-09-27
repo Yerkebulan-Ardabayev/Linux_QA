@@ -277,7 +277,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
     "https://www.gnu.org/software/bash/manual/bash.html#Special-Parameters",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html"
    ]
   },
   {
@@ -10533,7 +10533,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Arithmetic-Expansion",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Arithmetic",
-    "https://man7.org/linux/man-pages/man1/bc.1p.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/bc.1.html"
    ]
   },
   {
@@ -11140,7 +11140,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
     "https://www.gnu.org/software/bash/manual/bash.html#Signals",
-    "https://man7.org/linux/man-pages/man7/signal.7.html"
+    "https://manpages.ubuntu.com/manpages/noble/man7/signal.7.html"
    ]
   },
   {
@@ -14023,9 +14023,9 @@
     "<p>Бэкап на том же диске не спасает от отказа диска. Копируйте архивы на другую машину, например через rsync.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
-    "https://man7.org/linux/man-pages/man1/date.1.html",
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/date.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion"
    ]
@@ -15439,10 +15439,10 @@
     "<p>Сдвиг копий от младших номеров к старшим затрёт .2.gz раньше, чем он станет .3.gz.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/stat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html",
     "https://www.gnu.org/software/gzip/manual/gzip.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Looping-Constructs",
-    "https://man7.org/linux/man-pages/man8/logrotate.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/logrotate.8.html"
    ]
   },
   {
@@ -16571,7 +16571,7 @@
     "<p>Код 000 значит, что ответа не было вовсе. Это ошибка соединения, а не HTTP.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Arrays",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Arithmetic"
    ]
@@ -17357,7 +17357,7 @@
     "<p>Место может кончиться по inode, а не по байтам. Для этого есть <code>df -i</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/df.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion",
     "https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution"
    ]
@@ -18615,10 +18615,10 @@
     "<p>Без проверки <code>id</code> повторный запуск упадёт на первом существующем пользователе из-за <code>set -e</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/useradd.8.html",
-    "https://man7.org/linux/man-pages/man8/chpasswd.8.html",
-    "https://man7.org/linux/man-pages/man1/chage.1.html",
-    "https://man7.org/linux/man-pages/man1/id.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/useradd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/chpasswd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chage.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/id.1.html"
    ]
   },
   {
@@ -19498,9 +19498,9 @@
     "<p>Проверка «процесс есть» не значит «сервис отвечает». Для веб-сервиса добавьте запрос curl к нему.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/pgrep.1.html",
-    "https://man7.org/linux/man-pages/man1/nohup.1.html",
-    "https://man7.org/linux/man-pages/man1/tee.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/pgrep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nohup.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tee.1.html",
     "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html"
    ]
   },
@@ -20478,10 +20478,10 @@
     "<p>Если в журнале свой формат (log_format), номера полей другие. Сначала посмотрите на одну строку журнала.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html",
-    "https://man7.org/linux/man-pages/man1/uniq.1.html",
-    "https://man7.org/linux/man-pages/man1/sort.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/uniq.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html",
     "https://nginx.org/en/docs/http/ngx_http_log_module.html"
    ]
   },
@@ -22970,8 +22970,8 @@
    "sources": [
     "https://docs.openssl.org/3.0/man1/openssl-s_client/",
     "https://docs.openssl.org/3.0/man1/openssl-x509/",
-    "https://man7.org/linux/man-pages/man1/date.1.html",
-    "https://man7.org/linux/man-pages/man1/cut.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/date.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cut.1.html"
    ]
   },
   {
@@ -24336,7 +24336,7 @@
    ],
    "sources": [
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins"
    ]
   },
@@ -25263,9 +25263,9 @@
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Command-Grouping",
-    "https://man7.org/linux/man-pages/man1/ps.1.html",
-    "https://man7.org/linux/man-pages/man1/free.1.html",
-    "https://man7.org/linux/man-pages/man5/os-release.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/free.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/os-release.5.html"
    ]
   },
   {
@@ -26823,11 +26823,11 @@
     "<p>Временный файл в /tmp может оказаться на другой файловой системе, и mv станет копированием, уже не атомарным.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/mktemp.1.html",
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/mktemp.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html",
-    "https://man7.org/linux/man-pages/man1/diff.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/diff.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
    ]
   }

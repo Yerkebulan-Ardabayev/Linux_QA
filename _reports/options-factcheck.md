@@ -1,6 +1,6 @@
 # Сверка опций и текстов карточек с man-страницами Ubuntu 24.04 (noble)
 
-Часть 1 про опции в разборе команд, часть 2 (ниже) про summary, mistakes и комментарии.
+Часть 1 про опции в разборе команд, часть 2 про summary, mistakes и комментарии, часть 3 про замену ссылок man7.org на manpages.ubuntu.com.
 
 # Часть 1. Опции
 
@@ -2332,3 +2332,159 @@
 | 14 | diag-zombies | ошибка 1 | ок |  |  | [man1/ps.1.html#process-state-codes](https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html#process-state-codes) |
 | 14 | diag-wrong-time | summary | исправлено | Неверное время ломает TLS-сертификаты, расписание cron и сопоставление логов. timedatectl показывает местное время, UTC, часовой пояс и включена ли синхронизация по NTP. Какая служба ведёт синхронизацию, видно в строке NTP service. Если сдвиг на целые часы, неверен часовой пояс. Если на минуты или секунды, не работает синхронизация. | Стало: Неверное время ломает TLS-сертификаты, расписание cron и сопоставление логов. timedatectl показывает местное время, UTC, часовой пояс и включена ли синхронизация по NTP. Работает ли служба синхронизации, видно в строке NTP service. Если сдвиг на целые часы, неверен часовой пояс. Если на минуты или секунды, не работает синхронизация. Причина: Строка NTP service в timedatectl показывает только состояние (active/inactive), а не имя службы. Сервер синхронизации показывает timedatectl timesync-status. | [man1/timedatectl.1.html#examples](https://manpages.ubuntu.com/manpages/noble/man1/timedatectl.1.html#examples) |
 | 14 | diag-wrong-time | ошибка 1 | ок |  |  | [man8/systemd-timesyncd.service.8.html#description](https://manpages.ubuntu.com/manpages/noble/man8/systemd-timesyncd.service.8.html#description) |
+
+# Часть 3. Ссылки на man-страницы
+
+**Итог:** все 147 ссылок на man7.org (260 вхождений в `sources` карточек, якорей не было) заменены на manpages.ubuntu.com для noble. Для 145 страниц адрес совпадает один к одному, для 2 страниц выбрана другая (ниже). Для каждой страницы проверено, что она открывается и из какого пакета взята (строка «Provided by»). В карточке `file` после замены совпали две ссылки, дубликат убран. Правило обновлено в `content/SCHEMA.md` и `spec.md`. Проверка `scripts/check-links.mjs` подтвердила, что новые ссылки открываются.
+
+Ранее в этой же работе заменены ссылки на manpages.debian.org (crontab, cron, at, hostname, dig), см. часть 2.
+
+| Было (man7.org) | Стало (manpages.ubuntu.com, noble) | Пакет noble | Примечание |
+|---|---|---|---|
+| man1/find.1 | [man1/find.1](https://manpages.ubuntu.com/manpages/noble/man1/find.1.html) | findutils (Version: 4.9.0-5build1) |  |
+| man1/ps.1 | [man1/ps.1](https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/curl.1 | [man1/curl.1](https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html) | curl (Version: 8.5.0-2ubuntu10.15) |  |
+| man1/gawk.1 | [man1/gawk.1](https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html) | gawk (Version: 1:5.2.1-2ubuntu0.1) |  |
+| man1/tar.1 | [man1/tar.1](https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html) | tar (Version: 1.35+dfsg-3ubuntu0.4) |  |
+| man1/ls.1 | [man1/ls.1](https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/chmod.1 | [man1/chmod.1](https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/sed.1 | [man1/sed.1](https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html) | sed (Version: 4.9-2ubuntu0.24.04.1) |  |
+| man1/grep.1 | [man1/grep.1](https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html) | grep (Version: 3.11-4build1) |  |
+| man1/du.1 | [man1/du.1](https://manpages.ubuntu.com/manpages/noble/man1/du.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/df.1 | [man1/df.1](https://manpages.ubuntu.com/manpages/noble/man1/df.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/stat.1 | [man1/stat.1](https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/sort.1 | [man1/sort.1](https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/journalctl.1 | [man1/journalctl.1](https://manpages.ubuntu.com/manpages/noble/man1/journalctl.1.html) | systemd (Version: 255.4-1ubuntu8.17) |  |
+| man1/free.1 | [man1/free.1](https://manpages.ubuntu.com/manpages/noble/man1/free.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man8/lsof.8 | [man8/lsof.8](https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html) | lsof (Version: 4.95.0-1build3) |  |
+| man7/signal.7 | [man7/signal.7](https://manpages.ubuntu.com/manpages/noble/man7/signal.7.html) | manpages (Version: 6.7-2) |  |
+| man5/shadow.5 | [man5/shadow.5](https://manpages.ubuntu.com/manpages/noble/man5/shadow.5.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man1/tee.1 | [man1/tee.1](https://manpages.ubuntu.com/manpages/noble/man1/tee.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/id.1 | [man1/id.1](https://manpages.ubuntu.com/manpages/noble/man1/id.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/getent.1 | [man1/getent.1](https://manpages.ubuntu.com/manpages/noble/man1/getent.1.html) | manpages (Version: 6.7-2) |  |
+| man1/date.1 | [man1/date.1](https://manpages.ubuntu.com/manpages/noble/man1/date.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/cut.1 | [man1/cut.1](https://manpages.ubuntu.com/manpages/noble/man1/cut.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man8/useradd.8 | [man8/useradd.8](https://manpages.ubuntu.com/manpages/noble/man8/useradd.8.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man8/ss.8 | [man8/ss.8](https://manpages.ubuntu.com/manpages/noble/man8/ss.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man8/ping.8 | [man8/ping.8](https://manpages.ubuntu.com/manpages/noble/man8/ping.8.html) | iputils-ping (Version: 3:20240117-1ubuntu0.1) |  |
+| man8/mount.8 | [man8/mount.8](https://manpages.ubuntu.com/manpages/noble/man8/mount.8.html) | mount (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/ip.8 | [man8/ip.8](https://manpages.ubuntu.com/manpages/noble/man8/ip.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man8/ip-route.8 | [man8/ip-route.8](https://manpages.ubuntu.com/manpages/noble/man8/ip-route.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man5/sudoers.5 | [man5/sudoers.5](https://manpages.ubuntu.com/manpages/noble/man5/sudoers.5.html) | sudo (Version: 1.9.15p5-3ubuntu5.24.04.3) |  |
+| man5/resolv.conf.5 | [man5/resolv.conf.5](https://manpages.ubuntu.com/manpages/noble/man5/resolv.conf.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc.5 | [man5/proc.5](https://manpages.ubuntu.com/manpages/noble/man5/proc.5.html) | manpages (Version: 6.7-2) |  |
+| man2/chown.2 | [man2/chown.2](https://manpages.ubuntu.com/manpages/noble/man2/chown.2.html) | manpages-dev (Version: 6.7-2) |  |
+| man1/uptime.1 | [man1/uptime.1](https://manpages.ubuntu.com/manpages/noble/man1/uptime.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/uniq.1 | [man1/uniq.1](https://manpages.ubuntu.com/manpages/noble/man1/uniq.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/top.1 | [man1/top.1](https://manpages.ubuntu.com/manpages/noble/man1/top.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/tail.1 | [man1/tail.1](https://manpages.ubuntu.com/manpages/noble/man1/tail.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/rm.1 | [man1/rm.1](https://manpages.ubuntu.com/manpages/noble/man1/rm.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/pgrep.1 | [man1/pgrep.1](https://manpages.ubuntu.com/manpages/noble/man1/pgrep.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/nproc.1 | [man1/nproc.1](https://manpages.ubuntu.com/manpages/noble/man1/nproc.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/nohup.1 | [man1/nohup.1](https://manpages.ubuntu.com/manpages/noble/man1/nohup.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/ln.1 | [man1/ln.1](https://manpages.ubuntu.com/manpages/noble/man1/ln.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/kill.1 | [man1/kill.1](https://manpages.ubuntu.com/manpages/noble/man1/kill.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/head.1 | [man1/head.1](https://manpages.ubuntu.com/manpages/noble/man1/head.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/diff.1 | [man1/diff.1](https://manpages.ubuntu.com/manpages/noble/man1/diff.1.html) | diffutils (Version: 1:3.10-1ubuntu0.1) |  |
+| man1/cp.1 | [man1/cp.1](https://manpages.ubuntu.com/manpages/noble/man1/cp.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/chage.1 | [man1/chage.1](https://manpages.ubuntu.com/manpages/noble/man1/chage.1.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man1/cat.1 | [man1/cat.1](https://manpages.ubuntu.com/manpages/noble/man1/cat.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man8/vmstat.8 | [man8/vmstat.8](https://manpages.ubuntu.com/manpages/noble/man8/vmstat.8.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man8/visudo.8 | [man8/visudo.8](https://manpages.ubuntu.com/manpages/noble/man8/visudo.8.html) | sudo (Version: 1.9.15p5-3ubuntu5.24.04.3) |  |
+| man8/vgs.8 | [man8/vgs.8](https://manpages.ubuntu.com/manpages/noble/man8/vgs.8.html) | lvm2 (Version: 2.03.16-3ubuntu3.2) |  |
+| man8/vgcreate.8 | [man8/vgcreate.8](https://manpages.ubuntu.com/manpages/noble/man8/vgcreate.8.html) | lvm2 (Version: 2.03.16-3ubuntu3.2) |  |
+| man8/usermod.8 | [man8/usermod.8](https://manpages.ubuntu.com/manpages/noble/man8/usermod.8.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man8/userdel.8 | [man8/userdel.8](https://manpages.ubuntu.com/manpages/noble/man8/userdel.8.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man8/umount.8 | [man8/umount.8](https://manpages.ubuntu.com/manpages/noble/man8/umount.8.html) | mount (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/traceroute.8 | [man1/traceroute.db.1](https://manpages.ubuntu.com/manpages/noble/man1/traceroute.db.1.html) | traceroute (Version: 1:2.1.5-1) | Страницы traceroute.8 для noble нет, в пакете traceroute она называется traceroute.db.1. |
+| man8/tracepath.8 | [man8/tracepath.8](https://manpages.ubuntu.com/manpages/noble/man8/tracepath.8.html) | iputils-tracepath (Version: 3:20240117-1ubuntu0.1) |  |
+| man8/systemd-timesyncd.service.8 | [man8/systemd-timesyncd.service.8](https://manpages.ubuntu.com/manpages/noble/man8/systemd-timesyncd.service.8.html) | systemd-timesyncd (Version: 255.4-1ubuntu8.17) |  |
+| man8/systemd-resolved.service.8 | [man8/systemd-resolved.service.8](https://manpages.ubuntu.com/manpages/noble/man8/systemd-resolved.service.8.html) | systemd-resolved (Version: 255.4-1ubuntu8.17) |  |
+| man8/swapon.8 | [man8/swapon.8](https://manpages.ubuntu.com/manpages/noble/man8/swapon.8.html) | mount (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/sudo.8 | [man8/sudo.8](https://manpages.ubuntu.com/manpages/noble/man8/sudo.8.html) | sudo (Version: 1.9.15p5-3ubuntu5.24.04.3) |  |
+| man8/resize2fs.8 | [man8/resize2fs.8](https://manpages.ubuntu.com/manpages/noble/man8/resize2fs.8.html) | e2fsprogs (Version: 1.47.0-2.4~exp1ubuntu4.1) |  |
+| man8/pvcreate.8 | [man8/pvcreate.8](https://manpages.ubuntu.com/manpages/noble/man8/pvcreate.8.html) | lvm2 (Version: 2.03.16-3ubuntu3.2) |  |
+| man8/parted.8 | [man8/parted.8](https://manpages.ubuntu.com/manpages/noble/man8/parted.8.html) | parted (Version: 3.6-4build1) |  |
+| man8/mkswap.8 | [man8/mkswap.8](https://manpages.ubuntu.com/manpages/noble/man8/mkswap.8.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/mke2fs.8 | [man8/mke2fs.8](https://manpages.ubuntu.com/manpages/noble/man8/mke2fs.8.html) | e2fsprogs (Version: 1.47.0-2.4~exp1ubuntu4.1) |  |
+| man8/lvextend.8 | [man8/lvextend.8](https://manpages.ubuntu.com/manpages/noble/man8/lvextend.8.html) | lvm2 (Version: 2.03.16-3ubuntu3.2) |  |
+| man8/lvcreate.8 | [man8/lvcreate.8](https://manpages.ubuntu.com/manpages/noble/man8/lvcreate.8.html) | lvm2 (Version: 2.03.16-3ubuntu3.2) |  |
+| man8/lsblk.8 | [man8/lsblk.8](https://manpages.ubuntu.com/manpages/noble/man8/lsblk.8.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/logrotate.8 | [man8/logrotate.8](https://manpages.ubuntu.com/manpages/noble/man8/logrotate.8.html) | logrotate (Version: 3.21.0-2build1) |  |
+| man8/iptables.8 | [man8/iptables.8](https://manpages.ubuntu.com/manpages/noble/man8/iptables.8.html) | iptables (Version: 1.8.10-3ubuntu2) |  |
+| man8/ip-neighbour.8 | [man8/ip-neighbour.8](https://manpages.ubuntu.com/manpages/noble/man8/ip-neighbour.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man8/ip-link.8 | [man8/ip-link.8](https://manpages.ubuntu.com/manpages/noble/man8/ip-link.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man8/ip-address.8 | [man8/ip-address.8](https://manpages.ubuntu.com/manpages/noble/man8/ip-address.8.html) | iproute2 (Version: 6.1.0-1ubuntu6.4) |  |
+| man8/groupadd.8 | [man8/groupadd.8](https://manpages.ubuntu.com/manpages/noble/man8/groupadd.8.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man8/fsck.8 | [man8/fsck.8](https://manpages.ubuntu.com/manpages/noble/man8/fsck.8.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/findmnt.8 | [man8/findmnt.8](https://manpages.ubuntu.com/manpages/noble/man8/findmnt.8.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/fdisk.8 | [man8/fdisk.8](https://manpages.ubuntu.com/manpages/noble/man8/fdisk.8.html) | fdisk (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/e2fsck.8 | [man8/e2fsck.8](https://manpages.ubuntu.com/manpages/noble/man8/e2fsck.8.html) | e2fsprogs (Version: 1.47.0-2.4~exp1ubuntu4.1) |  |
+| man8/chpasswd.8 | [man8/chpasswd.8](https://manpages.ubuntu.com/manpages/noble/man8/chpasswd.8.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man8/blkid.8 | [man8/blkid.8](https://manpages.ubuntu.com/manpages/noble/man8/blkid.8.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man8/arp.8 | [man8/arp.8](https://manpages.ubuntu.com/manpages/noble/man8/arp.8.html) | net-tools (Version: 2.10-0.1ubuntu4.4) |  |
+| man7/path_resolution.7 | [man7/path_resolution.7](https://manpages.ubuntu.com/manpages/noble/man7/path_resolution.7.html) | manpages (Version: 6.7-2) |  |
+| man7/inode.7 | [man7/inode.7](https://manpages.ubuntu.com/manpages/noble/man7/inode.7.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_pid_status.5 | [man5/proc_pid_status.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_status.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_pid_fd.5 | [man5/proc_pid_fd.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_fd.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_pid_exe.5 | [man5/proc_pid_exe.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_exe.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_pid_cwd.5 | [man5/proc_pid_cwd.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_cwd.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_pid_cmdline.5 | [man5/proc_pid_cmdline.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_cmdline.5.html) | manpages (Version: 6.7-2) |  |
+| man5/proc_loadavg.5 | [man5/proc_loadavg.5](https://manpages.ubuntu.com/manpages/noble/man5/proc_loadavg.5.html) | manpages (Version: 6.7-2) |  |
+| man5/passwd.5 | [man5/passwd.5](https://manpages.ubuntu.com/manpages/noble/man5/passwd.5.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man5/os-release.5 | [man5/os-release.5](https://manpages.ubuntu.com/manpages/noble/man5/os-release.5.html) | systemd (Version: 255.4-1ubuntu8.17) |  |
+| man5/login.defs.5 | [man5/login.defs.5](https://manpages.ubuntu.com/manpages/noble/man5/login.defs.5.html) | login (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man5/journald.conf.5 | [man5/journald.conf.5](https://manpages.ubuntu.com/manpages/noble/man5/journald.conf.5.html) | systemd (Version: 255.4-1ubuntu8.17) |  |
+| man5/hosts.5 | [man5/hosts.5](https://manpages.ubuntu.com/manpages/noble/man5/hosts.5.html) | manpages (Version: 6.7-2) |  |
+| man5/group.5 | [man5/group.5](https://manpages.ubuntu.com/manpages/noble/man5/group.5.html) | manpages (Version: 6.7-2) |  |
+| man5/fstab.5 | [man5/fstab.5](https://manpages.ubuntu.com/manpages/noble/man5/fstab.5.html) | mount (Version: 2.39.3-9ubuntu6.6) |  |
+| man5/ext4.5 | [man5/ext4.5](https://manpages.ubuntu.com/manpages/noble/man5/ext4.5.html) | e2fsprogs (Version: 1.47.0-2.4~exp1ubuntu4.1) |  |
+| man5/acl.5 | [man5/acl.5](https://manpages.ubuntu.com/manpages/noble/man5/acl.5.html) | acl (Version: 2.3.2-1build1.1) |  |
+| man4/null.4 | [man4/null.4](https://manpages.ubuntu.com/manpages/noble/man4/null.4.html) | manpages (Version: 6.7-2) |  |
+| man3/getopt.3 | [man3/getopt.3](https://manpages.ubuntu.com/manpages/noble/man3/getopt.3.html) | manpages-dev (Version: 6.7-2) |  |
+| man2/umask.2 | [man2/umask.2](https://manpages.ubuntu.com/manpages/noble/man2/umask.2.html) | manpages-dev (Version: 6.7-2) |  |
+| man1/xargs.1 | [man1/xargs.1](https://manpages.ubuntu.com/manpages/noble/man1/xargs.1.html) | findutils (Version: 4.9.0-5build1) |  |
+| man1/whoami.1 | [man1/whoami.1](https://manpages.ubuntu.com/manpages/noble/man1/whoami.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/wget.1 | [man1/wget.1](https://manpages.ubuntu.com/manpages/noble/man1/wget.1.html) | wget (Version: 1.21.4-1ubuntu4.5) |  |
+| man1/wc.1 | [man1/wc.1](https://manpages.ubuntu.com/manpages/noble/man1/wc.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/watch.1 | [man1/watch.1](https://manpages.ubuntu.com/manpages/noble/man1/watch.1.html) | procps (Version: 2:4.0.4-4ubuntu3.3) |  |
+| man1/truncate.1 | [man1/truncate.1](https://manpages.ubuntu.com/manpages/noble/man1/truncate.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/tr.1 | [man1/tr.1](https://manpages.ubuntu.com/manpages/noble/man1/tr.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/touch.1 | [man1/touch.1](https://manpages.ubuntu.com/manpages/noble/man1/touch.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/timedatectl.1 | [man1/timedatectl.1](https://manpages.ubuntu.com/manpages/noble/man1/timedatectl.1.html) | systemd (Version: 255.4-1ubuntu8.17) |  |
+| man1/systemctl.1 | [man1/systemctl.1](https://manpages.ubuntu.com/manpages/noble/man1/systemctl.1.html) | systemd (Version: 255.4-1ubuntu8.17) |  |
+| man1/su.1 | [man1/su.1](https://manpages.ubuntu.com/manpages/noble/man1/su.1.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man1/strace.1 | [man1/strace.1](https://manpages.ubuntu.com/manpages/noble/man1/strace.1.html) | strace (Version: 6.8-0ubuntu2) |  |
+| man1/ssh-copy-id.1 | [man1/ssh-copy-id.1](https://manpages.ubuntu.com/manpages/noble/man1/ssh-copy-id.1.html) | openssh-client (Version: 1:9.6p1-3ubuntu13.19) |  |
+| man1/setfacl.1 | [man1/setfacl.1](https://manpages.ubuntu.com/manpages/noble/man1/setfacl.1.html) | acl (Version: 2.3.2-1build1.1) |  |
+| man1/rsync.1 | [man1/rsync.1](https://manpages.ubuntu.com/manpages/noble/man1/rsync.1.html) | rsync (Version: 3.2.7-1ubuntu1.5) |  |
+| man1/rmdir.1 | [man1/rmdir.1](https://manpages.ubuntu.com/manpages/noble/man1/rmdir.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/resolvectl.1 | [man1/resolvectl.1](https://manpages.ubuntu.com/manpages/noble/man1/resolvectl.1.html) | systemd-resolved (Version: 255.4-1ubuntu8.17) |  |
+| man1/renice.1 | [man1/renice.1](https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html) | bsdutils (Version: 1:2.39.3-9ubuntu6.6) |  |
+| man1/realpath.1 | [man1/realpath.1](https://manpages.ubuntu.com/manpages/noble/man1/realpath.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/pwd.1 | [man1/pwd.1](https://manpages.ubuntu.com/manpages/noble/man1/pwd.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/printf.1 | [man1/printf.1](https://manpages.ubuntu.com/manpages/noble/man1/printf.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/paste.1 | [man1/paste.1](https://manpages.ubuntu.com/manpages/noble/man1/paste.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/passwd.1 | [man1/passwd.1](https://manpages.ubuntu.com/manpages/noble/man1/passwd.1.html) | passwd (Version: 1:4.13+dfsg1-4ubuntu3.2) |  |
+| man1/nl.1 | [man1/nl.1](https://manpages.ubuntu.com/manpages/noble/man1/nl.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/nice.1 | [man1/nice.1](https://manpages.ubuntu.com/manpages/noble/man1/nice.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/namei.1 | [man1/namei.1](https://manpages.ubuntu.com/manpages/noble/man1/namei.1.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man1/mv.1 | [man1/mv.1](https://manpages.ubuntu.com/manpages/noble/man1/mv.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/mktemp.1 | [man1/mktemp.1](https://manpages.ubuntu.com/manpages/noble/man1/mktemp.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/mkdir.1 | [man1/mkdir.1](https://manpages.ubuntu.com/manpages/noble/man1/mkdir.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/less.1 | [man1/less.1](https://manpages.ubuntu.com/manpages/noble/man1/less.1.html) | less (Version: 590-2ubuntu2.1) |  |
+| man1/killall.1 | [man1/killall.1](https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html) | psmisc (Version: 23.7-1build1) |  |
+| man1/htop.1 | [man1/htop.1](https://manpages.ubuntu.com/manpages/noble/man1/htop.1.html) | htop (Version: 3.3.0-4build1) |  |
+| man1/groups.1 | [man1/groups.1](https://manpages.ubuntu.com/manpages/noble/man1/groups.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/getfacl.1 | [man1/getfacl.1](https://manpages.ubuntu.com/manpages/noble/man1/getfacl.1.html) | acl (Version: 2.3.2-1build1.1) |  |
+| man1/fuser.1 | [man1/fuser.1](https://manpages.ubuntu.com/manpages/noble/man1/fuser.1.html) | psmisc (Version: 23.7-1build1) |  |
+| man1/file.1 | [man1/file.1](https://manpages.ubuntu.com/manpages/noble/man1/file.1.html) | file (Version: 1:5.45-3build1) |  |
+| man1/echo.1 | [man1/echo.1](https://manpages.ubuntu.com/manpages/noble/man1/echo.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/dpkg-query.1 | [man1/dpkg-query.1](https://manpages.ubuntu.com/manpages/noble/man1/dpkg-query.1.html) | dpkg (Version: 1.22.6ubuntu6.6) |  |
+| man1/dmesg.1 | [man1/dmesg.1](https://manpages.ubuntu.com/manpages/noble/man1/dmesg.1.html) | util-linux (Version: 2.39.3-9ubuntu6.6) |  |
+| man1/dirname.1 | [man1/dirname.1](https://manpages.ubuntu.com/manpages/noble/man1/dirname.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/column.1 | [man1/column.1](https://manpages.ubuntu.com/manpages/noble/man1/column.1.html) | bsdextrautils (Version: 2.39.3-9ubuntu6.6) |  |
+| man1/chown.1 | [man1/chown.1](https://manpages.ubuntu.com/manpages/noble/man1/chown.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/chgrp.1 | [man1/chgrp.1](https://manpages.ubuntu.com/manpages/noble/man1/chgrp.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |
+| man1/bc.1p | [man1/bc.1](https://manpages.ubuntu.com/manpages/noble/man1/bc.1.html) | bc (Version: 1.07.1-3ubuntu4) | На manpages.ubuntu.com страница bc.1p для noble из пакета 9base (bc из Plan 9), а в Ubuntu bc из пакета bc. |
+| man1/basename.1 | [man1/basename.1](https://manpages.ubuntu.com/manpages/noble/man1/basename.1.html) | coreutils (Version: 9.4-3ubuntu6.3) |  |

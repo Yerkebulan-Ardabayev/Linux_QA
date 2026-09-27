@@ -138,7 +138,7 @@
     "<p>Конфиг, скопированный из Windows, ломает сервисы из-за скрытого <code>\\r</code>. Проверяйте его через <code>cat -A</code>, в конце строк будет видно <code>^M$</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/cat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cat.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html"
    ]
   },
@@ -279,7 +279,7 @@
     "<p>Поиск <code>/шаблон</code> по умолчанию учитывает регистр, для поиска без регистра запускайте <code>less -i</code>. Если в шаблоне есть заглавные буквы, <code>-i</code> не действует, тогда нужен <code>less -I</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/less.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/less.1.html"
    ]
   },
   {
@@ -432,9 +432,9 @@
     "<p>Для нескольких файлов <code>head</code> печатает заголовки <code>==&gt; имя &lt;==</code>. Убрать их можно опцией <code>-q</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/head.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/head.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/head-invocation.html",
-    "https://man7.org/linux/man-pages/man1/ps.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html"
    ]
   },
   {
@@ -541,7 +541,7 @@
     "<p><code>tail -n 2</code> и <code>tail -n +2</code> делают разное. Первое берёт две последние строки, второе всё начиная со второй.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tail.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tail.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/tail-invocation.html"
    ]
   },
@@ -666,7 +666,7 @@
     "<p>Если <code>grep</code> стоит не последним в цепочке, без <code>--line-buffered</code> строки появляются пачками с задержкой.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tail.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tail.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/tail-invocation.html"
    ]
   },
@@ -876,7 +876,7 @@
     "<p><code>grep -v '#'</code> убирает и строки, где решётка стоит в середине. Для комментариев нужен якорь <code>^</code>, а с отступом <code>^[[:space:]]*#</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/grep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html",
     "https://www.gnu.org/software/grep/manual/grep.html"
    ]
   },
@@ -1066,7 +1066,7 @@
     "<p>Маску в <code>--include</code> берите в кавычки, иначе оболочка может раскрыть <code>*.conf</code> в имена файлов текущего каталога.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/grep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html",
     "https://www.gnu.org/software/grep/manual/grep.html"
    ]
   },
@@ -1326,7 +1326,7 @@
     "<p><code>-c</code> считает строки, а не совпадения. Если в строке два совпадения, она учтётся один раз. Для подсчёта совпадений используйте <code>grep -o ... | wc -l</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/grep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html",
     "https://www.gnu.org/software/grep/manual/grep.html"
    ]
   },
@@ -1468,7 +1468,7 @@
     "<p>Если контекстные окна пересекаются, <code>grep</code> сливает их в одну группу, и строк выходит меньше ожидаемого. Это нормально.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/grep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html",
     "https://www.gnu.org/software/grep/manual/grep.html"
    ]
   },
@@ -1773,7 +1773,7 @@
     "<p><code>sed</code> без <code>-i</code> не меняет файл, он только печатает результат.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html"
    ]
   },
@@ -2116,7 +2116,7 @@
     "<p>Проверяйте удаление без <code>-i</code>, а уже потом меняйте файл.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html"
    ]
   },
@@ -2436,7 +2436,7 @@
     "<p>В macOS <code>sed -i</code> требует аргумент (<code>sed -i ''</code>). Команды из этой карточки рассчитаны на GNU sed в Ubuntu.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html"
    ]
   },
@@ -2888,7 +2888,7 @@
     "<p><code>.*</code> жадный и захватывает как можно больше. Если нужно «до ближайшего пробела», используйте <code>[^ ]*</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html"
    ]
   },
@@ -3109,7 +3109,7 @@
     "<p><code>print $1 $2</code> без запятой склеит поля вплотную. Для пробела между ними нужна запятая.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html"
    ]
   },
@@ -3464,7 +3464,7 @@
     "<p><code>$9 = 404</code> с одним знаком равенства присваивает значение и всегда истинно, будут напечатаны все строки.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html"
    ]
   },
@@ -3793,7 +3793,7 @@
     "<p>Порядок <code>for (k in arr)</code> не определён. Для стабильного вывода добавляйте <code>| sort</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html"
    ]
   },
@@ -4122,7 +4122,7 @@
     "<p>Если задать <code>FS</code> в основном блоке, а не в <code>BEGIN</code>, первая строка уже будет разобрана по пробелам.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html"
    ]
   },
@@ -4302,7 +4302,7 @@
     "<p><code>-f 3,1</code> не поменяет порядок полей, cut всегда выводит их в порядке строки. Переставлять поля умеет awk.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/cut.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cut.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/cut-invocation.html"
    ]
   },
@@ -4618,9 +4618,9 @@
     "<p><code>-k3</code> означает «с третьего поля до конца строки». Чтобы ключом было только третье поле, пишите <code>-k3,3</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/sort.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html",
-    "https://man7.org/linux/man-pages/man1/du.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/du.1.html"
    ]
   },
   {
@@ -4813,7 +4813,7 @@
     "<p>Если счётчики не нужны, <code>sort -u</code> делает то же, что <code>sort | uniq</code>, одной командой.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/uniq.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/uniq.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/uniq-invocation.html"
    ]
   },
@@ -4983,7 +4983,7 @@
     "<p>Длину текста на кириллице меряйте <code>wc -m</code>, а не <code>wc -c</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/wc.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/wc.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html"
    ]
   },
@@ -5387,9 +5387,9 @@
     "<p><code>tr -d '\\r' file</code> с именем файла не работает, tr читает только ввод. Используйте <code>&lt; file</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tr.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tr.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/tr-invocation.html",
-    "https://man7.org/linux/man-pages/man1/df.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html"
    ]
   },
   {
@@ -5624,8 +5624,8 @@
     "<p>Если ввод пустой, GNU xargs всё равно запустит команду один раз. Опция <code>-r</code> это отключает.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/xargs.1.html",
-    "https://man7.org/linux/man-pages/man1/find.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/xargs.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -5796,7 +5796,7 @@
     "<p>Без <code>-a</code> tee перезаписывает файл. Для конфигов это часто означает потерю остальных строк.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tee.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tee.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/tee-invocation.html"
    ]
   },
@@ -5969,7 +5969,7 @@
     "<p>Файлы из Windows отличаются в каждой строке из-за <code>\\r</code>, хотя текст одинаковый. Проверьте <code>cat -A</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/diff.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/diff.1.html",
     "https://www.gnu.org/software/diffutils/manual/diffutils.html"
    ]
   },
@@ -6198,7 +6198,7 @@
     "<p>Если в файлах разное число строк, недостающие значения будут пустыми, строки не сдвигаются. Проверьте порядок и длину файлов до склейки.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/paste.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/paste.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/paste-invocation.html"
    ]
   },
@@ -6320,7 +6320,7 @@
     "<p>Номера <code>nl</code> и номера <code>grep -n</code> для файла с пустыми строками не совпадут. Для ссылок на строку используйте <code>nl -b a</code> или <code>cat -n</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/nl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nl.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/nl-invocation.html"
    ]
   },
@@ -6516,7 +6516,7 @@
     "<p>По умолчанию все значения в JSON от <code>column -J</code> строковые, зарплата будет <code>\"5200\"</code>, а не числом. Число даёт свойство столбца <code>json=number</code> в опции <code>-C</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/column.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/column.1.html"
    ]
   },
   {
@@ -7037,8 +7037,8 @@
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins",
-    "https://man7.org/linux/man-pages/man1/printf.1.html",
-    "https://man7.org/linux/man-pages/man1/echo.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/printf.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/echo.1.html"
    ]
   }
  ]

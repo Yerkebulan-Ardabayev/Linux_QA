@@ -917,7 +917,7 @@
     "<p>Если на сервере вход по паролю уже выключен, ssh-copy-id не сможет войти. Ключ тогда добавляют через консоль ВМ или через уже рабочий ключ.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ssh-copy-id.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ssh-copy-id.1.html",
     "https://man.openbsd.org/ssh"
    ]
   },
@@ -1977,7 +1977,7 @@
     "<p>Забывают косую черту у источника и получают <code>/var/www/site/site/</code>. Для копирования содержимого пишите <code>site/</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/rsync.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/rsync.1.html"
    ]
   },
   {

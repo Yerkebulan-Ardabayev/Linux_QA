@@ -22,7 +22,7 @@
   "examples": [ ...примеры... ],
   "script": null,
   "mistakes": ["<p>Частая ошибка и как её избежать.</p>"],
-  "sources": ["https://man7.org/linux/man-pages/man1/ls.1.html"]
+  "sources": ["https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html"]
 }
 ```
 
@@ -117,7 +117,7 @@ docker run --rm linuxqa-lab bash -c 'cd /lab; <setup>; <line>'
 
 Только первичные, ссылка на конкретную страницу.
 
-- Man-страницы, `https://man7.org/linux/man-pages/man1/<cmd>.1.html` (раздел 1, 5, 7, 8 по факту).
+- Man-страницы Ubuntu 24.04, `https://manpages.ubuntu.com/manpages/noble/man1/<cmd>.1.html` (раздел 1, 5, 7, 8 по факту). Страница должна быть из того пакета, который стоит в Ubuntu, это видно в строке «Provided by». Например, `bc` это `man1/bc.1` из пакета bc, а не `bc.1p` из 9base, `traceroute` это `man1/traceroute.db.1`. Ссылки на man7.org и manpages.debian.org не ставить, там другие версии программ.
 - cron, crontab(1), crontab(5), cron(8) из пакета `cron`, который стоит в Ubuntu по умолчанию, `https://git.launchpad.net/ubuntu/+source/cron/tree/<page>?h=applied/ubuntu/noble`. На manpages.ubuntu.com для noble эти страницы взяты из другого пакета, cronie.
 - Bash, `https://www.gnu.org/software/bash/manual/bash.html` с якорем раздела, например `#Pipelines`, `#Redirections`, `#Shell-Parameter-Expansion`.
 - GNU Coreutils, `https://www.gnu.org/software/coreutils/manual/html_node/<page>.html`.
