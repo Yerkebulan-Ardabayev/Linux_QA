@@ -146,8 +146,8 @@
     "<p>Добавить адрес через <code>ip addr add</code> и считать настройку сохранённой. После перезагрузки адрес исчезнет, постоянный адрес пишут в файл netplan.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ip.8.html",
-    "https://man7.org/linux/man-pages/man8/ip-address.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip-address.8.html"
    ]
   },
   {
@@ -293,8 +293,8 @@
     "<p>Выключать интерфейс на удалённом сервере, к которому вы подключены по SSH. Включить его обратно будет не с чего, понадобится консоль VM.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ip-link.8.html",
-    "https://man7.org/linux/man-pages/man8/ip.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip-link.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip.8.html"
    ]
   },
   {
@@ -479,7 +479,7 @@
     "<p>Удалить маршрут default на удалённой машине. Ответы на ваш SSH перестанут уходить, если вы подключены не из локальной сети.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ip-route.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip-route.8.html"
    ]
   },
   {
@@ -700,7 +700,7 @@
     "<p>Видеть сервис на <code>127.0.0.1:5432</code> и ждать подключений снаружи. Такой сервис принимает соединения только с этой же машины, его нужно настроить слушать на <code>0.0.0.0</code> или на адресе интерфейса.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ss.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ss.8.html"
    ]
   },
   {
@@ -822,7 +822,7 @@
     "<p>Делать вывод «сервер лежит» по отсутствию ответа на ping. Проверьте нужный порт через <code>nc -zv</code> или <code>curl</code>, ICMP может быть закрыт, а сервис работать.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ping.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ping.8.html"
    ]
   },
   {
@@ -939,7 +939,7 @@
     "<p>Считать звёздочки на промежуточном переходе поломкой. Многие маршрутизаторы не отвечают на такие пакеты, но передают трафик дальше. Смотрите, доходит ли трассировка до конечного узла.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/traceroute.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/traceroute.db.1.html"
    ]
   },
   {
@@ -1418,10 +1418,10 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Скачивать бинарный файл без <code>-o</code> или <code>-O</code>. Он выведется прямо в терминал.</p>"
+    "<p>Скачивать бинарный файл без <code>-o</code> или <code>-O</code>. curl пишет ответ в стандартный вывод, а если это терминал, вместо файла покажет предупреждение <code>Binary output can mess up your terminal</code> и ничего не сохранит.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -1452,7 +1452,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без индикатора прогресса."
+         "d": "--silent, без индикатора прогресса и сообщений об ошибках."
         },
         {
          "t": "I",
@@ -1525,7 +1525,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без индикатора прогресса."
+         "d": "--silent, без индикатора прогресса и сообщений об ошибках."
         },
         {
          "t": "I",
@@ -1598,7 +1598,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без прогресса."
+         "d": "--silent, без прогресса и сообщений об ошибках."
         },
         {
          "t": "I",
@@ -1661,7 +1661,7 @@
     "<p>Считать ответ HEAD полной проверкой. Некоторые приложения обрабатывают HEAD иначе, чем GET. Если код странный, повторите через <code>curl -s -o /dev/null -w '%{http_code}\\n'</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -1692,7 +1692,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, убрать индикатор прогресса, чтобы он не смешивался с подробностями."
+         "d": "--silent, убрать индикатор прогресса и сообщения об ошибках, чтобы они не смешивались с подробностями."
         },
         {
          "t": "v",
@@ -1765,7 +1765,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без прогресса."
+         "d": "--silent, без прогресса и сообщений об ошибках."
         },
         {
          "t": "v",
@@ -1818,7 +1818,7 @@
     "<p>Пересылать вывод <code>-v</code> коллегам целиком. В нём видны заголовки Authorization и Cookie, если вы их передавали. Уберите их перед отправкой.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -2264,7 +2264,7 @@
     "<p>Вставлять токен прямо в команду. Он останется в <code>~/.bash_history</code>. Держите его в переменной и подставляйте <code>$TOKEN</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -2295,7 +2295,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без прогресса."
+         "d": "--silent, без прогресса и сообщений об ошибках."
         },
         {
          "t": "L",
@@ -2368,7 +2368,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без прогресса."
+         "d": "--silent, без прогресса и сообщений об ошибках."
         },
         {
          "t": "I",
@@ -2446,7 +2446,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "--silent, без прогресса."
+         "d": "--silent, без прогресса и сообщений об ошибках."
         },
         {
          "t": "L",
@@ -2548,7 +2548,7 @@
     "<p>Проверять сайт без <code>-L</code> и видеть пустой ответ. Сайт мог перенаправить с http на https, код ответа 301 виден в <code>curl -I</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -2569,7 +2569,7 @@
       {
        "t": "-s",
        "k": "opt",
-       "d": "--silent, без прогресса."
+       "d": "--silent, без прогресса и сообщений об ошибках."
       },
       {
        "t": "-o",
@@ -2675,7 +2675,7 @@
       {
        "t": "-s",
        "k": "opt",
-       "d": "--silent, без прогресса."
+       "d": "--silent, без прогресса и сообщений об ошибках."
       },
       {
        "t": "-o",
@@ -2800,7 +2800,7 @@
     "<p>Писать формат <code>-w</code> в двойных кавычках. Внутри двойных кавычек оболочка обрабатывает <code>$</code> и обратную косую черту, в одинарных строка доходит до curl без изменений.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -3058,7 +3058,7 @@
     "<p>Запустить <code>wget</code> того же URL второй раз без <code>-c</code>. wget сохранит новую копию как <code>big.iso.1</code>, а не продолжит старую.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/wget.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/wget.1.html"
    ]
   },
   {
@@ -3237,7 +3237,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Путать синтаксис разных netcat. В версии OpenBSD порт для <code>-l</code> пишется без <code>-p</code>, <code>nc -l 8080</code>. Запись <code>nc -l -p 8080</code> из старых инструкций относится к другой реализации.</p>"
+    "<p>Путать синтаксис разных netcat. В версии OpenBSD порт для <code>-l</code> пишут аргументом, <code>nc -l 8080</code>, а в остальных режимах <code>-p</code> задаёт порт источника. Ключи из старых инструкций для другой реализации сверяйте с <code>man nc</code>.</p>"
    ],
    "sources": [
     "https://man.openbsd.org/nc"
@@ -3687,7 +3687,7 @@
     "<p>Выполнить <code>iptables -F</code> при политике DROP в цепочке INPUT. Разрешающие правила исчезнут, политика останется, и сервер перестанет отвечать, в том числе по SSH.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/iptables.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/iptables.8.html"
    ]
   },
   {
@@ -3814,9 +3814,9 @@
     "<p>Писать <code>sudo echo '...' &gt;&gt; /etc/hosts</code>. Перенаправление выполняет ваша оболочка без прав root, и будет отказ в доступе. Поэтому запись идёт через <code>sudo tee -a</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man5/hosts.5.html",
-    "https://man7.org/linux/man-pages/man1/getent.1.html",
-    "https://man7.org/linux/man-pages/man1/tee.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man5/hosts.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/getent.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tee.1.html"
    ]
   },
   {
@@ -3917,8 +3917,8 @@
     "<p>Видеть в resolv.conf <code>127.0.0.53</code> и думать, что DNS сломан. Это адрес локальной заглушки systemd-resolved, реальные серверы показывает <code>resolvectl status</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man5/resolv.conf.5.html",
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/resolv.conf.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html",
     "https://www.freedesktop.org/software/systemd/man/latest/systemd-resolved.service.html"
    ]
@@ -4355,7 +4355,7 @@
     "<p>Применять правку по SSH сразу через <code>apply</code>. Используйте <code>try</code>, он откатит настройки сам.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://netplan.readthedocs.io/en/stable/netplan-yaml/",
     "https://netplan.readthedocs.io/en/stable/netplan-try/",
     "https://netplan.readthedocs.io/en/stable/netplan-apply/",
@@ -4476,8 +4476,8 @@
     "<p>Путать <code>-I</code> и <code>-i</code>. Маленькая <code>-i</code> ищет адрес по имени машины через DNS или hosts и часто возвращает 127.0.1.1.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/bookworm/hostname/hostname.1.en.html",
-    "https://man7.org/linux/man-pages/man1/gawk.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/hostname.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html"
    ]
   },
   {
@@ -4569,8 +4569,8 @@
     "<p>Ждать в таблице все машины сети. Там только те, с кем был обмен пакетами. Сначала <code>ping</code> нужного адреса, потом <code>ip neigh</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ip-neighbour.8.html",
-    "https://man7.org/linux/man-pages/man8/arp.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip-neighbour.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/arp.8.html"
    ]
   }
  ]

@@ -52,13 +52,13 @@
   ],
   "script": null,
   "mistakes": ["<p>Перепутать порядок: после -f сразу имя архива.</p>"],
-  "sources": ["https://man7.org/linux/man-pages/man1/tar.1.html"]
+  "sources": ["https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html"]
 }
 ```
 
 Для скрипта поле `script` заполнено массивом строк, у каждой `line`, `d` (что делает строка) и необязательный `parts`.
 
-Источники только первичные. Man-страницы на man7.org, GNU Coreutils manual и Bash Reference Manual на gnu.org, документация Ubuntu Server на ubuntu.com, systemd на freedesktop.org. Объяснение каждой опции сверяется с man-страницей, опции, которых нет в man, не пишутся.
+Источники только первичные. Man-страницы Ubuntu 24.04 (noble) на manpages.ubuntu.com, GNU Coreutils manual и Bash Reference Manual на gnu.org, документация Ubuntu Server на ubuntu.com, systemd на freedesktop.org. Объяснение каждой опции сверяется с man-страницей, опции, которых нет в man, не пишутся.
 
 ## 4. Разделы и объём
 

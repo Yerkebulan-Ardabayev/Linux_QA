@@ -5,7 +5,7 @@
    "slug": "bash-shebang-zapusk",
    "cmd": "#!/bin/bash",
    "text": "#!/bin/bash: первая строка скрипта и способы запуска",
-   "summary": "<p>Скрипт это обычный текстовый файл с командами. Первая строка <code>#!/bin/bash</code> (шебанг) говорит ядру, какой программой выполнять файл. Без неё файл, запущенный как <code>./hello.sh</code>, выполнит текущая оболочка по своим правилам, и поведение может отличаться.</p><p>Запустить скрипт можно двумя способами. <code>chmod +x hello.sh</code> и затем <code>./hello.sh</code>, тогда нужны право на выполнение и шебанг. Или <code>bash hello.sh</code>, тогда право на выполнение не нужно, а шебанг игнорируется, файл читает тот bash, который вы вызвали.</p>",
+   "summary": "<p>Скрипт это обычный текстовый файл с командами. Первая строка <code>#!/bin/bash</code> (шебанг) говорит ядру, какой программой выполнять файл. Без неё файл, запущенный как <code>./hello.sh</code>, выполнит текущая оболочка по своим правилам, и поведение может отличаться.</p><p>Запустить скрипт можно двумя способами. <code>chmod +x hello.sh</code> и затем <code>./hello.sh</code>, тогда нужно право на выполнение, а интерпретатор выбирается по шебангу. Или <code>bash hello.sh</code>, тогда право на выполнение не нужно, а шебанг игнорируется, файл читает тот bash, который вы вызвали.</p>",
    "examples": [
     {
      "line": "chmod +x hello.sh && ./hello.sh",
@@ -277,7 +277,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
     "https://www.gnu.org/software/bash/manual/bash.html#Special-Parameters",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html"
    ]
   },
   {
@@ -10533,7 +10533,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Arithmetic-Expansion",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Arithmetic",
-    "https://man7.org/linux/man-pages/man1/bc.1p.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/bc.1.html"
    ]
   },
   {
@@ -11140,7 +11140,7 @@
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
     "https://www.gnu.org/software/bash/manual/bash.html#Signals",
-    "https://man7.org/linux/man-pages/man7/signal.7.html"
+    "https://manpages.ubuntu.com/manpages/noble/man7/signal.7.html"
    ]
   },
   {
@@ -12721,7 +12721,7 @@
     "output": "Создан shop.conf\n# Файл создан скриптом gen-config.sh 2026-09-21\nserver {\n    listen 8080;\n    server_name shop.example.local;\n    root /var/www/shop;\n}\nВ этом блоке $app не раскрывается"
    },
    "mistakes": [
-    "<p>Пробелы перед закрывающим <code>EOF</code> или после него, и bash его не узнает. Скрипт закончится с ошибкой «here-document delimited by end-of-file».</p>",
+    "<p>Пробелы перед закрывающим <code>EOF</code> или после него, и bash его не узнает. Весь остаток скрипта станет телом here-document, а bash лишь выдаст предупреждение «here-document delimited by end-of-file».</p>",
     "<p>Когда в теле нужен знак доллара буквально (например, в скрипте, который вы генерируете), экранируйте его <code>\\$</code> или берите ограничитель в кавычки.</p>"
    ],
    "sources": [
@@ -14019,13 +14019,13 @@
    },
    "mistakes": [
     "<p>Дата <code>+%F</code> без времени при двух запусках в один день перезапишет архив.</p>",
-    "<p>Архив в тот же каталог, который архивируется, попадёт сам в себя.</p>",
+    "<p>Архив, который пишется в тот же каталог, что архивируется, меняет этот каталог во время чтения. tar сообщит «file changed as we read it» и вернёт код 1, а при <code>set -e</code> скрипт оборвётся.</p>",
     "<p>Бэкап на том же диске не спасает от отказа диска. Копируйте архивы на другую машину, например через rsync.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
-    "https://man7.org/linux/man-pages/man1/date.1.html",
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/date.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion"
    ]
@@ -15439,10 +15439,10 @@
     "<p>Сдвиг копий от младших номеров к старшим затрёт .2.gz раньше, чем он станет .3.gz.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/stat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html",
     "https://www.gnu.org/software/gzip/manual/gzip.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Looping-Constructs",
-    "https://man7.org/linux/man-pages/man8/logrotate.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/logrotate.8.html"
    ]
   },
   {
@@ -15851,7 +15851,7 @@
          {
           "t": "-s",
           "k": "opt",
-          "d": "Тихий режим, без индикатора загрузки."
+          "d": "Тихий режим, без индикатора прогресса и без сообщений об ошибках."
          },
          {
           "t": "-o",
@@ -16571,7 +16571,7 @@
     "<p>Код 000 значит, что ответа не было вовсе. Это ошибка соединения, а не HTTP.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Arrays",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Arithmetic"
    ]
@@ -16580,7 +16580,7 @@
    "slug": "skript-disk-porog",
    "cmd": "disk-alert.sh",
    "text": "disk-alert.sh: предупреждение о заполнении диска",
-   "summary": "<p>Скрипт читает вывод <code>df -P</code> построчно, берёт процент заполнения каждой файловой системы и сравнивает с порогом. Разделы выше порога печатаются в поток ошибок, а код возврата становится 1.</p><p><code>-P</code> гарантирует, что каждая файловая система занимает ровно одну строку, иначе длинное имя устройства переносится и ломает разбор. Временные tmpfs и devtmpfs исключены, они живут в памяти.</p>",
+   "summary": "<p>Скрипт читает вывод <code>df -P</code> построчно, берёт процент заполнения каждой файловой системы и сравнивает с порогом. Разделы выше порога печатаются в поток ошибок, а код возврата становится 1.</p><p><code>-P</code> включает формат вывода POSIX, на него и рассчитан разбор полей. Временные tmpfs и devtmpfs исключены, они живут в памяти.</p>",
    "examples": [],
    "script": {
     "name": "disk-alert.sh",
@@ -16741,7 +16741,7 @@
       "d": ""
      },
      {
-      "line": "# df -P печатает каждую файловую систему в одну строку, tail убирает заголовок",
+      "line": "# df -P выводит в формате POSIX, tail убирает заголовок",
       "d": "Комментарий к циклу.",
       "parts": [
        {
@@ -16751,7 +16751,7 @@
         "ref": "sym-comment"
        },
        {
-        "t": "df -P печатает каждую файловую систему в одну строку, tail убирает заголовок",
+        "t": "df -P выводит в формате POSIX, tail убирает заголовок",
         "k": "cmt",
         "d": "Текст комментария, пояснение для человека."
        }
@@ -17134,7 +17134,7 @@
          {
           "t": "-P",
           "k": "opt",
-          "d": "Формат POSIX, каждая файловая система строго в одну строку."
+          "d": "portability, выводить в формате POSIX."
          },
          {
           "t": "-x",
@@ -17353,11 +17353,11 @@
     "output": "OK / 10%\nOK /etc/hosts 10%\nВсе разделы ниже порога 80%"
    },
    "mistakes": [
-    "<p>Без <code>-P</code> длинное имя устройства переносится на отдельную строку, и поля съезжают.</p>",
+    "<p>Без <code>-P</code> df выводит свой формат, а не формат POSIX. Для разбора в скрипте задавайте <code>-P</code> явно.</p>",
     "<p>Место может кончиться по inode, а не по байтам. Для этого есть <code>df -i</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/df.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion",
     "https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution"
    ]
@@ -18611,14 +18611,14 @@
     "output": "Создан alice в группе devops\nСоздан bob в группе devops\nПропуск, ubuntu уже существует\nСоздан carol в группе qa\nСоздано 3, пропущено 1"
    },
    "mistakes": [
-    "<p>Пароль в аргументах команды виден другим пользователям через <code>ps</code>. echo встроен в bash и отдельного процесса не создаёт, а chpasswd получает пароль через вход.</p>",
+    "<p>Пароль в аргументах команды виден другим пользователям через <code>ps</code>. echo встроен в bash и не запускается как отдельная программа, поэтому пароль не попадает в аргументы процесса, а chpasswd получает пароль через вход.</p>",
     "<p>Без проверки <code>id</code> повторный запуск упадёт на первом существующем пользователе из-за <code>set -e</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/useradd.8.html",
-    "https://man7.org/linux/man-pages/man8/chpasswd.8.html",
-    "https://man7.org/linux/man-pages/man1/chage.1.html",
-    "https://man7.org/linux/man-pages/man1/id.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/useradd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/chpasswd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chage.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/id.1.html"
    ]
   },
   {
@@ -19498,9 +19498,9 @@
     "<p>Проверка «процесс есть» не значит «сервис отвечает». Для веб-сервиса добавьте запрос curl к нему.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/pgrep.1.html",
-    "https://man7.org/linux/man-pages/man1/nohup.1.html",
-    "https://man7.org/linux/man-pages/man1/tee.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/pgrep.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nohup.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tee.1.html",
     "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html"
    ]
   },
@@ -20478,10 +20478,10 @@
     "<p>Если в журнале свой формат (log_format), номера полей другие. Сначала посмотрите на одну строку журнала.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
     "https://www.gnu.org/software/gawk/manual/gawk.html",
-    "https://man7.org/linux/man-pages/man1/uniq.1.html",
-    "https://man7.org/linux/man-pages/man1/sort.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/uniq.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html",
     "https://nginx.org/en/docs/http/ngx_http_log_module.html"
    ]
   },
@@ -22964,14 +22964,14 @@
     "output": ""
    },
    "mistakes": [
-    "<p>Без <code>-servername</code> сервер с несколькими сайтами на одном IP отдаст сертификат по умолчанию, и дата будет чужой.</p>",
+    "<p>Без <code>-servername</code> s_client берёт имя для SNI из <code>-connect</code>. Если подключаетесь по IP-адресу, задайте имя сайта в <code>-servername</code>, иначе сервер с несколькими сайтами на одном IP отдаст сертификат по умолчанию, и дата будет чужой.</p>",
     "<p>Без <code>echo |</code> s_client будет ждать ввода, и скрипт зависнет.</p>"
    ],
    "sources": [
     "https://docs.openssl.org/3.0/man1/openssl-s_client/",
     "https://docs.openssl.org/3.0/man1/openssl-x509/",
-    "https://man7.org/linux/man-pages/man1/date.1.html",
-    "https://man7.org/linux/man-pages/man1/cut.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/date.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cut.1.html"
    ]
   },
   {
@@ -23789,7 +23789,7 @@
          {
           "t": "-mtime",
           "k": "opt",
-          "d": "Условие по времени изменения в сутках. +N значит больше N суток назад."
+          "d": "Условие по времени изменения в сутках, дробная часть отбрасывается, поэтому +N значит не меньше N+1 полных суток назад."
          },
          {
           "t": "+\"$DAYS\"",
@@ -24152,7 +24152,7 @@
        {
         "t": "-mtime",
         "k": "opt",
-        "d": "Условие по времени изменения в сутках. +N значит больше N суток назад."
+        "d": "Условие по времени изменения в сутках, дробная часть отбрасывается, поэтому +N значит не меньше N+1 полных суток назад."
        },
        {
         "t": "+\"$DAYS\"",
@@ -24336,7 +24336,7 @@
    ],
    "sources": [
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins"
    ]
   },
@@ -25263,9 +25263,9 @@
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#Command-Grouping",
-    "https://man7.org/linux/man-pages/man1/ps.1.html",
-    "https://man7.org/linux/man-pages/man1/free.1.html",
-    "https://man7.org/linux/man-pages/man5/os-release.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/free.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/os-release.5.html"
    ]
   },
   {
@@ -26823,11 +26823,11 @@
     "<p>Временный файл в /tmp может оказаться на другой файловой системе, и mv станет копированием, уже не атомарным.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/mktemp.1.html",
-    "https://man7.org/linux/man-pages/man1/sed.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/mktemp.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sed.1.html",
     "https://www.gnu.org/software/sed/manual/sed.html",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html",
-    "https://man7.org/linux/man-pages/man1/diff.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/diff.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
    ]
   }

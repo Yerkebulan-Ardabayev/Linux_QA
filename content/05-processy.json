@@ -168,7 +168,7 @@
     "<p><code>ps -aux</code> с дефисом смешивает два стандарта. По POSIX это процессы с терминалом плюс процессы пользователя с именем x, и только если такого пользователя нет, ps поймёт команду как <code>ps aux</code>. Пишите <code>ps aux</code> без дефиса.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ps.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html"
    ]
   },
   {
@@ -500,7 +500,7 @@
     "<p>Без минуса <code>--sort=%mem</code> сортирует по возрастанию, и самые тяжёлые процессы окажутся в конце, а <code>head</code> покажет самые лёгкие.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ps.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html"
    ]
   },
   {
@@ -664,7 +664,7 @@
     "<p>Процесс в состоянии <code>Z</code> нельзя убить через kill, он уже завершён. Зомби исчезнет, когда родитель заберёт код возврата или сам завершится.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ps.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html"
    ]
   },
   {
@@ -823,7 +823,7 @@
     "<p>В скрипте <code>top</code> без <code>-b</code> пытается открыть терминал и завершается ошибкой или выводит управляющие коды. Для записи в файл нужен <code>top -b -n 1</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/top.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/top.1.html"
    ]
   },
   {
@@ -849,7 +849,7 @@
         {
          "t": "--user",
          "k": "opt",
-         "d": "Показать процессы указанного пользователя, без значения показывает ваши."
+         "d": "Показать только процессы указанного пользователя."
         },
         {
          "t": "=",
@@ -969,7 +969,7 @@
     "<p><code>-d 5</code> в htop это полсекунды, а не 5 секунд, как в top. Задержка у htop в десятых долях секунды.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/htop.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/htop.1.html"
    ]
   },
   {
@@ -1210,10 +1210,10 @@
     "<p><code>kill</code> без ошибки не значит, что процесс завершился. Он только доставил сигнал, программа может обрабатывать его долго или проигнорировать. Проверяйте через <code>ps -p PID</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/kill.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/kill.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Job-Control-Builtins",
     "https://www.gnu.org/software/bash/manual/bash.html#Exit-Status",
-    "https://man7.org/linux/man-pages/man7/signal.7.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/signal.7.html",
     "https://nginx.org/en/docs/control.html"
    ]
   },
@@ -1403,7 +1403,7 @@
     "<p>Не каждая программа перечитывает конфигурацию по HUP. Программа без обработчика HUP по этому сигналу просто завершится. Проверяйте документацию службы, для служб systemd надёжнее <code>systemctl reload</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man7/signal.7.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/signal.7.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Signals",
     "https://www.gnu.org/software/bash/manual/bash.html#Exit-Status",
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
@@ -1558,7 +1558,7 @@
     "<p>С <code>-f</code> шаблон может совпасть с командной строкой вашего же скрипта, который вызывает pkill, и скрипт завершит сам себя.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/pgrep.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/pgrep.1.html"
    ]
   },
   {
@@ -1671,7 +1671,7 @@
     "<p>Если процесс не завершается, <code>killall</code> не повторяет сигнал сам. С <code>-w</code> он будет ждать бесконечно, поэтому такой вызов в скрипте ставьте с таймаутом.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/killall.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/killall.1.html"
    ]
   },
   {
@@ -1879,12 +1879,12 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>nice влияет только на CPU. Процесс, который тормозит систему диском, nice не успокоит, для диска есть <code>ionice</code>.</p>",
+    "<p>nice задаёт в первую очередь приоритет CPU, приоритет ввода-вывода из него только выводится. Процесс, который тормозит систему диском, nice может не успокоить, для диска есть <code>ionice</code>.</p>",
     "<p>У <code>nice</code> опция <code>-n</code> это добавка к текущему значению, а у <code>renice</code> это новое значение. <code>renice -n 5</code> ставит 5, а не прибавляет 5.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/nice.1.html",
-    "https://man7.org/linux/man-pages/man1/renice.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/nice.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/renice.1.html"
    ]
   },
   {
@@ -2052,7 +2052,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Задания принадлежат оболочке. При выходе из SSH-сессии оболочка отправляет им HUP, и они завершаются. Для долгих задач используйте <code>nohup</code>, <code>tmux</code> или службу systemd.</p>",
+    "<p>Задания принадлежат оболочке. При обрыве SSH-сессии оболочка получает HUP, пересылает его заданиям, и они завершаются. Для долгих задач используйте <code>nohup</code>, <code>tmux</code> или службу systemd.</p>",
     "<p><code>%1</code> и PID 1 это разные вещи. <code>kill 1</code> адресован systemd, <code>kill %1</code> первому заданию.</p>"
    ],
    "sources": [
@@ -2226,7 +2226,7 @@
     "<p>nohup не перезапускает упавший процесс и не стартует после перезагрузки. Для постоянной службы пишите unit-файл systemd.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/nohup.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nohup.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/nohup-invocation.html"
    ]
   },
@@ -2319,7 +2319,7 @@
     "<p>Малое значение free не означает нехватку памяти. Смотрите available. Тревожный признак это малый available вместе с ростом used в swap.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/free.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/free.1.html"
    ]
   },
   {
@@ -2416,16 +2416,16 @@
     "<p>Высокий load average не всегда значит загруженный CPU. Процессы в состоянии D, например ожидающие медленный диск или NFS, тоже входят в него. Проверьте колонку wa в <code>top</code> или <code>vmstat</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/uptime.1.html",
-    "https://man7.org/linux/man-pages/man5/proc_loadavg.5.html",
-    "https://man7.org/linux/man-pages/man1/nproc.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/uptime.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_loadavg.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nproc.1.html"
    ]
   },
   {
    "slug": "vmstat",
    "cmd": "vmstat",
    "text": "vmstat: процессы, память, ввод-вывод и CPU одной таблицей",
-   "summary": "<p><code>vmstat задержка количество</code> печатает строку статистики каждые N секунд. Первая строка это среднее с момента загрузки, следующие показывают текущее состояние.</p><ul><li><b>r</b>, процессы в очереди на CPU, <b>b</b>, процессы в непрерываемом сне.</li><li><b>swpd, free, buff, cache</b>, память, <b>si, so</b>, чтение из swap и запись в swap в секунду.</li><li><b>bi, bo</b>, блоки, прочитанные с устройств и записанные на них.</li><li><b>in, cs</b>, прерывания и переключения контекста в секунду.</li><li><b>us, sy, id, wa, st</b>, доля CPU на пользовательский код, ядро, простой, ожидание ввода-вывода и время, украденное гипервизором.</li></ul>",
+   "summary": "<p><code>vmstat задержка количество</code> печатает строку статистики каждые N секунд. В первой строке колонки CPU, swap и ввода-вывода это среднее с момента загрузки, в следующих это значения за интервал. Процессы и память всегда показаны на текущий момент.</p><ul><li><b>r</b>, процессы в очереди на CPU, <b>b</b>, процессы в непрерываемом сне.</li><li><b>swpd, free, buff, cache</b>, память, <b>si, so</b>, чтение из swap и запись в swap в секунду.</li><li><b>bi, bo</b>, КиБ в секунду, прочитанные с блочных устройств и записанные на них.</li><li><b>in, cs</b>, прерывания и переключения контекста в секунду.</li><li><b>us, sy, id, wa, st</b>, доля CPU на пользовательский код, ядро, простой, ожидание ввода-вывода и время, украденное гипервизором.</li></ul>",
    "examples": [
     {
      "line": "vmstat 1 5",
@@ -2512,11 +2512,11 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Первая строка vmstat это среднее с момента загрузки, по ней нельзя судить о текущей нагрузке. Смотрите вторую и следующие.</p>",
+    "<p>Первая строка vmstat по CPU, swap и вводу-выводу это среднее с момента загрузки, по ней нельзя судить о текущей нагрузке. Смотрите вторую и следующие.</p>",
     "<p>Постоянно ненулевые si и so значат, что системе не хватает памяти и она активно работает со swap.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/vmstat.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/vmstat.8.html"
    ]
   },
   {
@@ -2667,7 +2667,7 @@
     "<p>Удалённый файл, который процесс держит открытым, продолжает занимать место на диске. Его видно в lsof с пометкой <code>(deleted)</code>, место освободится после перезапуска процесса.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/lsof.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html"
    ]
   },
   {
@@ -2739,7 +2739,7 @@
       {
        "t": "-c",
        "k": "opt",
-       "d": "Считать время, вызовы и ошибки по каждому вызову и напечатать сводку в конце."
+       "d": "Считать время, число вызовов и ошибок по каждому системному вызову и в конце напечатать только сводку, обычная трассировка не выводится."
       },
       {
        "t": "ls",
@@ -2905,7 +2905,7 @@
     "<p><code>strace команда | grep</code> ничего не отфильтрует, потому что трассировка идёт в stderr. Пишите <code>strace -o trace.log команда</code> или <code>2&gt;&amp;1 |</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/strace.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/strace.1.html"
    ]
   },
   {
@@ -3153,15 +3153,15 @@
    "script": null,
    "mistakes": [
     "<p><code>cat /proc/PID/cmdline</code> печатает аргументы слитно, нулевые байты на экране не видны. Заменяйте их через <code>tr</code>.</p>",
-    "<p>Каталог исчезает сразу после завершения процесса. Сохраняйте нужные данные сразу, а не ссылку на путь.</p>"
+    "<p>Каталог исчезает, когда родитель заберёт код возврата завершившегося процесса, обычно почти сразу. Сохраняйте нужные данные сразу, а не ссылку на путь.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man5/proc.5.html",
-    "https://man7.org/linux/man-pages/man5/proc_pid_status.5.html",
-    "https://man7.org/linux/man-pages/man5/proc_pid_fd.5.html",
-    "https://man7.org/linux/man-pages/man5/proc_pid_cmdline.5.html",
-    "https://man7.org/linux/man-pages/man5/proc_pid_cwd.5.html",
-    "https://man7.org/linux/man-pages/man5/proc_pid_exe.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_status.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_fd.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_cmdline.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_cwd.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_exe.5.html"
    ]
   },
   {
@@ -3362,7 +3362,7 @@
     "<p><code>watch ps aux | grep nginx</code> отправит в grep экран самого watch, и результат будет нечитаемым. Берите конвейер в одинарные кавычки.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/watch.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/watch.1.html"
    ]
   },
   {

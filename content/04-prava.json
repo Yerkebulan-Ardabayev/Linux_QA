@@ -303,7 +303,7 @@
     "<p>Путать <code>=</code> и <code>+</code>. <code>u=x</code> оставит владельцу только выполнение и снимет чтение и запись.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/chmod.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html"
    ]
   },
   {
@@ -448,9 +448,9 @@
    ],
    "sources": [
     "https://www.gnu.org/software/coreutils/manual/html_node/What-information-is-listed.html",
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
-    "https://man7.org/linux/man-pages/man1/stat.1.html",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html"
    ]
   },
   {
@@ -620,8 +620,8 @@
     "<p>Запускать <code>chown -R</code> с опечаткой в пути, например <code>/ var/www</code>. Команда пройдёт по всему корню. Проверяйте путь через <code>ls</code> перед рекурсивной сменой.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/chown.1.html",
-    "https://man7.org/linux/man-pages/man2/chown.2.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chown.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man2/chown.2.html"
    ]
   },
   {
@@ -799,8 +799,8 @@
     "<p>Ожидать, что новая группа сразу даст пользователю доступ. Если пользователя только что добавили в группу, права заработают после нового входа в систему.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/chgrp.1.html",
-    "https://man7.org/linux/man-pages/man2/chown.2.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chgrp.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man2/chown.2.html"
    ]
   },
   {
@@ -960,7 +960,7 @@
    ],
    "sources": [
     "https://www.gnu.org/software/bash/manual/bash.html#index-umask",
-    "https://man7.org/linux/man-pages/man2/umask.2.html"
+    "https://manpages.ubuntu.com/manpages/noble/man2/umask.2.html"
    ]
   },
   {
@@ -1171,8 +1171,8 @@
     "<p>Снимать SGID с каталога через <code>chmod 755</code>. По man chmod сохраняет SUID и SGID каталога при числовом режиме, нужно <code>chmod g-s</code> или <code>chmod 00755</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/chmod.1.html",
-    "https://man7.org/linux/man-pages/man7/inode.7.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/inode.7.html"
    ]
   },
   {
@@ -1409,8 +1409,8 @@
     "<p>Передавать пароль открытым текстом в <code>-p</code>. Опция ждёт уже зашифрованный пароль, а команда видна в списке процессов и истории.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/useradd.8.html",
-    "https://man7.org/linux/man-pages/man5/login.defs.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/useradd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/login.defs.5.html"
    ]
   },
   {
@@ -1628,7 +1628,7 @@
     "<p>Ждать, что после добавления в группу права появятся в уже открытой сессии. Нужно выйти и войти заново.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/usermod.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/usermod.8.html"
    ]
   },
   {
@@ -1726,7 +1726,7 @@
     "<p>Считать, что <code>-r</code> убирает все файлы пользователя. Файлы вне домашнего каталога остаются, по man их нужно проверить вручную на всех файловых системах.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/userdel.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/userdel.8.html"
    ]
   },
   {
@@ -1879,8 +1879,8 @@
     "<p>Считать, что <code>passwd -l</code> полностью запрещает вход. Он блокирует только пароль, вход по SSH-ключу продолжит работать. Чтобы отключить учётную запись, man советует <code>usermod --expiredate 1</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/passwd.1.html",
-    "https://man7.org/linux/man-pages/man5/shadow.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/passwd.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/shadow.5.html"
    ]
   },
   {
@@ -2030,8 +2030,8 @@
     "<p>Создавать группу, которая уже есть, в скрипте. Команда завершится ошибкой, добавьте <code>-f</code>, тогда она просто вернёт успех.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/groupadd.8.html",
-    "https://man7.org/linux/man-pages/man5/group.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/groupadd.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/group.5.html"
    ]
   },
   {
@@ -2156,7 +2156,7 @@
     "<p>Ждать новую группу в выводе <code>id</code> без аргумента сразу после <code>usermod -aG</code>. Без имени <code>id</code> показывает группы текущего процесса, они старые. <code>id alice</code> покажет группы из базы, уже новые.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/id.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/id.1.html"
    ]
   },
   {
@@ -2209,7 +2209,7 @@
     "<p>Путать вывод без аргумента и с вашим именем. <code>groups</code> показывает группы сессии, <code>groups $USER</code> группы из базы, после <code>usermod -aG</code> они различаются до нового входа.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/groups.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/groups.1.html"
    ]
   },
   {
@@ -2265,7 +2265,7 @@
    "script": null,
    "mistakes": [],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/whoami.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/whoami.1.html"
    ]
   },
   {
@@ -2404,11 +2404,11 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Писать <code>su alice</code> без <code>-</code>. Переменные окружения и каталог останутся от прежнего пользователя, из-за этого программы берут чужие настройки.</p>",
+    "<p>Писать <code>su alice</code> без <code>-</code>. Текущий каталог и большинство переменных окружения останутся от прежнего пользователя, su заменит только HOME, SHELL, USER и LOGNAME. Окружения смешаются, и программы могут взять чужие настройки.</p>",
     "<p>Запускать <code>su</code> в скриптах от root. Man su рекомендует для этого <code>runuser</code>, он не требует аутентификации.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/su.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/su.1.html"
    ]
   },
   {
@@ -2519,8 +2519,8 @@
     "<p>Писать <code>sudo echo текст > /etc/файл</code>. Перенаправление выполняет ваша оболочка без прав root, и запись не пройдёт. Используйте <code>echo текст | sudo tee /etc/файл</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/sudo.8.html",
-    "https://man7.org/linux/man-pages/man5/sudoers.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/sudo.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/sudoers.5.html"
    ]
   },
   {
@@ -2608,8 +2608,8 @@
     "<p>Называть файл в <code>/etc/sudoers.d/</code> с точкой, например <code>deploy.conf</code>. По man sudoers файлы с точкой в имени или с ~ в конце пропускаются.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/visudo.8.html",
-    "https://man7.org/linux/man-pages/man5/sudoers.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/visudo.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/sudoers.5.html"
    ]
   },
   {
@@ -2881,9 +2881,9 @@
     "<p>Не замечать <code>+</code> в выводе <code>ls -l</code>. Если доступ ведёт себя странно, сначала посмотрите <code>getfacl</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/setfacl.1.html",
-    "https://man7.org/linux/man-pages/man1/getfacl.1.html",
-    "https://man7.org/linux/man-pages/man5/acl.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/setfacl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/getfacl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/acl.5.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/What-information-is-listed.html"
    ]
   },
@@ -3103,10 +3103,10 @@
     "<p>Искать <code>grep alice</code> без <code>^</code> и <code>:</code>. Совпадут и alice2, и строки, где alice есть в комментарии.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man5/passwd.5.html",
-    "https://man7.org/linux/man-pages/man5/shadow.5.html",
-    "https://man7.org/linux/man-pages/man1/getent.1.html",
-    "https://man7.org/linux/man-pages/man1/cut.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man5/passwd.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/shadow.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/getent.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cut.1.html"
    ]
   },
   {
@@ -3305,8 +3305,8 @@
     "<p>Путать <code>-M</code> и <code>-E</code>. Первая задаёт срок пароля, после него пользователь сменит пароль. Вторая дату окончания учётной записи, после неё войти нельзя вообще.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/chage.1.html",
-    "https://man7.org/linux/man-pages/man5/shadow.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/chage.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/shadow.5.html"
    ]
   }
  ]

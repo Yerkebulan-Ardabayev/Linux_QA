@@ -129,7 +129,7 @@
     "<p>Смотреть только на <code>df -h</code>, когда файлы не создаются. Проверьте <code>df -i</code>, миллионы мелких файлов (кэш, сессии) исчерпывают inode раньше, чем байты.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/df.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html"
    ]
   },
   {
@@ -368,9 +368,9 @@
     "<p>Запускать <code>du</code> по <code>/</code> без <code>-x</code>. Тогда du заходит в <code>/proc</code> и смонтированные диски. Опция <code>-x</code> (--one-file-system) пропускает каталоги на других файловых системах.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/du.1.html",
-    "https://man7.org/linux/man-pages/man1/sort.1.html",
-    "https://man7.org/linux/man-pages/man1/head.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/du.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/head.1.html"
    ]
   },
   {
@@ -516,7 +516,7 @@
       {
        "t": "-f",
        "k": "opt",
-       "d": "--fs, колонки о файловых системах, FSTYPE, LABEL, UUID, FSAVAIL, FSUSE%, MOUNTPOINTS."
+       "d": "--fs, колонки о файловых системах, FSTYPE, FSVER, LABEL, UUID, FSAVAIL, FSUSE%, MOUNTPOINTS."
       }
      ],
      "run": "container",
@@ -626,7 +626,7 @@
     "<p>Выбирать диск для <code>mkfs</code> или <code>fdisk</code> по памяти. Имена nvme0n1 и sda зависят от контроллера в настройках VM. Перед любой записью сверьте размер и отсутствие точек монтирования в <code>lsblk</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/lsblk.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsblk.8.html"
    ]
   },
   {
@@ -742,7 +742,7 @@
     "<p>Записывать в fstab <code>PARTUUID</code> вместо <code>UUID</code> или наоборот, не глядя. Это разные значения, UUID принадлежит файловой системе и меняется после <code>mkfs</code>, PARTUUID принадлежит разделу.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/blkid.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/blkid.8.html"
    ]
   },
   {
@@ -901,7 +901,7 @@
     "<p>Добавить строку в fstab и перезагрузиться, не проверив. Ошибка в fstab может остановить загрузку. Сначала выполните <code>sudo mount -a</code>, молчание значит, что всё смонтировалось.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/mount.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/mount.8.html"
    ]
   },
   {
@@ -1015,8 +1015,8 @@
     "<p>Выполнять <code>umount</code>, находясь внутри точки монтирования. Ваша же оболочка держит каталог. Сначала <code>cd ~</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/umount.8.html",
-    "https://man7.org/linux/man-pages/man1/fuser.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/umount.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/fuser.1.html"
    ]
   },
   {
@@ -1402,9 +1402,9 @@
     "<p>Перезагружаться после правки без проверки. Выполните <code>sudo findmnt --verify</code> и <code>sudo mount -a</code>, ошибки будут видны сразу, а не при загрузке.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man5/fstab.5.html",
-    "https://man7.org/linux/man-pages/man8/findmnt.8.html",
-    "https://man7.org/linux/man-pages/man8/mount.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man5/fstab.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/findmnt.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/mount.8.html"
    ]
   },
   {
@@ -1496,7 +1496,7 @@
     "<p>Указывать раздел (<code>/dev/sdb1</code>) вместо диска (<code>/dev/sdb</code>). Таблица разделов живёт на диске целиком, fdisk работает с диском.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/fdisk.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/fdisk.8.html"
    ]
   },
   {
@@ -1681,7 +1681,7 @@
     "<p>Считать, что parted спросит перед удалением. С <code>-s</code> вопросов нет, а без неё изменения всё равно пишутся сразу после ответа. Перед запуском сверьте диск в <code>lsblk</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/parted.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/parted.8.html"
    ]
   },
   {
@@ -1790,11 +1790,11 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Перепутать диск. mkfs не спрашивает, если на устройстве нет таблицы разделов или смонтированной ФС. Сверьте имя и размер в <code>lsblk</code>.</p>"
+    "<p>Перепутать диск. mkfs не спрашивает подтверждения, если на устройстве нет таблицы разделов или файловой системы. Смонтированную ФС он без двойного <code>-F</code> не отформатирует. Сверьте имя и размер в <code>lsblk</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/mke2fs.8.html",
-    "https://man7.org/linux/man-pages/man5/ext4.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/mke2fs.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/ext4.5.html"
    ]
   },
   {
@@ -1908,8 +1908,8 @@
     "<p>Запускать fsck на смонтированной файловой системе. В man e2fsck сказано, что это небезопасно, исправления могут испортить данные. Сначала <code>umount</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/fsck.8.html",
-    "https://man7.org/linux/man-pages/man8/e2fsck.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/fsck.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/e2fsck.8.html"
    ]
   },
   {
@@ -2010,9 +2010,9 @@
     "<p>Оставить файлу подкачки права 644. В нём оказывается содержимое памяти процессов, читать его должен только root, поэтому <code>chmod 600</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/mkswap.8.html",
-    "https://man7.org/linux/man-pages/man8/swapon.8.html",
-    "https://man7.org/linux/man-pages/man1/free.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/mkswap.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/swapon.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/free.1.html"
    ]
   },
   {
@@ -2197,9 +2197,9 @@
     "<p>Путать <code>-L</code> и <code>-l</code>. Большая L задаёт размер в байтах (10G), маленькая в экстентах или процентах (100%FREE).</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/pvcreate.8.html",
-    "https://man7.org/linux/man-pages/man8/vgcreate.8.html",
-    "https://man7.org/linux/man-pages/man8/lvcreate.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/pvcreate.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/vgcreate.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/lvcreate.8.html",
     "https://documentation.ubuntu.com/server/how-to/storage/manage-logical-volumes/"
    ]
   },
@@ -2370,9 +2370,9 @@
     "<p>Выполнить <code>lvextend</code> без <code>-r</code> и забыть <code>resize2fs</code>. Том вырос, а <code>df -h</code> показывает прежний размер, потому что файловая система осталась старой.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/lvextend.8.html",
-    "https://man7.org/linux/man-pages/man8/resize2fs.8.html",
-    "https://man7.org/linux/man-pages/man8/vgs.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/lvextend.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/resize2fs.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/vgs.8.html",
     "https://documentation.ubuntu.com/server/how-to/storage/manage-logical-volumes/"
    ]
   }

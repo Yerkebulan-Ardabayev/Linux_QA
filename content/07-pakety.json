@@ -833,11 +833,11 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Удалять пакеты через <code>dpkg -r</code>. Документация Ubuntu предупреждает, что так можно удалить пакет, от которого зависят другие, пользуйтесь apt.</p>"
+    "<p>Удалять пакеты через <code>dpkg -r</code>. dpkg не разрешает зависимости сам, при зависимых пакетах он откажет в удалении, а с <code>--force-depends</code> оставит их сломанными. Пользуйтесь apt.</p>"
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/dpkg.1.html",
-    "https://man7.org/linux/man-pages/man1/dpkg-query.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/dpkg-query.1.html",
     "https://documentation.ubuntu.com/server/how-to/software/package-management/"
    ]
   },
@@ -1047,7 +1047,7 @@
       {
        "t": "--purge",
        "k": "opt",
-       "d": "Не сохранять снимок данных. Без опции данные хранятся 31 день."
+       "d": "Удалить snap без сохранения снимка его данных."
       }
      ],
      "run": "danger",
@@ -1200,7 +1200,7 @@
         {
          "t": "s",
          "k": "opt",
-         "d": "silent, без индикатора загрузки."
+         "d": "silent, без индикатора загрузки и сообщений об ошибках."
         },
         {
          "t": "S",

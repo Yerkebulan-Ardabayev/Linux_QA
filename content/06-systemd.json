@@ -250,7 +250,7 @@
    "slug": "systemctl-reload",
    "cmd": "systemctl reload",
    "text": "systemctl reload: перечитать конфигурацию без остановки службы",
-   "summary": "<p><code>reload</code> просит службу перечитать свою конфигурацию, процесс при этом не останавливается, соединения не рвутся. Работает только у служб, где задан <code>ExecReload=</code>. <code>reload-or-restart</code> делает reload, если служба его поддерживает, иначе restart.</p><p>По man systemctl, reload перечитывает конфигурацию самой службы, а не unit-файл. Изменения в unit-файле подхватывает <code>systemctl daemon-reload</code>.</p>",
+   "summary": "<p><code>reload</code> просит службу перечитать свою конфигурацию, процесс при этом не останавливается, соединения не рвутся. Работает только у служб, которые поддерживают reload, то есть с <code>ExecReload=</code> или <code>Type=notify-reload</code>. <code>reload-or-restart</code> делает reload, если служба его поддерживает, иначе restart.</p><p>По man systemctl, reload перечитывает конфигурацию самой службы, а не unit-файл. Изменения в unit-файле подхватывает <code>systemctl daemon-reload</code>.</p>",
    "examples": [
     {
      "line": "sudo systemctl reload nginx",
@@ -813,7 +813,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>list-units без <code>--all</code> не показывает неактивные юниты, которых нет в памяти. Если службы нет в списке, проверьте <code>list-unit-files</code>.</p>"
+    "<p>list-units без <code>--all</code> не показывает неактивные юниты, а юниты, которых нет в памяти, не покажет и с <code>--all</code>. Если службы нет в списке, проверьте <code>list-unit-files</code>.</p>"
    ],
    "sources": [
     "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"

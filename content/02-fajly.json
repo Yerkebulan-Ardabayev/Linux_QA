@@ -78,7 +78,7 @@
     "<p>Путать <code>pwd</code> и переменную <code>$PWD</code> не страшно, они совпадают. Но в скрипте, где важен настоящий путь на диске (например, для проверки, на каком разделе лежат файлы), берите <code>pwd -P</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/pwd.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/pwd.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
    ]
   },
@@ -412,7 +412,7 @@
     "<p>Разбирать вывод <code>ls</code> в скриптах ненадёжно, имена с пробелами и переводами строк ломают разбор. Для обхода файлов в скриптах используйте шаблон <code>for f in *</code> или <code>find</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html"
    ]
   },
@@ -578,7 +578,7 @@
     "<p><code>ls -l *.log</code> в каталоге без таких файлов выдаёт ошибку <code>No such file or directory</code>. Шаблон ничего не нашёл, bash оставил его как есть, и ls ищет файл с именем <code>*.log</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/Sorting-the-output.html"
    ]
   },
@@ -925,7 +925,7 @@
     "<p>Пробел внутри скобок, <code>{src, docs}</code>, отключает раскрытие, и вы получите каталоги с фигурными скобками в имени.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/mkdir.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/mkdir.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/mkdir-invocation.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Brace-Expansion"
    ]
@@ -1026,7 +1026,7 @@
     "<p>Скрытый файл, например <code>.gitkeep</code>, делает каталог непустым, хотя <code>ls</code> без <code>-a</code> его не покажет. Проверяйте через <code>ls -A</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/rmdir.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/rmdir.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/rmdir-invocation.html"
    ]
   },
@@ -1269,7 +1269,7 @@
     "<p><code>touch</code> не очищает существующий файл, он меняет только время. Чтобы обнулить файл, используют <code>: &gt; file</code> или <code>truncate -s 0 file</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/touch.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/touch.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/touch-invocation.html"
    ]
   },
@@ -1403,7 +1403,7 @@
     "<p><code>cp</code> без опций ставит копии текущее время и вашего владельца. Для резервной копии с сохранением прав, владельца и времени нужен <code>cp -a</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/cp.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cp.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html"
    ]
   },
@@ -1621,7 +1621,7 @@
     "<p>Владелец сохраняется при <code>cp -a</code>, только когда копирует root. Обычный пользователь получит копии на своё имя, это ограничение системы, а не ошибка команды.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/cp.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/cp.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html"
    ]
   },
@@ -1629,7 +1629,7 @@
    "slug": "mv",
    "cmd": "mv",
    "text": "mv: переместить или переименовать",
-   "summary": "<p><code>mv</code> (move) переименовывает файл или переносит его в другой каталог. Отдельной команды переименования в Linux нет, это и есть <code>mv</code>.</p><p>В пределах одной файловой системы перенос мгновенный, меняется только запись в каталоге. Между разными дисками <code>mv</code> копирует данные и удаляет исходник. Как и <code>cp</code>, без опций он молча перезаписывает существующий файл.</p>",
+   "summary": "<p><code>mv</code> (move) переименовывает файл или переносит его в другой каталог. Для обычного переименования отдельная команда не нужна, это и есть <code>mv</code>.</p><p>В пределах одной файловой системы перенос мгновенный, меняется только запись в каталоге. Между разными дисками <code>mv</code> копирует данные и удаляет исходник. Как и <code>cp</code>, без опций он молча перезаписывает существующий файл.</p>",
    "examples": [
     {
      "line": "mv -v old.txt new.txt",
@@ -1809,7 +1809,7 @@
     "<p><code>mv file.txt backup</code> при отсутствии каталога <code>backup</code> не выдаст ошибку, а переименует файл в <code>backup</code>. Пишите каталог с косой чертой в конце, <code>backup/</code>, тогда mv сообщит об ошибке.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/mv.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/mv.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/mv-invocation.html"
    ]
   },
@@ -1969,7 +1969,7 @@
     "<p>Удаление файла, который держит открытым работающая программа, не освобождает место на диске, пока программа его не закроет. Частая причина полного диска после чистки журналов.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/rm.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/rm.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html"
    ]
   },
@@ -2157,7 +2157,7 @@
     "<p>Лишний пробел, <code>rm -rf / tmp/build</code> вместо <code>rm -rf /tmp/build</code>, указывает команде корень системы. От корня защищает встроенная проверка <code>--preserve-root</code>, но от <code>rm -rf ~ /build</code> не защищает ничего.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/rm.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/rm.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/rm-invocation.html"
    ]
   },
@@ -2210,7 +2210,7 @@
         {
          "t": "l",
          "k": "opt",
-         "d": "Длинный формат, второе поле это число жёстких ссылок."
+         "d": "Длинный формат. Число жёстких ссылок стоит сразу после прав, здесь 2."
         },
         {
          "t": "i",
@@ -2299,7 +2299,7 @@
     "<p>Жёсткая ссылка не резервная копия. Правка файла через любое имя меняет единственные данные, и изменения видны через все имена.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ln.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ln.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html"
    ]
   },
@@ -2577,7 +2577,7 @@
     "<p><code>ln -sf новая current</code> без <code>-n</code>, когда current указывает на каталог, создаёт ссылку внутри старого каталога, а current не меняется.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ln.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ln.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html"
    ]
   },
@@ -2772,7 +2772,7 @@
     "<p><code>-name</code> проверяет только имя, без каталога. Чтобы искать по части пути, нужен <code>-path \"*/logs/*\"</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -2948,7 +2948,7 @@
     "<p><code>-mtime +1</code> не значит «старше суток». Дробные сутки отбрасываются, поэтому файлу должно быть не меньше двух полных суток. Для точной границы используйте <code>-mmin</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -3096,7 +3096,7 @@
     "<p>Размер округляется вверх до единицы. <code>-size -1M</code> найдёт только пустые файлы, ведь любой непустой файл занимает хотя бы одну единицу в 1 МиБ. Для малых порогов берите <code>k</code> или байты <code>c</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -3419,7 +3419,7 @@
     "<p>С <code>+</code> фигурные скобки должны стоять последними перед <code>+</code>. Если имя нужно в середине команды, как в <code>cp {} {}.bak</code>, используйте <code>\\;</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -3614,7 +3614,7 @@
     "<p><code>find /</code> с <code>-delete</code> и ошибкой в условии уничтожает систему. Всегда указывайте конкретный каталог и проверяйте список без <code>-delete</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -3805,10 +3805,10 @@
    ],
    "script": null,
    "mistakes": [
-    "<p><code>-perm 644</code> и <code>-perm -644</code> разные условия. Первое ищет права ровно 644, второе любые права, в которых есть хотя бы биты 644, например 755 не подойдёт, а 666 подойдёт.</p>"
+    "<p><code>-perm 644</code> и <code>-perm -644</code> разные условия. Первое ищет права ровно 644, второе любые права, в которых есть хотя бы биты 644, например подойдут и 755, и 666, а 600 нет.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
    ]
   },
@@ -3979,7 +3979,7 @@
     "<p>Время Change (ctime) это не время создания. Оно меняется при смене прав, владельца или переименовании. Время создания stat показывает в строке Birth, если файловая система его хранит.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/stat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html"
    ]
   },
@@ -4103,7 +4103,6 @@
     "<p>Если <code>./script.sh</code> выдаёт <code>bad interpreter</code>, проверьте <code>file script.sh</code>. Слова <code>with CRLF line terminators</code> значат, что файл сохранён в Windows.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/file.1.html",
     "https://manpages.ubuntu.com/manpages/noble/man1/file.1.html"
    ]
   },
@@ -4344,8 +4343,8 @@
     "<p>В bash то же самое быстрее делается раскрытием параметров, <code>${f%.txt}</code> вместо <code>$(basename \"$f\" .txt)</code>. Но basename понятнее и отрезает ещё и каталоги.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/basename.1.html",
-    "https://man7.org/linux/man-pages/man1/dirname.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/basename.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/dirname.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/basename-invocation.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/dirname-invocation.html"
    ]
@@ -4489,7 +4488,7 @@
     "<p>По умолчанию <code>realpath</code> не требует, чтобы последняя часть пути существовала. Чтобы получить ошибку на несуществующем файле, добавьте <code>-e</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/realpath.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/realpath.1.html",
     "https://www.gnu.org/software/coreutils/manual/html_node/realpath-invocation.html"
    ]
   }

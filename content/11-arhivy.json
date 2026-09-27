@@ -322,7 +322,7 @@
     "<p>Абсолютный путь, <code>tar -czf etc.tar.gz /etc</code>, tar сохранит без начальной косой черты и сообщит <code>Removing leading '/'</code>. Это защита, при распаковке файлы не перезапишут системные.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
     "https://www.gnu.org/software/tar/manual/tar.html"
    ]
   },
@@ -591,7 +591,7 @@
     "<p>Если в архиве нет общего каталога верхнего уровня, файлы рассыплются по текущему каталогу. Это тоже видно заранее по <code>tar -tf</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
     "https://www.gnu.org/software/tar/manual/tar.html"
    ]
   },
@@ -785,7 +785,7 @@
     "<p>Список печатается с путями как в архиве, например <code>project/src/app.py</code>. Именно такой путь нужно указать, чтобы извлечь один файл.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
     "https://www.gnu.org/software/tar/manual/tar.html"
    ]
   },
@@ -1106,10 +1106,10 @@
    "script": null,
    "mistakes": [
     "<p>В GNU tar исключения действуют только на файлы, указанные после них. <code>tar -czf b.tar.gz project --exclude=\"*.log\"</code> сообщит, что опция стоит после аргументов и не действует, и журналы попадут в архив.</p>",
-    "<p>Шаблон без кавычек, <code>--exclude=*.log</code>, bash может раскрыть по файлам текущего каталога. Берите шаблон в кавычки.</p>"
+    "<p>Шаблон без кавычек, <code>--exclude *.log</code> через пробел, bash может раскрыть по файлам текущего каталога. Берите шаблон в кавычки.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/tar.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html",
     "https://www.gnu.org/software/tar/manual/tar.html",
     "https://www.gnu.org/software/tar/manual/html_node/exclude.html"
    ]
@@ -1666,7 +1666,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Высокие уровни сжатия, <code>-9</code> и <code>-e</code>, требуют много памяти. На маленькой виртуальной машине это может закончиться нехваткой памяти, начинайте с уровня по умолчанию 6.</p>"
+    "<p>Высокие уровни сжатия, например <code>-9</code>, требуют много памяти. На маленькой виртуальной машине это может закончиться нехваткой памяти, начинайте с уровня по умолчанию 6.</p>"
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/xz.1.html"
@@ -1899,7 +1899,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/bzip2.1.html",
-    "https://man7.org/linux/man-pages/man1/tar.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/tar.1.html"
    ]
   }
  ]

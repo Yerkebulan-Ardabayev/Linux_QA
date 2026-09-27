@@ -127,7 +127,7 @@
     "<p>Правят задачу через <code>sudo crontab -e</code> и ищут её потом в своей таблице. С sudo открывается таблица root.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/cron/crontab.1.en.html"
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.1?h=applied/ubuntu/noble"
    ]
   },
   {
@@ -367,7 +367,7 @@
     "<p>Пишут <code>* 2 * * *</code>, желая запуск раз в 02:00. Звёздочка в минутах даёт 60 запусков, с 02:00 до 02:59. Нужна строка <code>0 2 * * *</code>.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/cron/crontab.5.en.html"
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.5?h=applied/ubuntu/noble"
    ]
   },
   {
@@ -475,7 +475,7 @@
     "<p>Ждут, что <code>@reboot</code> запустится после сети или базы данных. Он срабатывает при старте cron, и нужные службы в этот момент могут быть ещё не готовы. Для зависимостей от других служб используйте unit systemd.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/cron/crontab.5.en.html"
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.5?h=applied/ubuntu/noble"
    ]
   },
   {
@@ -721,8 +721,8 @@
     "<p>Ждут, что переменные из <code>/etc/crontab</code> подействуют и здесь. Файлы в cron.d от него не зависят, свои переменные задавайте в самом файле.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/cron/cron.8.en.html",
-    "https://manpages.debian.org/trixie/cron/crontab.5.en.html"
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/cron.8?h=applied/ubuntu/noble",
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.5?h=applied/ubuntu/noble"
    ]
   },
   {
@@ -891,7 +891,7 @@
     "<p>Ставят задание, а служба <code>atd</code> не запущена, и оно не выполняется. Проверьте <code>systemctl status atd</code>.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/at/at.1.en.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/at.1.html"
    ]
   },
   {
@@ -1170,8 +1170,8 @@
     "<p>Проверяют команду в своей оболочке и удивляются, что в cron она не работает. cron запускает её через sh, без ваших настроек из <code>~/.bashrc</code> и с коротким списком PATH. Пишите полные пути к программам и файлам.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/cron/crontab.5.en.html",
-    "https://manpages.debian.org/trixie/cron/cron.8.en.html",
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.5?h=applied/ubuntu/noble",
+    "https://git.launchpad.net/ubuntu/+source/cron/tree/cron.8?h=applied/ubuntu/noble",
     "https://www.gnu.org/software/bash/manual/bash.html#Redirections"
    ]
   }

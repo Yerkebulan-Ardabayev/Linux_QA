@@ -65,7 +65,7 @@
       {
        "t": "-d",
        "k": "opt",
-       "d": "max-depth, глубина подсчёта."
+       "d": "max-depth, печатать итоги только для каталогов не глубже N уровней, вложенное всё равно входит в сумму."
       },
       {
        "t": "1",
@@ -246,10 +246,10 @@
     "<p>Запускают <code>du</code> без <code>sudo</code> и видят заниженные размеры. Каталоги без права чтения du пропускает с ошибкой Permission denied.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/df.1.html",
-    "https://man7.org/linux/man-pages/man1/du.1.html",
-    "https://man7.org/linux/man-pages/man1/find.1.html",
-    "https://man7.org/linux/man-pages/man1/sort.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/du.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/sort.1.html"
    ]
   },
   {
@@ -304,7 +304,7 @@
       {
        "t": "-d",
        "k": "opt",
-       "d": "Глубина."
+       "d": "max-depth, печатать итоги только до указанной глубины."
       },
       {
        "t": "2",
@@ -422,9 +422,9 @@
     "<p>Удаляют мелкие файлы через <code>rm *</code> в огромном каталоге и получают <code>Argument list too long</code>. Удаляйте через <code>find каталог -type f -delete</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/df.1.html",
-    "https://man7.org/linux/man-pages/man1/du.1.html",
-    "https://man7.org/linux/man-pages/man1/find.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/df.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/du.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -617,9 +617,9 @@
     "<p>Сразу убивают процесс на порту. Сначала посмотрите, что это, по имени и <code>systemctl status</code>. Часто это вторая копия вашей же службы или сервис, который нужен.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ss.8.html",
-    "https://man7.org/linux/man-pages/man8/lsof.8.html",
-    "https://man7.org/linux/man-pages/man1/grep.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/ss.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/grep.1.html"
    ]
   },
   {
@@ -751,15 +751,15 @@
     "<p>Правят файл юнита и забывают <code>sudo systemctl daemon-reload</code>. systemd продолжает работать со старой версией.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/systemctl.1.html",
-    "https://man7.org/linux/man-pages/man1/journalctl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/systemctl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/journalctl.1.html"
    ]
   },
   {
    "slug": "diag-high-cpu",
    "cmd": "ps",
    "text": "Высокая загрузка CPU: найти процесс",
-   "summary": "<p>Сначала <code>uptime</code>, он показывает среднюю нагрузку за 1, 5 и 15 минут. Сравните её с числом ядер из <code>nproc</code>. Нагрузка выше числа ядер значит, что процессы стоят в очереди.</p><p>Затем <code>ps</code> с сортировкой по CPU или <code>top</code> в пакетном режиме покажут, кто именно нагружает процессор.</p>",
+   "summary": "<p>Сначала <code>uptime</code>, он показывает среднюю нагрузку за 1, 5 и 15 минут. Сравните её с числом ядер из <code>nproc</code>. Нагрузка выше числа ядер значит, что процессы стоят в очереди к процессору или ждут диск.</p><p>Затем <code>ps</code> с сортировкой по CPU или <code>top</code> в пакетном режиме покажут, кто именно нагружает процессор.</p>",
    "examples": [
     {
      "line": "uptime",
@@ -992,10 +992,10 @@
     "<p>Ищут текущего виновника только по <code>ps</code>. Колонка %CPU в ps это доля за всё время жизни процесса, недавний всплеск она сгладит. Текущую загрузку показывает <code>top</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/uptime.1.html",
-    "https://man7.org/linux/man-pages/man1/nproc.1.html",
-    "https://man7.org/linux/man-pages/man1/ps.1.html",
-    "https://man7.org/linux/man-pages/man1/top.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/uptime.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nproc.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/top.1.html"
    ]
   },
   {
@@ -1319,10 +1319,10 @@
     "<p>Перезапускают упавшую службу, не посмотрев журнал ядра. Без записи OOM причина падения останется неизвестной, и всё повторится.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/free.1.html",
-    "https://man7.org/linux/man-pages/man1/ps.1.html",
-    "https://man7.org/linux/man-pages/man1/dmesg.1.html",
-    "https://man7.org/linux/man-pages/man1/journalctl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/free.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/dmesg.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/journalctl.1.html"
    ]
   },
   {
@@ -1475,9 +1475,9 @@
     "<p>Удаляют лог работающей службы через <code>rm</code>, чтобы освободить место. Безопаснее обнулить его на месте, <code>truncate -s 0 файл</code>, тогда место освобождается сразу.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/lsof.8.html",
-    "https://man7.org/linux/man-pages/man5/proc.5.html",
-    "https://man7.org/linux/man-pages/man1/truncate.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsof.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/truncate.1.html"
    ]
   },
   {
@@ -1578,11 +1578,11 @@
     "<p>Правят <code>/etc/resolv.conf</code> вручную. В Ubuntu это ссылка на файл, который ведёт systemd-resolved, и там всегда один сервер 127.0.0.53. Настоящие DNS-серверы задаются в настройках сети, проверяйте их через <code>resolvectl status</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/resolvectl.1.html",
-    "https://man7.org/linux/man-pages/man8/systemd-resolved.service.8.html",
-    "https://manpages.debian.org/trixie/bind9-dnsutils/dig.1.en.html",
-    "https://man7.org/linux/man-pages/man1/getent.1.html",
-    "https://man7.org/linux/man-pages/man5/resolv.conf.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/resolvectl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/systemd-resolved.service.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/dig.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/getent.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/resolv.conf.5.html"
    ]
   },
   {
@@ -1735,10 +1735,10 @@
     "<p>Делают вывод «хост лежит» по молчащему ping. Проверьте порт через <code>nc -zv</code>, сервис может работать при закрытом ICMP.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man8/ip-route.8.html",
-    "https://man7.org/linux/man-pages/man8/ping.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/ip-route.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/ping.8.html",
     "https://man.openbsd.org/nc",
-    "https://man7.org/linux/man-pages/man8/tracepath.8.html"
+    "https://manpages.ubuntu.com/manpages/noble/man8/tracepath.8.html"
    ]
   },
   {
@@ -1770,7 +1770,7 @@
       {
        "t": "-s",
        "k": "opt",
-       "d": "silent, без индикатора прогресса."
+       "d": "silent, без индикатора прогресса и без сообщений об ошибках."
       },
       {
        "t": "-w",
@@ -1854,7 +1854,7 @@
       {
        "t": "-s",
        "k": "opt",
-       "d": "Без прогресса."
+       "d": "Без прогресса и без сообщений об ошибках."
       },
       {
        "t": "-w",
@@ -1930,7 +1930,7 @@
     "<p>Замеряют один раз и делают вывод. Повторите запрос 3-5 раз, первый часто медленнее из-за холодного кэша DNS и приложения.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/curl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/curl.1.html"
    ]
   },
   {
@@ -2064,10 +2064,10 @@
     "<p>Проверяют права только у файла. Без права <code>x</code> на любой из каталогов пути до файла не добраться, какими бы ни были его права.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/namei.1.html",
-    "https://man7.org/linux/man-pages/man1/id.1.html",
-    "https://man7.org/linux/man-pages/man1/stat.1.html",
-    "https://man7.org/linux/man-pages/man1/chmod.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/namei.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/id.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/stat.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/chmod.1.html"
    ]
   },
   {
@@ -2314,7 +2314,7 @@
     "https://man.openbsd.org/ssh",
     "https://man.openbsd.org/sshd",
     "https://man.openbsd.org/sshd_config",
-    "https://man7.org/linux/man-pages/man1/journalctl.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/journalctl.1.html"
    ]
   },
   {
@@ -2485,9 +2485,9 @@
     "<p>Удаляют файлы в <code>/var/log</code> через <code>rm</code>, пока служба в них пишет. Место не вернётся, пока служба держит файл, смотрите карточку про <code>lsof +L1</code>.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/du.1.html",
-    "https://man7.org/linux/man-pages/man1/journalctl.1.html",
-    "https://man7.org/linux/man-pages/man5/journald.conf.5.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/du.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/journalctl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/journald.conf.5.html"
    ]
   },
   {
@@ -2915,16 +2915,16 @@
     "<p>Пытаются убить зомби через <code>kill -9</code>. Он уже завершён и сигналы не получает. Разбирайтесь с родителем.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/ps.1.html",
-    "https://man7.org/linux/man-pages/man1/gawk.1.html",
-    "https://man7.org/linux/man-pages/man1/kill.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/ps.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/gawk.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/kill.1.html"
    ]
   },
   {
    "slug": "diag-wrong-time",
    "cmd": "timedatectl",
    "text": "Время на сервере неверное: часовой пояс и синхронизация",
-   "summary": "<p>Неверное время ломает TLS-сертификаты, расписание cron и сопоставление логов. <code>timedatectl</code> показывает местное время, UTC, часовой пояс и включена ли синхронизация по NTP. Какая служба ведёт синхронизацию, видно в строке NTP service.</p><p>Если сдвиг на целые часы, неверен часовой пояс. Если на минуты или секунды, не работает синхронизация.</p>",
+   "summary": "<p>Неверное время ломает TLS-сертификаты, расписание cron и сопоставление логов. <code>timedatectl</code> показывает местное время, UTC, часовой пояс и включена ли синхронизация по NTP. Работает ли служба синхронизации, видно в строке NTP service.</p><p>Если сдвиг на целые часы, неверен часовой пояс. Если на минуты или секунды, не работает синхронизация.</p>",
    "examples": [
     {
      "line": "timedatectl",
@@ -3064,9 +3064,9 @@
     "<p>Меняют время вручную через <code>date -s</code> при включённом NTP. Синхронизация вернёт своё значение. Чините пояс или NTP, а не время руками.</p>"
    ],
    "sources": [
-    "https://man7.org/linux/man-pages/man1/timedatectl.1.html",
-    "https://man7.org/linux/man-pages/man8/systemd-timesyncd.service.8.html",
-    "https://man7.org/linux/man-pages/man1/date.1.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/timedatectl.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/systemd-timesyncd.service.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/date.1.html"
    ]
   }
  ]
