@@ -1418,7 +1418,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Скачивать бинарный файл без <code>-o</code> или <code>-O</code>. Он выведется прямо в терминал.</p>"
+    "<p>Скачивать бинарный файл без <code>-o</code> или <code>-O</code>. curl пишет ответ в стандартный вывод, а если это терминал, вместо файла покажет предупреждение <code>Binary output can mess up your terminal</code> и ничего не сохранит.</p>"
    ],
    "sources": [
     "https://man7.org/linux/man-pages/man1/curl.1.html"
@@ -3237,7 +3237,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Путать синтаксис разных netcat. В версии OpenBSD порт для <code>-l</code> пишется без <code>-p</code>, <code>nc -l 8080</code>. Запись <code>nc -l -p 8080</code> из старых инструкций относится к другой реализации.</p>"
+    "<p>Путать синтаксис разных netcat. В версии OpenBSD порт для <code>-l</code> пишут аргументом, <code>nc -l 8080</code>, а в остальных режимах <code>-p</code> задаёт порт источника. Ключи из старых инструкций для другой реализации сверяйте с <code>man nc</code>.</p>"
    ],
    "sources": [
     "https://man.openbsd.org/nc"
