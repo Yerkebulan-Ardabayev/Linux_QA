@@ -276,7 +276,7 @@
    "script": null,
    "mistakes": [
     "<p>Выход из <code>less</code> клавишей <code>q</code>, а не Ctrl+C. Ctrl+C в режиме <code>F</code> только останавливает ожидание.</p>",
-    "<p>Поиск <code>/шаблон</code> по умолчанию учитывает регистр, для поиска без регистра запускайте <code>less -i</code>.</p>"
+    "<p>Поиск <code>/шаблон</code> по умолчанию учитывает регистр, для поиска без регистра запускайте <code>less -i</code>. Если в шаблоне есть заглавные буквы, <code>-i</code> не действует, тогда нужен <code>less -I</code>.</p>"
    ],
    "sources": [
     "https://man7.org/linux/man-pages/man1/less.1.html"
@@ -6513,7 +6513,7 @@
    ],
    "script": null,
    "mistakes": [
-    "<p>Все значения в JSON от <code>column -J</code> строковые, зарплата будет <code>\"5200\"</code>, а не числом.</p>"
+    "<p>По умолчанию все значения в JSON от <code>column -J</code> строковые, зарплата будет <code>\"5200\"</code>, а не числом. Число даёт свойство столбца <code>json=number</code> в опции <code>-C</code>.</p>"
    ],
    "sources": [
     "https://man7.org/linux/man-pages/man1/column.1.html"
