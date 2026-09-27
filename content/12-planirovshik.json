@@ -891,7 +891,7 @@
     "<p>Ставят задание, а служба <code>atd</code> не запущена, и оно не выполняется. Проверьте <code>systemctl status atd</code>.</p>"
    ],
    "sources": [
-    "https://manpages.debian.org/trixie/at/at.1.en.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/at.1.html"
    ]
   },
   {
