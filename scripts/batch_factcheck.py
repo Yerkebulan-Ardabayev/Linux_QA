@@ -80,7 +80,8 @@ def source_list(sources: list[str]) -> list[str]:
     for u in sources:
         out.append(u)
         m = BASH_ANCHOR.match(u)
-        if m:
+        # Якорь index-X это строка указателя внутри чужого раздела, своей страницы у него нет.
+        if m and not m.group(1).startswith("index-"):
             out.append(f"https://www.gnu.org/software/bash/manual/html_node/{m.group(1)}.html")
     return out
 
