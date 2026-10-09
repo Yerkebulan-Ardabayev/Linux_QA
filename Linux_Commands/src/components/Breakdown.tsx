@@ -75,7 +75,7 @@ const Breakdown = ({ line, parts, onOpenRef, prompt = true }: BreakdownProps) =>
           >
             <div className="flex items-center gap-2 sm:w-56 shrink-0 min-w-0">
               <code
-                className={`px-1.5 py-0.5 rounded bg-zinc-800 font-mono text-[13px] whitespace-pre break-all ${KINDS[p.k]?.text ?? ''}`}
+                className={`px-1.5 py-0.5 rounded bg-term-chip font-mono text-[13px] whitespace-pre break-all ${KINDS[p.k]?.text ?? ''}`}
               >
                 {p.t}
               </code>
@@ -105,9 +105,9 @@ const Breakdown = ({ line, parts, onOpenRef, prompt = true }: BreakdownProps) =>
 
   return (
     <div className="rounded-lg border border-border overflow-hidden" onMouseLeave={() => setHover(null)}>
-      <div className="relative bg-zinc-900 text-zinc-100 font-mono text-[15px] leading-7 px-4 py-3 pr-12 overflow-x-auto">
+      <div className="relative bg-term text-term-fg font-mono text-[15px] leading-7 px-4 py-3 pr-12 overflow-x-auto">
         <div className="whitespace-pre">
-          {prompt && <span className="text-zinc-500 select-none">$ </span>}
+          {prompt && <span className="text-term-dim select-none">$ </span>}
           {indent > 0 && <span>{line.slice(0, indent)}</span>}
           {renderTokens(text, parts, '')}
         </div>
@@ -118,7 +118,7 @@ const Breakdown = ({ line, parts, onOpenRef, prompt = true }: BreakdownProps) =>
               setTimeout(() => setCopied(false), 1200);
             });
           }}
-          className="absolute top-2.5 right-2.5 p-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-white/10 transition-colors"
+          className="absolute top-2.5 right-2.5 p-1.5 rounded-md text-term-dim hover:text-term-fg hover:bg-white/10 transition-colors"
           title="Скопировать команду"
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}

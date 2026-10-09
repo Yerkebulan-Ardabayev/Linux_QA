@@ -107,7 +107,7 @@ const SearchCommand = ({ open, onClose, data, onSelect }: SearchCommandProps) =>
                   idx === selectedIdx ? 'bg-primary/10 text-foreground' : 'hover:bg-muted text-foreground'
                 }`}
               >
-                <code className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5 shrink-0 w-20 truncate">{q.cmd}</code>
+                <code className="font-mono text-xs text-emerald-600 dark:text-[#A3BE8C] font-semibold mt-0.5 shrink-0 w-20 truncate">{q.cmd}</code>
                 <div className="min-w-0">
                   <div className="text-sm font-medium truncate">
                     <Highlighted text={q.text} terms={highlightTerms} />

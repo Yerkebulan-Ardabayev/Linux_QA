@@ -26,6 +26,13 @@ export default {
         foreground: "hsl(var(--foreground))",
         elevated: "hsl(var(--surface-elevated))",
         "text-code": "hsl(var(--text-code))",
+        term: {
+          DEFAULT: "hsl(var(--term-bg))",
+          chip: "hsl(var(--term-chip))",
+          fg: "hsl(var(--term-fg))",
+          out: "hsl(var(--term-out))",
+          dim: "hsl(var(--term-dim))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

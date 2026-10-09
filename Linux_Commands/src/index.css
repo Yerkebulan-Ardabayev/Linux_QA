@@ -6,51 +6,58 @@
 
 @layer base {
   :root {
-    --background: 228 16% 13%;
-    --foreground: 220 20% 92%;
+    --background: 220 16% 22%;
+    --foreground: 218 27% 94%;
 
-    --card: 228 16% 17%;
-    --card-foreground: 220 20% 92%;
+    --card: 222 16% 28%;
+    --card-foreground: 218 27% 94%;
 
-    --popover: 228 16% 17%;
-    --popover-foreground: 220 20% 92%;
+    --popover: 222 16% 28%;
+    --popover-foreground: 218 27% 94%;
 
-    --primary: 187 80% 42%;
-    --primary-foreground: 230 25% 4%;
+    --primary: 193 43% 67%;
+    --primary-foreground: 220 16% 22%;
 
-    --secondary: 228 14% 23%;
-    --secondary-foreground: 220 20% 85%;
+    --secondary: 220 17% 32%;
+    --secondary-foreground: 219 28% 88%;
 
-    --muted: 228 14% 20%;
-    --muted-foreground: 220 12% 66%;
+    --muted: 222 16% 28%;
+    --muted-foreground: 219 18% 72%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 230 25% 4%;
+    --accent: 40 71% 73%;
+    --accent-foreground: 220 16% 22%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 354 42% 56%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 228 14% 26%;
-    --input: 228 14% 26%;
-    --ring: 187 80% 42%;
+    --border: 220 16% 36%;
+    --input: 220 16% 36%;
+    --ring: 193 43% 67%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 228 16% 14%;
-    --sidebar-foreground: 220 20% 85%;
-    --sidebar-primary: 187 80% 42%;
-    --sidebar-primary-foreground: 230 25% 4%;
-    --sidebar-accent: 228 14% 21%;
-    --sidebar-accent-foreground: 220 20% 85%;
-    --sidebar-border: 228 14% 26%;
-    --sidebar-ring: 187 80% 42%;
+    --sidebar-background: 220 16% 24%;
+    --sidebar-foreground: 219 28% 88%;
+    --sidebar-primary: 193 43% 67%;
+    --sidebar-primary-foreground: 220 16% 22%;
+    --sidebar-accent: 220 17% 32%;
+    --sidebar-accent-foreground: 219 28% 88%;
+    --sidebar-border: 220 16% 36%;
+    --sidebar-ring: 193 43% 67%;
 
     /* Custom tokens */
-    --glow-primary: 0 0 20px hsl(187 80% 42% / 0.15);
-    --glow-accent: 0 0 20px hsl(38 92% 50% / 0.15);
-    --gradient-card-hover: linear-gradient(135deg, hsl(187 80% 42% / 0.05), hsl(38 92% 50% / 0.03));
-    --surface-elevated: 228 16% 20%;
-    --text-code: 187 60% 65%;
+    --glow-primary: 0 0 20px hsl(193 43% 67% / 0.18);
+    --glow-accent: 0 0 20px hsl(40 71% 73% / 0.18);
+    --gradient-card-hover: linear-gradient(135deg, hsl(193 43% 67% / 0.07), hsl(40 71% 73% / 0.04));
+    --surface-elevated: 220 17% 32%;
+    --text-code: 179 25% 65%;
+    /* Терминал: строка команды и вывод. Тёмный в обеих темах, цвета частей
+     * в lib/kinds.ts подобраны под этот фон (Nord, nordtheme.com). */
+    --term-bg: 220 17% 17%;
+    --term-chip: 220 17% 18%;
+    --term-fg: 218 27% 94%;
+    --term-out: 219 28% 88%;
+    --term-dim: 220 16% 60%;
     --font-display: 'Space Grotesk', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   }

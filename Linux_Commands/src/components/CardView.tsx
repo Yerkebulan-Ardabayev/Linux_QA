@@ -69,7 +69,7 @@ const CardView = ({ card, onBack, onHome, onPrev, onNext, onOpenRef }: CardViewP
           <span className="text-muted-foreground">Цвета частей</span>
           {kinds.map((k) => (
             <span key={k} className="inline-flex items-center gap-1.5">
-              <code className={`px-1.5 py-0.5 rounded bg-zinc-800 font-mono ${KINDS[k].text}`}>Aa</code>
+              <code className={`px-1.5 py-0.5 rounded bg-term-chip font-mono ${KINDS[k].text}`}>Aa</code>
               <span className="text-muted-foreground">{KINDS[k].label}</span>
             </span>
           ))}
@@ -97,8 +97,8 @@ const CardView = ({ card, onBack, onHome, onPrev, onNext, onOpenRef }: CardViewP
       </div>
 
       {card.mistakes.length > 0 && (
-        <div className="mt-10 rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
-          <h3 className="text-sm font-semibold text-amber-600 dark:text-amber-400 mb-2">Частые ошибки</h3>
+        <div className="mt-10 rounded-lg border border-accent/40 bg-accent/5 px-4 py-3">
+          <h3 className="text-sm font-semibold text-amber-600 dark:text-accent mb-2">Частые ошибки</h3>
           <div className="answer-content text-sm text-secondary-foreground">
             {card.mistakes.map((m, i) => (
               <div key={i} dangerouslySetInnerHTML={{ __html: m }} />

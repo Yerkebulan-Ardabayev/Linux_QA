@@ -61,7 +61,7 @@ const CommandList = ({ category, categoryIndex, cards, focusIdx = -1, onBack, on
                   : 'border-border hover:border-primary/30 hover:bg-primary/5'
               }`}
             >
-              <code className="font-mono text-sm text-emerald-600 dark:text-emerald-400 font-semibold shrink-0 min-w-[5.5rem] max-w-[40%] truncate">
+              <code className="font-mono text-sm text-emerald-600 dark:text-[#A3BE8C] font-semibold shrink-0 min-w-[5.5rem] max-w-[40%] truncate">
                 {c.cmd}
               </code>
               <span
