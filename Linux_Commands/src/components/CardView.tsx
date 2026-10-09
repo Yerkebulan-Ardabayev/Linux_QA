@@ -69,7 +69,7 @@ const CardView = ({ card, onBack, onHome, onPrev, onNext, onOpenRef }: CardViewP
           <span className="text-muted-foreground">Цвета частей</span>
           {kinds.map((k) => (
             <span key={k} className="inline-flex items-center gap-1.5">
-              <code className={`px-1.5 py-0.5 rounded bg-zinc-900 font-mono ${KINDS[k].text}`}>Aa</code>
+              <code className={`px-1.5 py-0.5 rounded bg-zinc-800 font-mono ${KINDS[k].text}`}>Aa</code>
               <span className="text-muted-foreground">{KINDS[k].label}</span>
             </span>
           ))}

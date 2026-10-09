@@ -48,7 +48,7 @@ const RunInfo = ({ run, setup, output }: RunInfoProps) => {
             <TerminalSquare className="w-3.5 h-3.5" />
             Вывод, реальный запуск в Ubuntu 24.04
           </div>
-          <pre className="bg-zinc-950 text-zinc-300 font-mono text-[13px] leading-6 px-4 py-3 overflow-x-auto max-h-80">{output}</pre>
+          <pre className="bg-zinc-900 text-zinc-300 font-mono text-[13px] leading-6 px-4 py-3 overflow-x-auto max-h-80">{output}</pre>
         </div>
       ) : (
         <div className="text-xs text-muted-foreground px-1">Команда отработала без вывода на экран.</div>

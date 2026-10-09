@@ -6,23 +6,23 @@
 
 @layer base {
   :root {
-    --background: 230 25% 4%;
-    --foreground: 220 20% 90%;
+    --background: 228 16% 13%;
+    --foreground: 220 20% 92%;
 
-    --card: 232 25% 7%;
-    --card-foreground: 220 20% 90%;
+    --card: 228 16% 17%;
+    --card-foreground: 220 20% 92%;
 
-    --popover: 232 25% 7%;
-    --popover-foreground: 220 20% 90%;
+    --popover: 228 16% 17%;
+    --popover-foreground: 220 20% 92%;
 
     --primary: 187 80% 42%;
     --primary-foreground: 230 25% 4%;
 
-    --secondary: 232 20% 14%;
-    --secondary-foreground: 220 20% 80%;
+    --secondary: 228 14% 23%;
+    --secondary-foreground: 220 20% 85%;
 
-    --muted: 232 15% 12%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 228 14% 20%;
+    --muted-foreground: 220 12% 66%;
 
     --accent: 38 92% 50%;
     --accent-foreground: 230 25% 4%;
@@ -30,26 +30,26 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 232 20% 15%;
-    --input: 232 20% 15%;
+    --border: 228 14% 26%;
+    --input: 228 14% 26%;
     --ring: 187 80% 42%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 232 25% 5%;
-    --sidebar-foreground: 220 20% 80%;
+    --sidebar-background: 228 16% 14%;
+    --sidebar-foreground: 220 20% 85%;
     --sidebar-primary: 187 80% 42%;
     --sidebar-primary-foreground: 230 25% 4%;
-    --sidebar-accent: 232 20% 12%;
-    --sidebar-accent-foreground: 220 20% 80%;
-    --sidebar-border: 232 20% 15%;
+    --sidebar-accent: 228 14% 21%;
+    --sidebar-accent-foreground: 220 20% 85%;
+    --sidebar-border: 228 14% 26%;
     --sidebar-ring: 187 80% 42%;
 
     /* Custom tokens */
     --glow-primary: 0 0 20px hsl(187 80% 42% / 0.15);
     --glow-accent: 0 0 20px hsl(38 92% 50% / 0.15);
     --gradient-card-hover: linear-gradient(135deg, hsl(187 80% 42% / 0.05), hsl(38 92% 50% / 0.03));
-    --surface-elevated: 232 25% 9%;
+    --surface-elevated: 228 16% 20%;
     --text-code: 187 60% 65%;
     --font-display: 'Space Grotesk', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
