@@ -24335,7 +24335,6 @@
     "<p><code>-mtime +7</code> означает «больше 7 полных суток», файл возрастом 7,5 суток под него не попадёт.</p>"
    ],
    "sources": [
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
     "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
     "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins"
    ]

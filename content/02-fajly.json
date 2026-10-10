@@ -2772,8 +2772,7 @@
     "<p><code>-name</code> проверяет только имя, без каталога. Чтобы искать по части пути, нужен <code>-path \"*/logs/*\"</code>.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -2948,8 +2947,7 @@
     "<p><code>-mtime +1</code> не значит «старше суток». Дробные сутки отбрасываются, поэтому файлу должно быть не меньше двух полных суток. Для точной границы используйте <code>-mmin</code>.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -3096,8 +3094,7 @@
     "<p>Размер округляется вверх до единицы. <code>-size -1M</code> найдёт только пустые файлы, ведь любой непустой файл занимает хотя бы одну единицу в 1 МиБ. Для малых порогов берите <code>k</code> или байты <code>c</code>.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -3419,8 +3416,7 @@
     "<p>С <code>+</code> фигурные скобки должны стоять последними перед <code>+</code>. Если имя нужно в середине команды, как в <code>cp {} {}.bak</code>, используйте <code>\\;</code>.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -3614,8 +3610,7 @@
     "<p><code>find /</code> с <code>-delete</code> и ошибкой в условии уничтожает систему. Всегда указывайте конкретный каталог и проверяйте список без <code>-delete</code>.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
@@ -3808,8 +3803,7 @@
     "<p><code>-perm 644</code> и <code>-perm -644</code> разные условия. Первое ищет права ровно 644, второе любые права, в которых есть хотя бы биты 644, например подойдут и 755, и 666, а 600 нет.</p>"
    ],
    "sources": [
-    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
-    "https://www.gnu.org/software/findutils/manual/html_mono/find.html"
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html"
    ]
   },
   {
