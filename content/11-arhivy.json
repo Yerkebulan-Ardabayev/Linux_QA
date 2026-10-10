@@ -1676,7 +1676,7 @@
    "slug": "bzip2",
    "cmd": "bzip2",
    "text": "bzip2: сжатие bzip2",
-   "summary": "<p><code>bzip2</code> сжимает плотнее gzip, но медленнее. Сейчас его чаще встречают в старых архивах <code>.tar.bz2</code>, для новых обычно выбирают gzip (быстро) или xz (плотно). Опции те же, что у gzip, <code>-k</code> оставить исходник, <code>-d</code> или <code>bunzip2</code> распаковать.</p>",
+   "summary": "<p><code>bzip2</code> сжимает плотнее gzip, но медленнее. Сейчас его чаще встречают в старых архивах <code>.tar.bz2</code>, для новых обычно выбирают gzip (быстро) или xz (плотно). Опции похожи на опции gzip, но совпадают не все. <code>-k</code> оставить исходник, <code>-d</code> или <code>bunzip2</code> распаковать.</p>",
    "examples": [
     {
      "line": "bzip2 -v access.log && ls -l",

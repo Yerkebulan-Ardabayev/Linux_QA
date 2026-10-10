@@ -19,13 +19,22 @@ from __future__ import annotations
 
 import argparse
 import glob
+import gzip
+import html
 import json
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-WORK = ROOT / "_factcheck" / "batch"
+# FACTCHECK_RUN задаёт отдельную папку прогона, чтобы повторный батч не смешивался с первым.
+WORK = ROOT / "_factcheck" / os.environ.get("FACTCHECK_RUN", "batch")
+# Тексты источников из пакетов Ubuntu 24.04: man (apt-get download + dpkg-deb) и bashref.html из bash-doc.
+MAN_DIR = ROOT / "_factcheck" / "man" / "man"
+BASHREF = ROOT / "_factcheck" / "bashref" / "bashref.html"
+SOURCE_CHARS = 80000
 MANIFEST = WORK / "manifest.json"
 REQUESTS = WORK / "requests.jsonl"
 RESULTS = WORK / "results.jsonl"
@@ -58,6 +67,9 @@ SYSTEM = """Ты технический редактор учебного сай
 {"verdict": "ok" | "issues", "issues": [{"severity": "major" | "minor", "where": "summary | mistakes[i] | examples[i].parts | examples[i].d | script.lines[i] | sources", "claim": "дословная фраза из карточки", "problem": "что не так", "fix": "как исправить", "evidence_url": "ссылка", "evidence_quote": "короткая цитата источника или вывода, до 15 слов"}], "unreachable_sources": ["ссылки, которые не открылись"]}
 Если ошибок нет, issues пустой. Не выдумывай находки: нет подтверждения источником или выводом, значит нет находки."""
 
+INLINE_NOTE = """
+Тексты источников приложены к запросу в блоках «Источник». Они взяты из пакетов Ubuntu 24.04 (man-страницы и руководство bash из bash-doc), это та же версия, что в карточке. Проверяй по ним. web_fetch нужен только для ссылок без приложенного текста."""
+
 BASH_ANCHOR = re.compile(r"^https://www\.gnu\.org/software/bash/manual/bash\.html#(.+)$")
 
 
@@ -86,17 +98,75 @@ def source_list(sources: list[str]) -> list[str]:
     return out
 
 
-def build_params(item: dict) -> dict:
+def man_text(path: Path) -> str:
+    raw = gzip.decompress(path.read_bytes())
+    out = subprocess.run(["mandoc", "-T", "utf8"], input=raw, capture_output=True).stdout
+    return subprocess.run(["col", "-b"], input=out, capture_output=True).stdout.decode("utf-8", "replace")
+
+
+def find_man(name: str, sections: str = "185237") -> Path | None:
+    for sec in sections:
+        p = MAN_DIR / f"man{sec}" / f"{name}.{sec}.gz"
+        if p.exists():
+            return p
+    return None
+
+
+def bash_section(anchor: str) -> str | None:
+    s = BASHREF.read_text(encoding="utf-8")
+    m = re.search(r'<div class="[a-z-]+-level-extent" id="' + re.escape(anchor) + '"', s)
+    if not m:
+        return None
+    nxt = re.search(r'<div class="[a-z-]+-level-extent" id=', s[m.end():])
+    chunk = s[m.start(): m.end() + (nxt.start() if nxt else 40000)]
+    return html.unescape(re.sub(r"<[^>]+>", "", chunk))
+
+
+def local_source(url: str) -> tuple[str, str] | None:
+    """Текст источника из локальных пакетов noble: (откуда взят, текст) или None."""
+    m = re.match(r"https://manpages\.ubuntu\.com/manpages/noble/man(\d)/(.+)\.\1\.html$", url)
+    if m and (p := find_man(m.group(2), m.group(1))):
+        return f"man {m.group(2)}({m.group(1)}) из пакета noble", man_text(p)
+    m = re.match(r"https://www\.freedesktop\.org/software/systemd/man/latest/(.+)\.html$", url)
+    if m and (p := find_man(m.group(1))):
+        return f"man {m.group(1)} из systemd 255 (noble)", man_text(p)
+    m = re.match(r"https://man\.openbsd\.org/([\w.-]+)$", url)
+    if m and (p := find_man(m.group(1))):
+        return f"man {m.group(1)} из OpenSSH noble", man_text(p)
+    m = re.match(r"https://git\.launchpad\.net/ubuntu/\+source/cron/tree/([\w-]+)\.(\d)", url)
+    if m and (p := find_man(m.group(1), m.group(2))):
+        return f"man {m.group(1)}({m.group(2)}) из пакета cron noble", man_text(p)
+    m = re.match(r"https://www\.gnu\.org/software/bash/manual/(?:bash\.html#|html_node/)([\w-]+?)(?:\.html)?$", url)
+    if m and (t := bash_section(m.group(1))):
+        return f"руководство bash из пакета bash-doc noble, раздел {m.group(1)}", t
+    m = re.match(r"https://www\.gnu\.org/software/coreutils/manual/html_node/([\w-]+)-invocation\.html$", url)
+    if m and (p := find_man(m.group(1), "1")):
+        return f"man {m.group(1)}(1) из coreutils noble (вместо руководства GNU)", man_text(p)
+    m = re.match(r"https://www\.gnu\.org/software/(gawk|sed|tar|grep|findutils)/", url)
+    if m:
+        name = "find" if m.group(1) == "findutils" else m.group(1)
+        if p := find_man(name, "1"):
+            return f"man {name}(1) из пакета noble (вместо руководства GNU)", man_text(p)
+    return None
+
+
+def build_params(item: dict, inline: bool = False) -> dict:
     card = item["card"]
     sources = "\n".join(f"- {u}" for u in source_list(card.get("sources", []))) or "- (нет)"
     user = (f"Раздел: {item['category']}\n\nКарточка (JSON):\n"
             f"{json.dumps(card, ensure_ascii=False)}\n\nИсточники:\n{sources}")
+    if inline:
+        for u in card.get("sources", []):
+            got = local_source(u)
+            if got:
+                user += f"\n\nИсточник {u} ({got[0]}):\n{got[1][:SOURCE_CHARS]}"
     # custom_id в Batch API ограничен шаблоном ^[a-zA-Z0-9_-]{1,64}$, slug ему подходит.
     return {
         "model": MODEL,
         "max_tokens": MAX_TOKENS,
         "output_config": {"effort": "medium"},
-        "system": [{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
+        "system": [{"type": "text", "text": SYSTEM + (INLINE_NOTE if inline else ""),
+                    "cache_control": {"type": "ephemeral"}}],
         "tools": [{"type": "web_fetch_20260209", "name": "web_fetch",
                    "max_uses": MAX_FETCHES, "max_content_tokens": FETCH_TOKENS},
                   {"type": "web_search_20260209", "name": "web_search", "max_uses": MAX_SEARCHES}],
@@ -114,15 +184,18 @@ def save_manifest(m: dict) -> None:
     MANIFEST.write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def cmd_build(_: argparse.Namespace) -> None:
+def cmd_build(a: argparse.Namespace) -> None:
     WORK.mkdir(parents=True, exist_ok=True)
     items = load_cards()
+    if a.slugs:
+        want = set(Path(a.slugs).read_text(encoding="utf-8").split())
+        items = [i for i in items if i["custom_id"] in want]
     bad = [i["custom_id"] for i in items if not re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", i["custom_id"])]
     if bad:
         sys.exit(f"slug не подходит для custom_id: {bad}")
     with REQUESTS.open("w", encoding="utf-8") as fh:
         for it in items:
-            fh.write(json.dumps({"custom_id": it["custom_id"], "params": build_params(it)},
+            fh.write(json.dumps({"custom_id": it["custom_id"], "params": build_params(it, a.inline)},
                                 ensure_ascii=False) + "\n")
     # Грубая оценка: JSON с русским текстом около 2.5 символа на токен.
     prompt_tok = sum(len(SYSTEM) + len(json.dumps(i["card"], ensure_ascii=False)) + 300
@@ -276,7 +349,10 @@ def write_report(rows: list[dict]) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("build").set_defaults(fn=cmd_build)
+    b = sub.add_parser("build")
+    b.add_argument("--slugs", help="файл со slug через пробел или перевод строки, собрать только их")
+    b.add_argument("--inline", action="store_true", help="вложить тексты источников из пакетов noble")
+    b.set_defaults(fn=cmd_build)
     s = sub.add_parser("submit")
     s.add_argument("--limit", type=int, default=0)
     s.add_argument("--only", help="отправить эти slug через запятую")
