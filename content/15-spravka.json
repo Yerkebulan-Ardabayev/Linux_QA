@@ -1,0 +1,1819 @@
+{
+ "category": "Справка и окружение оболочки",
+ "cards": [
+  {
+   "slug": "komanda-anatomiya",
+   "cmd": "команда опции аргументы",
+   "text": "Анатомия команды: команда, опции и аргументы",
+   "summary": "<p>Строка команды состоит из слов, разделённых пробелами. Первое слово это <b>команда</b>, то есть имя программы или встроенной команды bash. Дальше идут <b>опции</b>, они меняют поведение команды, и <b>аргументы</b>, это то, с чем команда работает: файлы, каталоги, строки.</p><ul><li>Короткая опция это дефис и одна буква, <code>-l</code>. Несколько коротких опций можно склеить, <code>-la</code> то же, что <code>-l -a</code>.</li><li>Длинная опция начинается с двух дефисов и пишется словом, <code>--all</code>. Значение ей дают через знак равенства, <code>--color=auto</code>.</li><li>Опции со значением в короткой форме берут значение следующим словом, <code>head -n 3</code>.</li><li>Два дефиса <code>--</code> отдельным словом означают конец опций, всё после них считается аргументами.</li></ul><p>Какие опции есть у команды и в каком порядке писать аргументы, показывает раздел SYNOPSIS в <code>man</code>. Квадратные скобки там означают необязательную часть, многоточие означает, что часть можно повторить.</p>",
+   "diagram": " ls   -l -a   --color=auto   /etc /var\n ┬─   ┬────   ┬───────────   ┬────────\n │    │       │              └─ аргументы, с чем работать\n │    │       └─ длинная опция, два дефиса, имя=значение\n │    └─ короткие опции, дефис и одна буква\n └─ команда, имя программы или встроенной команды\n\n bash делит строку по пробелам на слова и передаёт их программе\n ┌────┬────┬────┬──────────────┬──────┬──────┐\n │ ls │ -l │ -a │ --color=auto │ /etc │ /var │\n └────┴────┴────┴──────────────┴──────┴──────┘\n   0    1    2         3           4      5\n слово 0 это имя команды, остальные программа разбирает сама",
+   "examples": [
+    {
+     "line": "ls -l -a --color=auto /etc /var",
+     "d": "Длинный список двух каталогов со скрытыми файлами. Цвет включается, только если вывод идёт в терминал.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Команда, программа /usr/bin/ls."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Короткая опция, long, длинный формат с правами, владельцем, размером и временем."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "Короткая опция, all, показывать и записи, чьё имя начинается с точки."
+      },
+      {
+       "t": "--color=auto",
+       "k": "opt",
+       "d": "Длинная опция со значением.",
+       "sub": [
+        {
+         "t": "--",
+         "k": "op",
+         "d": "Начало длинной опции."
+        },
+        {
+         "t": "color",
+         "k": "opt",
+         "d": "Имя опции, раскраска имён по типу файла."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Отделяет имя опции от значения."
+        },
+        {
+         "t": "auto",
+         "k": "val",
+         "d": "Красить, только если вывод идёт в терминал. В файл или в канал цвет не попадёт."
+        }
+       ]
+      },
+      {
+       "t": "/etc",
+       "k": "path",
+       "d": "Первый аргумент, каталог настроек."
+      },
+      {
+       "t": "/var",
+       "k": "path",
+       "d": "Второй аргумент. ls покажет каждый каталог отдельным блоком с заголовком."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/etc:\ntotal 716\ndrwxr-xr-x 1 root root    4096 Oct 12 22:33 .\ndrwxr-xr-x 1 root root    4096 Oct 12 22:33 ..\n-rw------- 1 root root       0 Sep 17 07:20 .pwd.lock\ndrwxr-xr-x 3 root root    4096 Oct 12 22:14 X11\n-rw-r--r-- 1 root root    3444 Jul  5  2023 adduser.conf\ndrwxr-xr-x 1 root root    4096 Oct 12 22:14 alternatives\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 apparmor\ndrwxr-xr-x 8 root root    4096 Oct 12 22:15 apparmor.d\ndrwxr-xr-x 1 root root    4096 Sep 17 07:20 apt\n-rw-r----- 1 root daemon   144 Apr  1  2024 at.deny\ndrwxr-x--- 4 root root    4096 Oct 12 22:14 audit\n-rw-r--r-- 1 root root    2319 Mar 31  2024 bash.bashrc\n-rw-r--r-- 1 root root     367 Aug  2  2022 bindresvport.blacklist\ndrwxr-xr-x 2 root root    4096 Jul 28 20:04 binfmt.d\ndrwxr-xr-x 3 root root    4096 Oct 12 22:14 ca-certificates\n-rw-r--r-- 1 root root    5287 Oct 12 22:14 ca-certificates.conf\ndrwxr-xr-x 2 root root    4096 Sep 17 07:29 cloud\ndrwx------ 2 root root    4096 Jul 28 20:04 credstore\ndrwx------ 2 root root    4096 Jul 28 20:04 credstore.encrypted\ndrwxr-xr-x 1 root root    4096 Oct 12 22:14 cron.d\ndrwxr-xr-x 1 root root    4096 Oct 12 22:14 cron.daily\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 cron.hourly\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 cron.monthly\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 cron.weekly\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 cron.yearly\n-rw-r--r-- 1 root root    1136 Mar 31  2024 crontab\n-rw-r--r-- 1 root root    2967 Apr 12  2024 debconf.conf\n-rw-r--r-- 1 root root      11 Apr 22  2024 debian_version\ndrwxr-xr-x 1 root root    4096 Oct 12 22:15 default\n-rw-r--r-- 1 root root    1706 Jul  5  2023 deluser.conf\ndrwxr-xr-x 2 root root    4096 Oct 12 22:14 depmod.d\ndrwxr-xr-x 1 root root    4096 Sep 17 07:29 dpkg\n-rw-r--r-- 1 root root     685 Apr  8  2024 e2scrub.conf\n-rw-r--r-- 1 root root     106 Sep 17 07:20 environment\n-rw-r--r-- 1 root root    1853 Oct 18  2022 ethertypes\ndrwxr-xr-x 6 root root    4096 Oct 12 22:15 fail2ban\n-rw-r--r-- 1 root root      37 Sep 17 07:20 fstab\n-rw-r--r-- 1 root root    2584 Jan 31  2024 gai.conf\n… (вывод обрезан)"
+    },
+    {
+     "line": "ls -la /var",
+     "d": "То же без цвета, но две короткие опции склеены в одно слово.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Команда."
+      },
+      {
+       "t": "-la",
+       "k": "opt",
+       "d": "Две короткие опции после одного дефиса.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "l",
+         "k": "opt",
+         "d": "long, длинный формат."
+        },
+        {
+         "t": "a",
+         "k": "opt",
+         "d": "all, включая скрытые записи."
+        }
+       ]
+      },
+      {
+       "t": "/var",
+       "k": "path",
+       "d": "Единственный аргумент, каталог."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "total 44\ndrwxr-xr-x 1 root root  4096 Sep 17 07:29 .\ndrwxr-xr-x 1 root root  4096 Oct 12 22:33 ..\ndrwxr-xr-x 2 root root  4096 Apr 22  2024 backups\ndrwxr-xr-x 1 root root  4096 Oct 12 22:14 cache\ndrwxr-xr-x 1 root root  4096 Oct 12 22:15 lib\ndrwxrwsr-x 2 root staff 4096 Apr 22  2024 local\nlrwxrwxrwx 1 root root     9 Sep 17 07:20 lock -> /run/lock\ndrwxr-xr-x 1 root root  4096 Oct 12 22:15 log\ndrwxrwsr-x 2 root mail  4096 Sep 17 07:20 mail\ndrwxr-xr-x 2 root root  4096 Sep 17 07:20 opt\nlrwxrwxrwx 1 root root     4 Sep 17 07:20 run -> /run\ndrwxr-xr-x 1 root root  4096 Oct 12 22:14 spool\ndrwxrwxrwt 2 root root  4096 Sep 17 07:29 tmp"
+    },
+    {
+     "line": "head -n 3 /etc/passwd",
+     "d": "Опция со значением в короткой форме, значение идёт следующим словом.",
+     "parts": [
+      {
+       "t": "head",
+       "k": "cmd",
+       "d": "Команда, печатает начало файла."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "lines, сколько строк вывести."
+      },
+      {
+       "t": "3",
+       "k": "num",
+       "d": "Значение опции -n. Длинная форма той же опции --lines=3."
+      },
+      {
+       "t": "/etc/passwd",
+       "k": "path",
+       "d": "Аргумент, файл, начало которого нужно показать."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Пропустить пробел между словами, <code>ls-la</code>. bash ищет команду с именем <code>ls-la</code> и пишет command not found.</p>",
+    "<p>Склеивать длинные опции или ставить им один дефис. <code>-all</code> для <code>ls</code> это три короткие опции <code>-a -l -l</code>, а не <code>--all</code>.</p>",
+    "<p>Имя файла, которое начинается с дефиса, программа примет за опцию. Пишите <code>rm -- -file</code> или <code>rm ./-file</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Simple-Commands",
+    "https://www.gnu.org/software/coreutils/manual/html_node/Common-options.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/ls.1.html"
+   ]
+  },
+  {
+   "slug": "man",
+   "cmd": "man",
+   "text": "man: открыть справочную страницу команды",
+   "summary": "<p><code>man</code> показывает страницу встроенного руководства (manual). Страницы разбиты на разделы, самые нужные из них:</p><ul><li><b>1</b> программы и команды оболочки, <code>ls</code>, <code>grep</code>;</li><li><b>5</b> форматы файлов, <code>/etc/passwd</code>, <code>crontab</code>, <code>fstab</code>;</li><li><b>8</b> команды администрирования, обычно для root, <code>useradd</code>, <code>mount</code>.</li></ul><p>Одно имя может быть в нескольких разделах. <code>crontab(1)</code> это программа, а <code>crontab(5)</code> формат файла заданий. Без номера раздела man показывает первую найденную страницу, поэтому для формата файла пишите <code>man 5 crontab</code>.</p><p>Страница открывается в программе <code>less</code>. Внутри работают клавиши: <code>/слово</code> и Enter ищет вперёд, <code>n</code> следующее совпадение, <code>N</code> предыдущее, <code>g</code> в начало, <code>G</code> в конец, <code>h</code> справка по клавишам, <code>q</code> выход. Обычный порядок разделов страницы NAME, SYNOPSIS, DESCRIPTION, OPTIONS, EXAMPLES, SEE ALSO.</p>",
+   "examples": [
+    {
+     "line": "man 5 crontab",
+     "d": "Открыть описание формата файла заданий cron, а не программы crontab. В стенде man заменён заглушкой, поэтому пример для настоящего сервера.",
+     "parts": [
+      {
+       "t": "man",
+       "k": "cmd",
+       "d": "Показать страницу руководства."
+      },
+      {
+       "t": "5",
+       "k": "num",
+       "d": "Номер раздела, 5 значит форматы файлов."
+      },
+      {
+       "t": "crontab",
+       "k": "arg",
+       "d": "Имя страницы. В разделе 1 под этим именем программа, в разделе 5 формат файла."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "man -a passwd",
+     "d": "Показать по очереди все страницы с именем passwd, программу из раздела 1 и формат /etc/passwd из раздела 5.",
+     "parts": [
+      {
+       "t": "man",
+       "k": "cmd",
+       "d": "Показать страницу руководства."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "all, показать все найденные страницы с этим именем, а не только первую. После выхода из одной man предложит следующую."
+      },
+      {
+       "t": "passwd",
+       "k": "arg",
+       "d": "Имя страницы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "man -w ls",
+     "d": "Не открывать страницу, а напечатать путь к её файлу.",
+     "parts": [
+      {
+       "t": "man",
+       "k": "cmd",
+       "d": "Руководство."
+      },
+      {
+       "t": "-w",
+       "k": "opt",
+       "d": "where, вывести расположение файла страницы вместо её показа."
+      },
+      {
+       "t": "ls",
+       "k": "arg",
+       "d": "Имя страницы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>В минимальных образах Ubuntu, например в Docker, man печатает «This system has been minimized» вместо страницы. Документация вырезана, вернуть её можно командой <code>unminimize</code>.</p>",
+    "<p>Искать <code>man cd</code> или <code>man alias</code>. Это встроенные команды bash, отдельной страницы у них может не быть. Справку по ним даёт <code>help cd</code>.</p>",
+    "<p>Ждать формат файла от <code>man crontab</code>. Без номера раздела откроется программа из раздела 1, формат файла лежит в разделе 5.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/man.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/less.1.html"
+   ]
+  },
+  {
+   "slug": "apropos-whatis",
+   "cmd": "apropos",
+   "text": "apropos, whatis: найти нужную man-страницу",
+   "summary": "<p><code>whatis</code> печатает однострочное описание страницы по точному имени и показывает, в каких разделах она есть. То же делает <code>man -f</code>.</p><p><code>apropos</code> ищет слово в именах и кратких описаниях всех страниц. Удобно, когда вы знаете задачу, но не знаете имя команды. Слово понимается как регулярное выражение. То же делает <code>man -k</code>.</p><p>Обе команды берут данные из индекса страниц, а не читают сами страницы. Индекс строит <code>mandb</code>, обычно по расписанию после установки пакетов.</p>",
+   "examples": [
+    {
+     "line": "whatis crontab",
+     "d": "Узнать, в каких разделах есть страница crontab и что в каждой.",
+     "parts": [
+      {
+       "t": "whatis",
+       "k": "cmd",
+       "d": "Показать краткое описание страницы по точному имени."
+      },
+      {
+       "t": "crontab",
+       "k": "arg",
+       "d": "Имя страницы. В выводе номер раздела стоит в скобках."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "crontab (1)          - maintain crontab files for individual users (Vixie Cron)\ncrontab (5)          - tables for driving cron"
+    },
+    {
+     "line": "apropos cron",
+     "d": "Найти все страницы, где слово cron встречается в имени или описании.",
+     "parts": [
+      {
+       "t": "apropos",
+       "k": "cmd",
+       "d": "Искать по именам и описаниям страниц."
+      },
+      {
+       "t": "cron",
+       "k": "pat",
+       "d": "Что искать. Это регулярное выражение, подходит любое вхождение."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "cron (8)             - daemon to execute scheduled commands (Vixie Cron)\ncrontab (1)          - maintain crontab files for individual users (Vixie Cron)\ncrontab (5)          - tables for driving cron"
+    },
+    {
+     "line": "apropos -s 8 user",
+     "d": "Найти команды администрирования, связанные с пользователями.",
+     "parts": [
+      {
+       "t": "apropos",
+       "k": "cmd",
+       "d": "Поиск по описаниям страниц."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "sections, искать только в указанных разделах."
+      },
+      {
+       "t": "8",
+       "k": "num",
+       "d": "Раздел 8, команды администрирования."
+      },
+      {
+       "t": "user",
+       "k": "pat",
+       "d": "Слово для поиска."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "addgroup (8)         - add or manipulate users or groups\nadduser (8)          - add or manipulate users or groups\nadduser.local (8)    - hook for local actions in adduser and deluser\napplygnupgdefaults (8) - Run gpgconf --apply-defaults for all users.\narpd (8)             - userspace arp daemon.\ndelgroup (8)         - remove a user or group from the system\ndeluser (8)          - remove a user or group from the system\ndeluser.local (8)    - hook for local actions in adduser and deluser\nsudo (8)             - execute a command as another user\nsudoedit (8)         - execute a command as another user\nsystemd-ask-password-console.path (8) - Query the user for system passwords on the console and vi...\nsystemd-ask-password-console.service (8) - Query the user for system passwords on the console and...\nsystemd-ask-password-wall.path (8) - Query the user for system passwords on the console and via wall\nsystemd-ask-password-wall.service (8) - Query the user for system passwords on the console and vi...\nsystemd-soft-reboot.service (8) - Userspace reboot operation\nsystemd-sysusers (8) - Allocate system users and groups\nsystemd-sysusers.service (8) - Allocate system users and groups\nsystemd-user-sessions (8) - Permit user logins after boot, prohibit user logins at shutdown\nsystemd-user-sessions.service (8) - Permit user logins after boot, prohibit user logins at shutdown\nsystemd-xdg-autostart-generator (8) - User unit generator for XDG autostart files\ntc-skbmod (8)        - user-friendly packet editor action"
+    },
+    {
+     "line": "man -k '^ssh'",
+     "d": "То же, что apropos, через сам man. Найти страницы, чьё имя или описание начинается с ssh. В стенде man заглушка, пример для сервера.",
+     "parts": [
+      {
+       "t": "man",
+       "k": "cmd",
+       "d": "Руководство."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "Искать слово в кратких описаниях и именах, как apropos."
+      },
+      {
+       "t": "'^ssh'",
+       "k": "str",
+       "d": "Регулярное выражение в одинарных кавычках.",
+       "ref": "sym-single-quotes",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открыть кавычки, bash не трогает текст внутри.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "^",
+         "k": "pat",
+         "d": "Начало строки."
+        },
+        {
+         "t": "ssh",
+         "k": "pat",
+         "d": "Буквально ssh."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрыть кавычки.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ответ «nothing appropriate» после установки пакета. Индекс ещё не обновлён, запустите <code>sudo mandb</code>.</p>",
+    "<p>Ждать от <code>whatis</code> поиска по части имени. Он ищет точное имя, для поиска по слову нужен <code>apropos</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/apropos.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/whatis.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/man.1.html"
+   ]
+  },
+  {
+   "slug": "help-builtin",
+   "cmd": "help",
+   "text": "help: справка по встроенным командам bash",
+   "summary": "<p>Часть команд не отдельные программы, а встроены в bash: <code>cd</code>, <code>alias</code>, <code>export</code>, <code>source</code>, <code>type</code>, <code>history</code>, <code>read</code> и другие. Справку по ним показывает встроенная команда <code>help</code>. Без аргументов она выводит список всех встроенных команд и конструкций языка.</p><p>Если аргумент не совпал с именем точно, <code>help</code> покажет все команды, чьё имя начинается с него. Проверить, встроенная ли команда, можно через <code>type</code>.</p>",
+   "examples": [
+    {
+     "line": "help cd",
+     "d": "Полная справка по встроенной команде cd.",
+     "parts": [
+      {
+       "t": "help",
+       "k": "cmd",
+       "d": "Справка по встроенным командам bash."
+      },
+      {
+       "t": "cd",
+       "k": "arg",
+       "d": "Имя встроенной команды."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "cd: cd [-L|[-P [-e]] [-@]] [dir]\n    Change the shell working directory.\n    \n    Change the current directory to DIR.  The default DIR is the value of the\n    HOME shell variable. If DIR is \"-\", it is converted to $OLDPWD.\n    \n    The variable CDPATH defines the search path for the directory containing\n    DIR.  Alternative directory names in CDPATH are separated by a colon (:).\n    A null directory name is the same as the current directory.  If DIR begins\n    with a slash (/), then CDPATH is not used.\n    \n    If the directory is not found, and the shell option `cdable_vars' is set,\n    the word is assumed to be  a variable name.  If that variable has a value,\n    its value is used for DIR.\n    \n    Options:\n      -L\tforce symbolic links to be followed: resolve symbolic\n    \t\tlinks in DIR after processing instances of `..'\n      -P\tuse the physical directory structure without following\n    \t\tsymbolic links: resolve symbolic links in DIR before\n    \t\tprocessing instances of `..'\n      -e\tif the -P option is supplied, and the current working\n    \t\tdirectory cannot be determined successfully, exit with\n    \t\ta non-zero status\n      -@\ton systems that support it, present a file with extended\n    \t\tattributes as a directory containing the file attributes\n    \n    The default is to follow symbolic links, as if `-L' were specified.\n    `..' is processed by removing the immediately previous pathname component\n    back to a slash or the beginning of DIR.\n    \n    Exit Status:\n    Returns 0 if the directory is changed, and if $PWD is set successfully when\n    -P is used; non-zero otherwise."
+    },
+    {
+     "line": "help -d cd pwd type",
+     "d": "Однострочное описание трёх команд сразу.",
+     "parts": [
+      {
+       "t": "help",
+       "k": "cmd",
+       "d": "Справка по встроенным командам."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "Краткое описание каждой команды в одну строку."
+      },
+      {
+       "t": "cd",
+       "k": "arg",
+       "d": "Первая команда."
+      },
+      {
+       "t": "pwd",
+       "k": "arg",
+       "d": "Вторая команда."
+      },
+      {
+       "t": "type",
+       "k": "arg",
+       "d": "Третья команда."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "cd - Change the shell working directory.\npwd - Print the name of the current working directory.\ntype - Display information about command type."
+    },
+    {
+     "line": "help -s alias type",
+     "d": "Только синтаксис, без описания.",
+     "parts": [
+      {
+       "t": "help",
+       "k": "cmd",
+       "d": "Справка по встроенным командам."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "Показать только короткую строку синтаксиса."
+      },
+      {
+       "t": "alias",
+       "k": "arg",
+       "d": "Первая команда."
+      },
+      {
+       "t": "type",
+       "k": "arg",
+       "d": "Вторая команда."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "alias: alias [-p] [name[=value] ... ]\ntype: type [-afptP] name [name ...]"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Вызывать <code>help</code> для внешней программы, <code>help ls</code>. Ответ будет «no help topics match», справку по программам даёт <code>man</code>.</p>",
+    "<p><code>help</code> есть только в bash. В <code>sh</code> (dash в Ubuntu) этой команды нет.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
+   ]
+  },
+  {
+   "slug": "type",
+   "cmd": "type",
+   "text": "type: узнать, чем является команда",
+   "summary": "<p><code>type</code> показывает, как bash поймёт имя, если написать его командой. Ответ бывает пяти видов:</p><ul><li><b>alias</b>, псевдоним, bash подставит вместо имени заданный текст;</li><li><b>keyword</b>, ключевое слово языка, <code>if</code>, <code>for</code>, <code>while</code>;</li><li><b>function</b>, функция оболочки;</li><li><b>builtin</b>, встроенная команда, выполняется внутри bash без запуска программы;</li><li><b>file</b>, исполняемый файл, найденный в каталогах из <code>PATH</code>.</li></ul><p>Если одно имя есть в нескольких местах, побеждает то, что bash проверяет раньше. Поэтому <code>echo</code> это встроенная команда, хотя есть и программа <code>/usr/bin/echo</code>. Опция <code>-a</code> показывает все варианты по порядку.</p>",
+   "diagram": " как bash находит команду по первому слову строки\n\n при чтении строки\n ├─ 1. alias? ──────── да ─▶ подставить текст алиаса\n └─ 2. ключевое слово? да ─▶ if, for, while, разбор синтаксиса\n        │ нет\n        ▼\n в имени есть / ? ──── да ─▶ запустить этот файл, без поиска\n        │ нет\n        ▼\n 3. функция? ───────── да ─▶ вызвать функцию\n 4. встроенная? ────── да ─▶ выполнить внутри bash\n 5. есть в хэше? ───── да ─▶ запустить запомненный путь\n        │ нет\n        ▼\n 6. каталоги из $PATH по очереди, слева направо\n    /usr/local/bin ─▶ /usr/bin ─▶ /bin ─▶ ...\n    первый найденный исполняемый файл запускается\n    и его путь запоминается в хэше\n        │ нигде нет\n        ▼\n command not found, код возврата 127",
+   "examples": [
+    {
+     "line": "type -a echo",
+     "d": "Все места, где есть команда echo, в порядке, в котором bash их проверяет.",
+     "parts": [
+      {
+       "t": "type",
+       "k": "cmd",
+       "d": "Показать, чем является имя."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "all, перечислить все варианты: алиасы, ключевые слова, функции, встроенные команды и файлы в PATH."
+      },
+      {
+       "t": "echo",
+       "k": "arg",
+       "d": "Имя для проверки. Первой будет встроенная команда, она и выполнится."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "echo is a shell builtin\necho is /usr/bin/echo\necho is /bin/echo"
+    },
+    {
+     "line": "type -t ls cd if ll",
+     "d": "По одному слову на каждое имя, удобно для скриптов.",
+     "parts": [
+      {
+       "t": "type",
+       "k": "cmd",
+       "d": "Показать, чем является имя."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "Печатать только тип одним словом, alias, keyword, function, builtin или file."
+      },
+      {
+       "t": "ls",
+       "k": "arg",
+       "d": "Программа, будет file."
+      },
+      {
+       "t": "cd",
+       "k": "arg",
+       "d": "Встроенная команда, будет builtin."
+      },
+      {
+       "t": "if",
+       "k": "arg",
+       "d": "Ключевое слово, будет keyword."
+      },
+      {
+       "t": "ll",
+       "k": "arg",
+       "d": "Алиас из подготовки, будет alias."
+      }
+     ],
+     "run": "container",
+     "setup": "shopt -s expand_aliases; alias ll='ls -l'",
+     "output": "file\nbuiltin\nkeyword\nalias"
+    },
+    {
+     "line": "type ll greet",
+     "d": "Узнать, во что раскрывается алиас и как определена функция.",
+     "parts": [
+      {
+       "t": "type",
+       "k": "cmd",
+       "d": "Без опций type печатает подробности, текст алиаса и тело функции."
+      },
+      {
+       "t": "ll",
+       "k": "arg",
+       "d": "Алиас."
+      },
+      {
+       "t": "greet",
+       "k": "arg",
+       "d": "Функция, заданная в подготовке."
+      }
+     ],
+     "run": "container",
+     "setup": "shopt -s expand_aliases; alias ll='ls -l'; greet() { echo \"hello, $1\"; }",
+     "output": "ll is aliased to `ls -l'\ngreet is a function\ngreet () \n{ \n    echo \"hello, $1\"\n}"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Доверять <code>which</code> вместо <code>type</code>. <code>which</code> ищет только файлы в PATH и не знает об алиасах, функциях и встроенных командах.</p>",
+    "<p>Переместили программу, а bash запускает её по старому пути из хэша и пишет No such file or directory. Сбросьте хэш командой <code>hash -r</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
+   ]
+  },
+  {
+   "slug": "which",
+   "cmd": "which",
+   "text": "which: найти путь к программе в PATH",
+   "summary": "<p><code>which</code> перебирает каталоги из переменной <code>PATH</code> и печатает путь к исполняемому файлу с указанным именем. Так проверяют, установлена ли программа и какая именно копия запустится.</p><p>В Ubuntu <code>which</code> это скрипт из пакета debianutils. Он ничего не знает об алиасах, функциях и встроенных командах bash, для них используйте <code>type</code>. Код возврата 0, если все имена найдены, 1, если хотя бы одного нет.</p>",
+   "examples": [
+    {
+     "line": "which -a ls",
+     "d": "Все подходящие файлы, а не только первый.",
+     "parts": [
+      {
+       "t": "which",
+       "k": "cmd",
+       "d": "Найти программу в каталогах PATH."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "Печатать все найденные пути. В Ubuntu /bin это ссылка на /usr/bin, поэтому одна и та же программа видна дважды."
+      },
+      {
+       "t": "ls",
+       "k": "arg",
+       "d": "Имя программы."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/usr/bin/ls\n/bin/ls"
+    },
+    {
+     "line": "which cd; echo $?",
+     "d": "cd встроена в bash, файла с таким именем в PATH нет.",
+     "parts": [
+      {
+       "t": "which",
+       "k": "cmd",
+       "d": "Найти программу в PATH."
+      },
+      {
+       "t": "cd",
+       "k": "arg",
+       "d": "Встроенная команда bash, which её не найдёт и ничего не напечатает."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Выполнить следующую команду в любом случае.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать код возврата."
+      },
+      {
+       "t": "$?",
+       "k": "var",
+       "d": "Код возврата which, здесь 1, имя не найдено.",
+       "ref": "sym-special-vars"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "1"
+    },
+    {
+     "line": "which -s nginx || echo 'nginx не установлен'",
+     "d": "Проверка в скрипте без вывода пути.",
+     "parts": [
+      {
+       "t": "which",
+       "k": "cmd",
+       "d": "Найти программу в PATH."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "Ничего не печатать, только вернуть 0, если всё найдено, или 1."
+      },
+      {
+       "t": "nginx",
+       "k": "arg",
+       "d": "Имя программы, в стенде её нет."
+      },
+      {
+       "t": "||",
+       "k": "op",
+       "d": "Выполнить echo, только если which вернула не 0.",
+       "ref": "sym-or"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать сообщение."
+      },
+      {
+       "t": "'nginx не установлен'",
+       "k": "str",
+       "d": "Текст в одинарных кавычках.",
+       "ref": "sym-single-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "nginx не установлен"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Считать, что <code>which ls</code> показывает, что выполнится. Если на <code>ls</code> есть алиас, bash выполнит алиас. Точный ответ даёт <code>type ls</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/which.debianutils.1.html",
+    "https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution"
+   ]
+  },
+  {
+   "slug": "alias",
+   "cmd": "alias",
+   "text": "alias, unalias: короткое имя для длинной команды",
+   "summary": "<p><code>alias имя='текст'</code> задаёт псевдоним. Когда первое слово команды совпадает с именем алиаса, bash подставляет вместо него текст и только потом выполняет строку. <code>alias</code> без аргументов печатает все алиасы, <code>alias имя</code> один. <code>unalias имя</code> удаляет алиас, <code>unalias -a</code> все.</p><p>Алиас живёт только в текущей оболочке. Чтобы он был в каждом новом терминале, допишите строку в <code>~/.bashrc</code>. В скриптах алиасы по умолчанию не раскрываются, там используйте функции.</p>",
+   "examples": [
+    {
+     "line": "alias ll='ls -lh'; alias ll",
+     "d": "Задать алиас и проверить, во что он раскрывается.",
+     "parts": [
+      {
+       "t": "alias",
+       "k": "cmd",
+       "d": "Встроенная команда, задать псевдоним."
+      },
+      {
+       "t": "ll='ls -lh'",
+       "k": "arg",
+       "d": "Определение алиаса.",
+       "sub": [
+        {
+         "t": "ll",
+         "k": "arg",
+         "d": "Имя алиаса."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Без пробелов вокруг, иначе bash увидит три отдельных слова."
+        },
+        {
+         "t": "'ls -lh'",
+         "k": "str",
+         "d": "Текст подстановки. Кавычки нужны, потому что внутри пробел.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем выполнить следующую команду.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "alias",
+       "k": "cmd",
+       "d": "С именем, но без знака равенства, показать алиас."
+      },
+      {
+       "t": "ll",
+       "k": "arg",
+       "d": "Какой алиас показать."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "alias ll='ls -lh'"
+    },
+    {
+     "line": "unalias ll; alias ll",
+     "d": "Удалить алиас. Повторный запрос сообщит, что его нет.",
+     "parts": [
+      {
+       "t": "unalias",
+       "k": "cmd",
+       "d": "Встроенная команда, удалить алиас."
+      },
+      {
+       "t": "ll",
+       "k": "arg",
+       "d": "Имя алиаса."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем выполнить следующую команду.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "alias",
+       "k": "cmd",
+       "d": "Показать алиас."
+      },
+      {
+       "t": "ll",
+       "k": "arg",
+       "d": "Его уже нет, будет ошибка not found."
+      }
+     ],
+     "run": "container",
+     "setup": "alias ll='ls -lh'",
+     "output": "bash: line 1: alias: ll: not found"
+    },
+    {
+     "line": "echo \"alias ll='ls -lh'\" >> ~/.bashrc && tail -n 1 ~/.bashrc",
+     "d": "Сохранить алиас навсегда, дописав его в файл настроек bash.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать строку."
+      },
+      {
+       "t": "\"alias ll='ls -lh'\"",
+       "k": "str",
+       "d": "Строка в двойных кавычках, одинарные внутри остаются как есть.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": ">>",
+       "k": "op",
+       "d": "Дописать в конец файла, не стирая его.",
+       "ref": "sym-append"
+      },
+      {
+       "t": "~/.bashrc",
+       "k": "path",
+       "d": "Файл, который bash читает при каждом запуске интерактивной оболочки.",
+       "sub": [
+        {
+         "t": "~",
+         "k": "op",
+         "d": "Домашний каталог.",
+         "ref": "sym-tilde"
+        },
+        {
+         "t": "/.bashrc",
+         "k": "path",
+         "d": "Скрытый файл в нём."
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверить результат, только если запись удалась.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "tail",
+       "k": "cmd",
+       "d": "Показать конец файла."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Сколько строк показать."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Одну, последнюю."
+      },
+      {
+       "t": "~/.bashrc",
+       "k": "path",
+       "d": "Тот же файл.",
+       "sub": [
+        {
+         "t": "~",
+         "k": "op",
+         "d": "Домашний каталог.",
+         "ref": "sym-tilde"
+        },
+        {
+         "t": "/.bashrc",
+         "k": "path",
+         "d": "Файл настроек."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "alias ll='ls -lh'"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ставить пробелы вокруг <code>=</code>, <code>alias ll = 'ls -l'</code>. bash примет это за три аргумента и сообщит, что алиасов <code>=</code> и <code>ls -l</code> нет.</p>",
+    "<p>Ждать, что алиас сработает в скрипте. В неинтерактивной оболочке алиасы не раскрываются, пока не включена опция <code>shopt -s expand_aliases</code>. Для скриптов пишите функцию.</p>",
+    "<p>Обойти алиас разово можно обратной косой чертой, <code>\\ls</code>, или через <code>command ls</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Aliases",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins"
+   ]
+  },
+  {
+   "slug": "history",
+   "cmd": "history",
+   "text": "history: история команд, !! и !$",
+   "summary": "<p>Интерактивный bash запоминает введённые строки. <code>history</code> печатает их с номерами, <code>history 10</code> последние десять. При выходе список сохраняется в файл <code>~/.bash_history</code> (переменная <code>HISTFILE</code>), при входе читается обратно. <code>history -c</code> очищает список, <code>history -d N</code> удаляет строку с номером N.</p><p>Подстановка из истории начинается с <code>!</code>:</p><ul><li><code>!!</code> вся предыдущая команда, например <code>sudo !!</code>;</li><li><code>!$</code> последнее слово предыдущей команды;</li><li><code>!N</code> команда с номером N, <code>!ssh</code> последняя команда, начинавшаяся с ssh.</li></ul><p>Поиск по истории запускает Ctrl+R. Набирайте часть команды, bash покажет последнюю подходящую. Ещё раз Ctrl+R ищет дальше назад, Enter выполняет найденное, Esc оставляет строку для правки, Ctrl+G отменяет поиск.</p><p>В скрипте история выключена, поэтому в стенде её включают в подготовке командой <code>set -o history</code> и загружают из файла.</p>",
+   "examples": [
+    {
+     "line": "history 3",
+     "d": "Последние три строки истории. Подготовка имитирует сохранённую историю.",
+     "parts": [
+      {
+       "t": "history",
+       "k": "cmd",
+       "d": "Встроенная команда bash, показать историю с номерами."
+      },
+      {
+       "t": "3",
+       "k": "num",
+       "d": "Сколько последних строк показать."
+      }
+     ],
+     "run": "container",
+     "setup": "set -o history; printf '%s\\n' 'cd /var/log' 'ls -l' 'tail -n 20 syslog' 'ssh admin@web1' 'df -h' > ~/.bash_history; history -r ~/.bash_history",
+     "output": "    3  tail -n 20 syslog\n    4  ssh admin@web1\n    5  df -h"
+    },
+    {
+     "line": "history | grep ssh",
+     "d": "Найти в истории все строки с ssh, вместе с номерами.",
+     "parts": [
+      {
+       "t": "history",
+       "k": "cmd",
+       "d": "Вся история."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать вывод на вход grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Оставить строки с образцом."
+      },
+      {
+       "t": "ssh",
+       "k": "pat",
+       "d": "Что искать."
+      }
+     ],
+     "run": "container",
+     "setup": "set -o history; printf '%s\\n' 'cd /var/log' 'ssh admin@web1' 'df -h' 'ssh admin@db1' 'free -h' > ~/.bash_history; history -r ~/.bash_history",
+     "output": "    2  ssh admin@web1\n    4  ssh admin@db1"
+    },
+    {
+     "line": "sudo !!",
+     "d": "Повторить предыдущую команду с правами root, если она упала с Permission denied. Работает только в интерактивной оболочке.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root."
+      },
+      {
+       "t": "!!",
+       "k": "op",
+       "d": "Подстановка всей предыдущей команды. bash сначала печатает получившуюся строку, потом выполняет её."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "cd !$",
+     "d": "После mkdir -p /srv/app перейти в только что созданный каталог.",
+     "parts": [
+      {
+       "t": "cd",
+       "k": "cmd",
+       "d": "Сменить каталог."
+      },
+      {
+       "t": "!$",
+       "k": "op",
+       "d": "Последнее слово предыдущей команды, здесь /srv/app."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Восклицательный знак в двойных кавычках в терминале, <code>echo \"Готово!\"</code>, bash понимает как подстановку из истории и может ответить event not found. Берите такой текст в одинарные кавычки.</p>",
+    "<p>Набирать пароль или токен прямо в строке команды. Он останется в <code>~/.bash_history</code>. Если в <code>HISTCONTROL</code> есть <code>ignorespace</code>, строка с пробелом в начале в историю не попадает.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-History-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#History-Interaction",
+    "https://www.gnu.org/software/bash/manual/bash.html#Event-Designators",
+    "https://www.gnu.org/software/bash/manual/bash.html#Commands-For-History"
+   ]
+  },
+  {
+   "slug": "source",
+   "cmd": "source",
+   "text": "source и точка: выполнить файл в текущей оболочке",
+   "summary": "<p><code>source файл</code> и равная ей <code>. файл</code> читают команды из файла и выполняют их в текущей оболочке. Переменные, функции, алиасы и смена каталога из файла остаются в силе после выполнения.</p><p>Обычный запуск <code>bash файл</code> или <code>./файл</code> создаёт новый процесс. Всё, что он задал, исчезает вместе с ним. Поэтому <code>source</code> используют, чтобы применить правки <code>~/.bashrc</code> без нового терминала или загрузить переменные из файла настроек.</p>",
+   "examples": [
+    {
+     "line": "source app.env && echo \"$APP_ENV $APP_PORT\"",
+     "d": "Загрузить переменные из файла в текущую оболочку и проверить их.",
+     "parts": [
+      {
+       "t": "source",
+       "k": "cmd",
+       "d": "Выполнить команды файла в текущей оболочке."
+      },
+      {
+       "t": "app.env",
+       "k": "path",
+       "d": "Файл со строками вида ИМЯ=значение."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Напечатать, только если source завершилась успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать значения."
+      },
+      {
+       "t": "\"$APP_ENV $APP_PORT\"",
+       "k": "str",
+       "d": "Строка в двойных кавычках, переменные внутри подставляются.",
+       "ref": "sym-double-quotes",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открыть кавычки.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$APP_ENV",
+         "k": "var",
+         "d": "Переменная из файла.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "$APP_PORT",
+         "k": "var",
+         "d": "Вторая переменная из файла.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрыть кавычки.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'APP_ENV=test\\nAPP_PORT=8080\\n' > app.env",
+     "output": "test 8080"
+    },
+    {
+     "line": "bash app.env; echo \"port=$APP_PORT\"; . ./app.env; echo \"port=$APP_PORT\"",
+     "d": "Сравнение. После запуска в отдельном bash переменная пуста, после точки она есть.",
+     "parts": [
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Запустить новый процесс bash."
+      },
+      {
+       "t": "app.env",
+       "k": "path",
+       "d": "Он выполнит файл и завершится, переменные пропадут."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать значение."
+      },
+      {
+       "t": "\"port=$APP_PORT\"",
+       "k": "str",
+       "d": "Здесь будет пусто, port=.",
+       "ref": "sym-double-quotes"
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": ".",
+       "k": "cmd",
+       "d": "Точка, то же, что source."
+      },
+      {
+       "t": "./app.env",
+       "k": "path",
+       "d": "Путь к файлу. Точка с косой чертой значит текущий каталог.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать значение ещё раз."
+      },
+      {
+       "t": "\"port=$APP_PORT\"",
+       "k": "str",
+       "d": "Теперь port=8080.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'APP_ENV=test\\nAPP_PORT=8080\\n' > app.env",
+     "output": "port=\nport=8080"
+    },
+    {
+     "line": "source ~/.bashrc",
+     "d": "Применить правки ~/.bashrc, например новый алиас, в уже открытом терминале.",
+     "parts": [
+      {
+       "t": "source",
+       "k": "cmd",
+       "d": "Выполнить файл в текущей оболочке."
+      },
+      {
+       "t": "~/.bashrc",
+       "k": "path",
+       "d": "Файл настроек интерактивного bash.",
+       "sub": [
+        {
+         "t": "~",
+         "k": "op",
+         "d": "Домашний каталог.",
+         "ref": "sym-tilde"
+        },
+        {
+         "t": "/.bashrc",
+         "k": "path",
+         "d": "Файл в нём."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Запускать файл настроек как <code>./setup-env.sh</code> и удивляться, что переменные не появились. Они были заданы в дочернем процессе. Нужно <code>source setup-env.sh</code>.</p>",
+    "<p><code>source file</code> без косой черты сначала ищет file в каталогах <code>PATH</code> и только потом в текущем каталоге. Чтобы не взять чужой файл, пишите <code>./file</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins"
+   ]
+  },
+  {
+   "slug": "env-export",
+   "cmd": "export",
+   "text": "env, printenv, export: переменные окружения",
+   "summary": "<p>Переменная оболочки, заданная как <code>X=1</code>, видна только в текущем bash. <b>Окружение</b> это набор переменных, который получает каждая запущенная программа. <code>export X</code> помечает переменную, чтобы она попала в окружение всех следующих команд, <code>export X=1</code> задаёт и помечает сразу.</p><ul><li><code>printenv</code> печатает окружение, <code>printenv HOME</code> одну переменную.</li><li><code>env</code> без аргументов тоже печатает окружение.</li><li><code>env VAR=x команда</code> запускает команду с изменённым окружением, текущая оболочка не меняется. bash позволяет то же короче, <code>VAR=x команда</code>.</li><li><code>env -i команда</code> запускает команду с пустым окружением, <code>env -u VAR команда</code> без одной переменной.</li></ul>",
+   "examples": [
+    {
+     "line": "printenv HOME TERM",
+     "d": "Значения двух переменных окружения, каждое на своей строке.",
+     "parts": [
+      {
+       "t": "printenv",
+       "k": "cmd",
+       "d": "Печатать переменные окружения."
+      },
+      {
+       "t": "HOME",
+       "k": "arg",
+       "d": "Домашний каталог, у root это /root."
+      },
+      {
+       "t": "TERM",
+       "k": "arg",
+       "d": "Тип терминала."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/root\nxterm"
+    },
+    {
+     "line": "X=1; bash -c 'echo \"[$X]\"'; export X; bash -c 'echo \"[$X]\"'",
+     "d": "Переменная без export не видна дочернему процессу, после export видна.",
+     "parts": [
+      {
+       "t": "X=1",
+       "k": "var",
+       "d": "Задать переменную оболочки, пока только в текущем bash.",
+       "sub": [
+        {
+         "t": "X",
+         "k": "var",
+         "d": "Имя."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Присваивание, без пробелов."
+        },
+        {
+         "t": "1",
+         "k": "val",
+         "d": "Значение."
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Новый процесс bash."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Выполнить команду из следующего аргумента."
+      },
+      {
+       "t": "'echo \"[$X]\"'",
+       "k": "str",
+       "d": "Одинарные кавычки, $X подставит уже дочерний bash. Напечатает [], переменной там нет.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "export",
+       "k": "cmd",
+       "d": "Встроенная команда, передавать переменную дочерним процессам."
+      },
+      {
+       "t": "X",
+       "k": "var",
+       "d": "Какую переменную экспортировать."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Снова новый bash."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Выполнить команду из аргумента."
+      },
+      {
+       "t": "'echo \"[$X]\"'",
+       "k": "str",
+       "d": "Теперь напечатает [1].",
+       "ref": "sym-single-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "[]\n[1]"
+    },
+    {
+     "line": "env APP_MODE=test bash -c 'echo \"mode=$APP_MODE\"'; echo \"after=$APP_MODE\"",
+     "d": "Задать переменную только для одной команды. В текущей оболочке её нет.",
+     "parts": [
+      {
+       "t": "env",
+       "k": "cmd",
+       "d": "Запустить команду с изменённым окружением."
+      },
+      {
+       "t": "APP_MODE=test",
+       "k": "var",
+       "d": "Добавить переменную в окружение запускаемой команды.",
+       "sub": [
+        {
+         "t": "APP_MODE",
+         "k": "var",
+         "d": "Имя."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Присваивание."
+        },
+        {
+         "t": "test",
+         "k": "val",
+         "d": "Значение."
+        }
+       ]
+      },
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Запускаемая команда."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Выполнить команду из аргумента."
+      },
+      {
+       "t": "'echo \"mode=$APP_MODE\"'",
+       "k": "str",
+       "d": "Напечатает mode=test.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Проверка в текущей оболочке."
+      },
+      {
+       "t": "\"after=$APP_MODE\"",
+       "k": "str",
+       "d": "Напечатает after=, переменная была только у дочерней команды.",
+       "ref": "sym-double-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "mode=test\nafter="
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ставить пробелы вокруг <code>=</code>, <code>X = 1</code>. bash ищет команду <code>X</code> с аргументами <code>=</code> и <code>1</code>.</p>",
+    "<p>Ждать, что <code>export</code> в скрипте изменит ваш терминал. Окружение передаётся только вниз, от родителя детям. Чтобы задать переменные в текущей оболочке, выполните файл через <code>source</code>.</p>",
+    "<p>Писать <code>$</code> перед именем при присваивании и экспорте, <code>export $X</code>. bash подставит значение, и экспортироваться будет переменная с именем, равным значению.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/env.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/printenv.1.html",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
+    "https://www.gnu.org/software/bash/manual/bash.html#Environment"
+   ]
+  },
+  {
+   "slug": "path-var",
+   "cmd": "PATH",
+   "text": "PATH: где оболочка ищет программы",
+   "summary": "<p><code>PATH</code> это переменная окружения со списком каталогов через двоеточие. Когда вы пишете имя команды без косой черты, bash по очереди, слева направо, ищет в этих каталогах исполняемый файл с таким именем и запускает первый найденный.</p><p>Текущего каталога в <code>PATH</code> обычно нет. Поэтому свой скрипт рядом запускают как <code>./script.sh</code>. Точка значит текущий каталог, а косая черта в имени говорит bash не искать по <code>PATH</code>, а взять файл по этому пути.</p><p>Добавить свой каталог можно так, <code>export PATH=\"$HOME/bin:$PATH\"</code>. Каталог в начале списка проверяется первым. Чтобы настройка сохранялась, допишите строку в <code>~/.bashrc</code>.</p>",
+   "examples": [
+    {
+     "line": "echo \"$PATH\" | tr ':' '\\n'",
+     "d": "Показать каталоги из PATH по одному на строке, в порядке поиска.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать значение."
+      },
+      {
+       "t": "\"$PATH\"",
+       "k": "str",
+       "d": "Значение PATH в двойных кавычках.",
+       "ref": "sym-double-quotes",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открыть кавычки.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$PATH",
+         "k": "var",
+         "d": "Список каталогов через двоеточие.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрыть кавычки.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать строку команде tr.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "tr",
+       "k": "cmd",
+       "d": "Заменить символы."
+      },
+      {
+       "t": "':'",
+       "k": "str",
+       "d": "Что заменить, двоеточие.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": "'\\n'",
+       "k": "str",
+       "d": "На что заменить, перевод строки.",
+       "ref": "sym-single-quotes"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/usr/local/sbin\n/usr/local/bin\n/usr/sbin\n/usr/bin\n/sbin\n/bin"
+    },
+    {
+     "line": "hello.sh; ./hello.sh",
+     "d": "Скрипт в текущем каталоге по одному имени не находится, а по пути с точкой запускается.",
+     "parts": [
+      {
+       "t": "hello.sh",
+       "k": "cmd",
+       "d": "Имя без косой черты, bash ищет его только в PATH и пишет command not found."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Затем следующая команда.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "./hello.sh",
+       "k": "path",
+       "d": "Путь от текущего каталога. Есть косая черта, поиска по PATH нет.",
+       "sub": [
+        {
+         "t": ".",
+         "k": "path",
+         "d": "Текущий каталог.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "/",
+         "k": "op",
+         "d": "Разделитель пути.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "hello.sh",
+         "k": "path",
+         "d": "Имя файла."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "printf '#!/bin/sh\\necho hello\\n' > hello.sh && chmod +x hello.sh",
+     "output": "bash: line 1: hello.sh: command not found\nhello"
+    },
+    {
+     "line": "export PATH=\"$HOME/bin:$PATH\" && which hello && hello",
+     "d": "Добавить ~/bin в начало PATH, после этого программа оттуда запускается по имени.",
+     "parts": [
+      {
+       "t": "export",
+       "k": "cmd",
+       "d": "Изменить переменную и оставить её в окружении."
+      },
+      {
+       "t": "PATH=\"$HOME/bin:$PATH\"",
+       "k": "var",
+       "d": "Новое значение, старый список сохраняется в конце.",
+       "sub": [
+        {
+         "t": "PATH",
+         "k": "var",
+         "d": "Имя переменной."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Присваивание без пробелов."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Открыть кавычки.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "$HOME",
+         "k": "var",
+         "d": "Домашний каталог, /root.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "/bin",
+         "k": "path",
+         "d": "Подкаталог bin в нём."
+        },
+        {
+         "t": ":",
+         "k": "op",
+         "d": "Разделитель каталогов в PATH."
+        },
+        {
+         "t": "$PATH",
+         "k": "var",
+         "d": "Прежний список каталогов целиком.",
+         "ref": "sym-var"
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Закрыть кавычки.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Дальше, только если export прошёл.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "which",
+       "k": "cmd",
+       "d": "Показать, где найдена программа."
+      },
+      {
+       "t": "hello",
+       "k": "arg",
+       "d": "Имя программы."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Запустить, только если она найдена.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "hello",
+       "k": "cmd",
+       "d": "Запуск по имени, без пути."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p ~/bin && printf '#!/bin/sh\\necho hello from bin\\n' > ~/bin/hello && chmod +x ~/bin/hello",
+     "output": "/root/bin/hello\nhello from bin"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Затереть список, <code>PATH=~/bin</code> без <code>:$PATH</code>. После этого перестают находиться <code>ls</code>, <code>grep</code> и остальные. Откройте новый терминал или верните значение полностью.</p>",
+    "<p>Добавлять в <code>PATH</code> точку, текущий каталог. Тогда файл с именем <code>ls</code> в чужом каталоге может запуститься вместо системной программы.</p>",
+    "<p>Запускать <code>./script.sh</code> без права на выполнение, ответ Permission denied. Дайте право <code>chmod +x script.sh</code> или запустите <code>bash script.sh</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Command-Search-and-Execution",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Variables",
+    "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins"
+   ]
+  },
+  {
+   "slug": "vim",
+   "cmd": "vim",
+   "text": "vim: редактор с режимами",
+   "summary": "<p><code>vim</code> открывает файл в <b>обычном</b> режиме, где клавиши это команды, а не текст. Отсюда частая растерянность новичков. Основные режимы и переходы:</p><ul><li><code>i</code> перейти во <b>вставку</b> перед курсором, <code>a</code> после курсора, <code>o</code> с новой строки. Внизу появится <code>-- INSERT --</code>.</li><li><code>Esc</code> вернуться в обычный режим.</li><li><code>:</code> открыть <b>командную строку</b> внизу экрана: <code>:w</code> сохранить, <code>:q</code> выйти, <code>:wq</code> сохранить и выйти, <code>:q!</code> выйти без сохранения.</li><li><code>/слово</code> и Enter искать вперёд, <code>n</code> следующее совпадение, <code>N</code> предыдущее.</li><li>В обычном режиме <code>dd</code> удаляет строку, <code>u</code> отменяет последнее действие.</li></ul><p>Встроенный учебник запускается командой <code>vimtutor</code>, справка внутри vim <code>:help</code>. В минимальной установке вместо vim может стоять урезанный <code>vi</code>.</p>",
+   "diagram": "                 vim файл\n                    │\n                    ▼\n ┌──────────────┐  i a o   ┌──────────────┐\n │   вставка    │ ◀─────── │   обычный    │\n │  ввод текста │          │ команды, dd, │\n │ -- INSERT -- │ ───────▶ │ u, n, ZZ     │\n └──────────────┘   Esc    └──────────────┘\n                             │         ▲\n                       : или /    Enter или Esc\n                             ▼         │\n                           ┌──────────────┐\n                           │  командная   │\n                           │   строка     │\n                           │ :w :q! :wq   │\n                           │ /слово       │\n                           └──────────────┘",
+   "examples": [
+    {
+     "line": "vim /etc/hosts",
+     "d": "Открыть файл. Правка, Esc, :wq сохранит и выйдет. Для системных файлов нужен sudo.",
+     "parts": [
+      {
+       "t": "vim",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "/etc/hosts",
+       "k": "path",
+       "d": "Файл для правки. Если его нет, vim создаст его при сохранении."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "vim +/PermitRootLogin /etc/ssh/sshd_config",
+     "d": "Открыть файл сразу на строке с первым вхождением слова.",
+     "parts": [
+      {
+       "t": "vim",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "+/PermitRootLogin",
+       "k": "opt",
+       "d": "Поставить курсор на первую строку с образцом.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Начало опции перехода."
+        },
+        {
+         "t": "/",
+         "k": "op",
+         "d": "Дальше образец поиска."
+        },
+        {
+         "t": "PermitRootLogin",
+         "k": "pat",
+         "d": "Что искать."
+        }
+       ]
+      },
+      {
+       "t": "/etc/ssh/sshd_config",
+       "k": "path",
+       "d": "Файл настроек сервера SSH."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "vim -R +25 /etc/passwd",
+     "d": "Открыть файл только для чтения, курсор на строке 25.",
+     "parts": [
+      {
+       "t": "vim",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "-R",
+       "k": "opt",
+       "d": "Режим только для чтения, как команда view. Случайно записать файл не выйдет."
+      },
+      {
+       "t": "+25",
+       "k": "opt",
+       "d": "Курсор на строку с этим номером.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Начало опции."
+        },
+        {
+         "t": "25",
+         "k": "num",
+         "d": "Номер строки."
+        }
+       ]
+      },
+      {
+       "t": "/etc/passwd",
+       "k": "path",
+       "d": "Файл."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Начать печатать сразу после открытия. В обычном режиме буквы выполняются как команды, например <code>d</code> и <code>x</code> удаляют текст. Сначала нажмите <code>i</code>.</p>",
+    "<p>Набрать <code>:wq</code> в режиме вставки. Текст попадёт в файл. Сначала Esc, потом <code>:wq</code>.</p>",
+    "<p>Сообщение E37 No write since last change при <code>:q</code>. Есть несохранённые правки, выберите <code>:wq</code> или <code>:q!</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/vim.1.html"
+   ]
+  },
+  {
+   "slug": "nano",
+   "cmd": "nano",
+   "text": "nano: простой редактор в терминале",
+   "summary": "<p><code>nano</code> открывает файл сразу в режиме ввода, печатать можно без переключений. Команды вызываются сочетаниями с Ctrl и Alt, подсказки видны в двух нижних строках. Знак <code>^</code> там значит Ctrl, <code>M-</code> значит Alt.</p><ul><li><code>^O</code> записать файл, имя подтвердить Enter;</li><li><code>^X</code> выйти, при несохранённых правках nano спросит, сохранить ли;</li><li><code>^W</code> поиск;</li><li><code>^K</code> вырезать строку, <code>^U</code> вставить;</li><li><code>^G</code> справка по клавишам.</li></ul>",
+   "examples": [
+    {
+     "line": "nano /etc/hosts",
+     "d": "Открыть файл для правки. Для системных файлов нужен sudo.",
+     "parts": [
+      {
+       "t": "nano",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "/etc/hosts",
+       "k": "path",
+       "d": "Файл для правки."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "nano -l +12 /etc/ssh/sshd_config",
+     "d": "Показать номера строк и поставить курсор на строку 12.",
+     "parts": [
+      {
+       "t": "nano",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "linenumbers, номера строк слева от текста."
+      },
+      {
+       "t": "+12",
+       "k": "opt",
+       "d": "Перейти на строку перед открытием файла.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Начало указания позиции."
+        },
+        {
+         "t": "12",
+         "k": "num",
+         "d": "Номер строки."
+        }
+       ]
+      },
+      {
+       "t": "/etc/ssh/sshd_config",
+       "k": "path",
+       "d": "Файл настроек SSH."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "nano -B /etc/fstab",
+     "d": "Править важный файл с резервной копией прежней версии.",
+     "parts": [
+      {
+       "t": "nano",
+       "k": "cmd",
+       "d": "Редактор."
+      },
+      {
+       "t": "-B",
+       "k": "opt",
+       "d": "backup, при сохранении оставить прежнюю версию рядом с тильдой в конце имени, /etc/fstab~."
+      },
+      {
+       "t": "/etc/fstab",
+       "k": "path",
+       "d": "Файл."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Открыть системный файл без <code>sudo</code>, внести правки и получить ошибку записи при <code>^O</code>. Выйдите и откройте снова через <code>sudo nano</code>.</p>",
+    "<p>Выходить по привычке из vim через Esc и <code>:q</code>. В nano это просто текст, выход по <code>^X</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/nano.1.html"
+   ]
+  }
+ ]
+}
