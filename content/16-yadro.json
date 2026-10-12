@@ -1,0 +1,2048 @@
+{
+ "category": "Ядро, железо и загрузка",
+ "cards": [
+  {
+   "slug": "uname",
+   "cmd": "uname",
+   "text": "uname: версия ядра и архитектура",
+   "summary": "<p><code>uname</code> печатает сведения о работающем ядре: его имя, номер выпуска, архитектуру процессора, имя хоста. Нужна, чтобы узнать, под какое ядро ставить модуль или драйвер, и под какую архитектуру скачивать программу (<code>x86_64</code> или <code>aarch64</code>).</p><p>Версию дистрибутива <code>uname</code> не показывает, для этого есть <code>/etc/os-release</code>. В контейнере <code>uname</code> печатает ядро хоста, потому что своего ядра у контейнера нет.</p>",
+   "diagram": "┌────────────────────────────────────────────────┐\n│ Пользователь набирает команду uname -r         │\n├────────────────────────────────────────────────┤\n│ Оболочка bash разбирает строку, находит        │\n│ программу /usr/bin/uname и запускает её        │\n├────────────────────────────────────────────────┤\n│ Утилиты и библиотеки                           │\n│ coreutils (ls, cp, uname), glibc (функции      │\n│ open(), read(), uname() для программ на C)     │\n├────────────────────────────────────────────────┤\n│ Системные вызовы, вход в ядро                  │\n│ openat, read, write, execve, uname             │\n├────────────────────────────────────────────────┤\n│ Ядро Linux                                     │\n│ процессы, память, файловые системы, сеть,      │\n│ драйверы устройств                             │\n├────────────────────────────────────────────────┤\n│ Железо                                         │\n│ процессор, память, диски, сетевые карты        │\n└────────────────────────────────────────────────┘\nuname получает ответ от ядра через вызов uname и\nпечатает версию ядра, а не версию дистрибутива.",
+   "examples": [
+    {
+     "line": "uname -r",
+     "d": "Номер выпуска ядра, то же имя, что у каталога модулей /lib/modules/<версия>.",
+     "parts": [
+      {
+       "t": "uname",
+       "k": "cmd",
+       "d": "Показать сведения о ядре и машине."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "--kernel-release, напечатать выпуск ядра."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "6.18.44-fc-v114"
+    },
+    {
+     "line": "uname -m",
+     "d": "Архитектура процессора, для которой собрано ядро.",
+     "parts": [
+      {
+       "t": "uname",
+       "k": "cmd",
+       "d": "Показать сведения о ядре и машине."
+      },
+      {
+       "t": "-m",
+       "k": "opt",
+       "d": "--machine, имя аппаратной платформы, например x86_64 или aarch64."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "x86_64"
+    },
+    {
+     "line": "uname -a",
+     "d": "Все сведения одной строкой.",
+     "parts": [
+      {
+       "t": "uname",
+       "k": "cmd",
+       "d": "Показать сведения о ядре и машине."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "--all, всё по порядку: имя ядра, имя хоста, выпуск, версия сборки, архитектура, процессор, платформа, ОС. Поля процессора и платформы пропускаются, если неизвестны."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "Linux lab 6.18.44-fc-v114 #1 SMP PREEMPT_DYNAMIC @0 x86_64 x86_64 x86_64 GNU/Linux"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>uname -p</code> и <code>uname -i</code> на многих системах печатают <code>unknown</code>, man называет их непереносимыми. Для архитектуры используйте <code>uname -m</code>.</p>",
+    "<p>Версия из <code>uname -r</code> меняется только после перезагрузки. Если вы поставили новое ядро через apt, но не перезагрузились, <code>uname -r</code> покажет старое.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/uname.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/uname-invocation.html"
+   ]
+  },
+  {
+   "slug": "lscpu-nproc",
+   "cmd": "lscpu",
+   "text": "lscpu и nproc: процессор и число ядер",
+   "summary": "<p><code>lscpu</code> собирает сведения о процессоре из <code>/proc/cpuinfo</code> и sysfs и печатает их таблицей: архитектура, модель, число логических CPU, ядер на сокет, потоков на ядро, объём кешей, флаги, признак виртуализации.</p><p><code>nproc</code> печатает одно число, сколько процессоров доступно текущему процессу. Его удобно подставлять в команды, например <code>make -j$(nproc)</code>, и сравнивать с load average.</p>",
+   "examples": [
+    {
+     "line": "lscpu",
+     "d": "Сводка о процессоре. Строка CPU(s) это число логических процессоров, Thread(s) per core показывает гиперпоточность.",
+     "parts": [
+      {
+       "t": "lscpu",
+       "k": "cmd",
+       "d": "Показать архитектуру процессора."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) Processor @ 2.10GHz\nCPU family:                              6\nModel:                                   207\nThread(s) per core:                      1\nCore(s) per socket:                      4\nSocket(s):                               1\nStepping:                                2\nBogoMIPS:                                4200.00\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 wbnoinvd arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid cldemote movdiri movdir64b fsrm md_clear serialize tsxldtrk amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               192 KiB (4 instances)\nL1i cache:                               128 KiB (4 instances)\nL2 cache:                                8 MiB (4 instances)\nL3 cache:                                260 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\n… (вывод обрезан)"
+    },
+    {
+     "line": "lscpu -e",
+     "d": "Таблица по каждому логическому CPU, к какому ядру, сокету и узлу NUMA он относится.",
+     "parts": [
+      {
+       "t": "lscpu",
+       "k": "cmd",
+       "d": "Показать архитектуру процессора."
+      },
+      {
+       "t": "-e",
+       "k": "opt",
+       "d": "--extended, по строке на каждый CPU с колонками по умолчанию."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE\n  0    0      0    0 0:0:0:0          yes\n  1    0      0    1 1:1:1:0          yes\n  2    0      0    2 2:2:2:0          yes\n  3    0      0    3 3:3:3:0          yes"
+    },
+    {
+     "line": "nproc",
+     "d": "Число процессоров, доступных текущему процессу.",
+     "parts": [
+      {
+       "t": "nproc",
+       "k": "cmd",
+       "d": "Напечатать число доступных процессоров."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "4"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>CPU(s) в <code>lscpu</code> считает логические процессоры. При двух потоках на ядро 8 CPU это 4 физических ядра. Смотрите строки Core(s) per socket и Thread(s) per core.</p>",
+    "<p><code>nproc</code> может показать меньше, чем установлено, если процесс привязан к части процессоров или задана переменная <code>OMP_NUM_THREADS</code>. Все установленные процессоры покажет <code>nproc --all</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/lscpu.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/nproc.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/nproc-invocation.html"
+   ]
+  },
+  {
+   "slug": "lspci-lsusb",
+   "cmd": "lspci",
+   "text": "lspci и lsusb: устройства на шинах PCI и USB",
+   "summary": "<p><code>lspci</code> перечисляет устройства на шине PCI: видеокарты, сетевые карты, контроллеры дисков, мосты. Каждая строка начинается с адреса <code>шина:устройство.функция</code>, дальше класс и производитель. <code>lsusb</code> делает то же для шины USB: номер шины и устройства, идентификатор <code>производитель:модель</code>, название.</p><p>Это первый шаг, когда устройство не работает. Видно ли его системе вообще, и какой драйвер ядра его обслуживает.</p>",
+   "examples": [
+    {
+     "line": "lspci",
+     "d": "Все PCI-устройства, по строке на устройство. В виртуальной машине видны виртуальные устройства, например Virtio.",
+     "parts": [
+      {
+       "t": "lspci",
+       "k": "cmd",
+       "d": "Перечислить PCI-устройства."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "00:00.0 Host bridge: Intel Corporation Device 0d57\n00:01.0 Unassigned class [ffff]: Red Hat, Inc. Virtio 1.0 memory balloon (rev 01)\n00:02.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:03.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:04.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:05.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:06.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:07.0 Mass storage controller: Red Hat, Inc. Virtio 1.0 block device (rev 01)\n00:08.0 Ethernet controller: Red Hat, Inc. Virtio 1.0 network device (rev 01)\n00:09.0 Unassigned class [ffff]: Red Hat, Inc. Virtio 1.0 socket (rev 01)\n00:0a.0 Unassigned class [ffff]: Red Hat, Inc. Virtio 1.0 RNG (rev 01)"
+    },
+    {
+     "line": "lspci -k",
+     "d": "Под каждым устройством строка Kernel driver in use с драйвером, который его обслуживает, и Kernel modules с подходящими модулями.",
+     "parts": [
+      {
+       "t": "lspci",
+       "k": "cmd",
+       "d": "Перечислить PCI-устройства."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "Показать драйвер ядра для каждого устройства и модули, которые могут с ним работать."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "lsusb -t",
+     "d": "USB-устройства деревом, от корневого концентратора к портам, с драйвером и скоростью.",
+     "parts": [
+      {
+       "t": "lsusb",
+       "k": "cmd",
+       "d": "Перечислить USB-устройства."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--tree, показать физическую иерархию USB деревом."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Если устройство есть в <code>lspci</code>, но нет строки <code>Kernel driver in use</code>, железо видно, а драйвер не загружен. Ищите модуль через <code>lspci -k</code> и <code>modprobe</code>.</p>",
+    "<p>Названия берутся из базы идентификаторов. Если вместо имени стоит <code>Device 0d57</code>, устройство новее базы, смотрите числовые коды через <code>lspci -nn</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/lspci.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsusb.8.html"
+   ]
+  },
+  {
+   "slug": "dmidecode",
+   "cmd": "dmidecode",
+   "text": "dmidecode: модель сервера, память и BIOS из таблицы DMI",
+   "summary": "<p><code>dmidecode</code> читает таблицу DMI (SMBIOS), которую заполняет прошивка материнской платы, и печатает её понятным текстом. Оттуда видно производителя и модель сервера, серийный номер, версию BIOS, сколько слотов памяти, какие заняты, тип и частоту модулей. Всё это без вскрытия корпуса.</p><p>Нужны права root. Выбор раздела через <code>-t</code> по номеру типа или по слову: <code>bios</code>, <code>system</code>, <code>baseboard</code>, <code>processor</code>, <code>memory</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo dmidecode -t memory",
+     "d": "Слоты памяти и установленные модули, размер, тип, частота, производитель.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmidecode",
+       "k": "cmd",
+       "d": "Прочитать таблицу DMI."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--type, показать только записи указанного типа."
+      },
+      {
+       "t": "memory",
+       "k": "val",
+       "d": "Ключевое слово, равно типам 5, 6, 16 и 17 (массив памяти и устройства памяти)."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo dmidecode -t system",
+     "d": "Производитель, модель, серийный номер и UUID машины.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmidecode",
+       "k": "cmd",
+       "d": "Прочитать таблицу DMI."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--type, показать только записи указанного типа."
+      },
+      {
+       "t": "system",
+       "k": "val",
+       "d": "Ключевое слово, равно типам 1, 12, 15, 23 и 32."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo dmidecode -s system-product-name",
+     "d": "Одна строка, модель машины. Удобно для скриптов инвентаризации.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmidecode",
+       "k": "cmd",
+       "d": "Прочитать таблицу DMI."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "--string, напечатать только значение одной строки DMI."
+      },
+      {
+       "t": "system-product-name",
+       "k": "val",
+       "d": "Ключ из списка в man, название модели."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Без sudo <code>dmidecode</code> не может прочитать таблицу и печатает ошибку доступа к <code>/dev/mem</code> или к файлам в <code>/sys/firmware/dmi</code>.</p>",
+    "<p>Данные пишет производитель прошивки, они бывают пустыми или неточными. В виртуальной машине вы увидите значения гипервизора, а не физического сервера.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/dmidecode.8.html"
+   ]
+  },
+  {
+   "slug": "dmesg",
+   "cmd": "dmesg",
+   "text": "dmesg: сообщения ядра",
+   "summary": "<p><code>dmesg</code> печатает кольцевой буфер ядра. Туда ядро пишет, какие устройства нашло при загрузке, какие драйверы загрузило, ошибки дисков и файловых систем, подключение USB, срабатывание OOM killer. Это первое место, куда смотреть, если что-то не так с железом.</p><p>Время по умолчанию стоит в секундах от загрузки, <code>-T</code> переводит его в обычную дату. В Ubuntu чтение буфера разрешено только root, поэтому команда идёт с sudo.</p>",
+   "examples": [
+    {
+     "line": "sudo dmesg -T | tail -n 20",
+     "d": "Последние 20 сообщений ядра с датой и временем.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmesg",
+       "k": "cmd",
+       "d": "Прочитать буфер сообщений ядра."
+      },
+      {
+       "t": "-T",
+       "k": "opt",
+       "d": "--ctime, печатать время в читаемом виде вместо секунд от загрузки."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать сообщения в tail.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "tail",
+       "k": "cmd",
+       "d": "Оставить конец вывода."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Сколько строк оставить."
+      },
+      {
+       "t": "20",
+       "k": "num",
+       "d": "Двадцать последних строк."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo dmesg --level=err,warn",
+     "d": "Только ошибки и предупреждения ядра.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmesg",
+       "k": "cmd",
+       "d": "Прочитать буфер сообщений ядра."
+      },
+      {
+       "t": "--level=err,warn",
+       "k": "opt",
+       "d": "Ограничить вывод перечисленными уровнями.",
+       "sub": [
+        {
+         "t": "--level",
+         "k": "opt",
+         "d": "-l, фильтр по уровню важности."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции идёт сразу за знаком равенства."
+        },
+        {
+         "t": "err,warn",
+         "k": "val",
+         "d": "Список уровней через запятую, ошибки и предупреждения."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo dmesg -Tw",
+     "d": "Ждать новые сообщения и печатать их по мере появления, например при подключении флешки.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "dmesg",
+       "k": "cmd",
+       "d": "Прочитать буфер сообщений ядра."
+      },
+      {
+       "t": "-Tw",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "T",
+         "k": "opt",
+         "d": "--ctime, читаемое время."
+        },
+        {
+         "t": "w",
+         "k": "opt",
+         "d": "--follow, ждать новые сообщения. Выход по Ctrl+C."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>dmesg: read kernel buffer failed: Operation not permitted</code> значит, что включён параметр <code>kernel.dmesg_restrict</code> и нужен sudo.</p>",
+    "<p>Время из <code>-T</code> бывает неточным после сна или гибернации, man прямо предупреждает об этом. Для точной хронологии сверяйте с журналом <code>journalctl -k</code>.</p>",
+    "<p>Буфер кольцевой, старые сообщения затираются новыми. Сообщения прошлых загрузок <code>dmesg</code> не покажет, смотрите <code>journalctl -k -b -1</code>, если журнал хранится на диске.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/dmesg.1.html"
+   ]
+  },
+  {
+   "slug": "sysctl",
+   "cmd": "sysctl",
+   "text": "sysctl: прочитать параметры ядра",
+   "summary": "<p>У ядра сотни настраиваемых параметров: пересылка пакетов, размер очередей, поведение памяти, лимиты на файлы. Все они лежат файлами в <code>/proc/sys</code>, а <code>sysctl</code> читает и пишет их по имени через точки. Имя <code>net.ipv4.ip_forward</code> это файл <code>/proc/sys/net/ipv4/ip_forward</code>.</p><p>Читать может любой пользователь. Как менять и как сохранить значение после перезагрузки, в карточке про <code>sysctl -w</code>.</p>",
+   "examples": [
+    {
+     "line": "sysctl net.ipv4.ip_forward",
+     "d": "Значение одного параметра в виде имя = значение. 1 значит, что система пересылает IPv4-пакеты между интерфейсами.",
+     "parts": [
+      {
+       "t": "sysctl",
+       "k": "cmd",
+       "d": "Прочитать или изменить параметр ядра."
+      },
+      {
+       "t": "net.ipv4.ip_forward",
+       "k": "arg",
+       "d": "Имя параметра, путь внутри /proc/sys с точками вместо косых черт."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "net.ipv4.ip_forward = 1"
+    },
+    {
+     "line": "sysctl -n vm.swappiness",
+     "d": "Только значение, без имени. Удобно для скриптов.",
+     "parts": [
+      {
+       "t": "sysctl",
+       "k": "cmd",
+       "d": "Прочитать параметр ядра."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "--values, не печатать имя параметра."
+      },
+      {
+       "t": "vm.swappiness",
+       "k": "arg",
+       "d": "Насколько охотно ядро выгружает память в swap вместо сброса файлового кеша, от 0 до 200, по умолчанию 60."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "60"
+    },
+    {
+     "line": "sysctl -a | grep ip_forward",
+     "d": "Найти параметры по части имени среди всех.",
+     "parts": [
+      {
+       "t": "sysctl",
+       "k": "cmd",
+       "d": "Прочитать параметры ядра."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "--all, показать все доступные параметры."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать весь список в grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Оставить строки с подстрокой."
+      },
+      {
+       "t": "ip_forward",
+       "k": "pat",
+       "d": "Искомая часть имени."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "net.ipv4.ip_forward = 1\nnet.ipv4.ip_forward_update_priority = 1\nnet.ipv4.ip_forward_use_pmtu = 0"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Обычный пользователь не видит часть параметров, <code>sysctl -a</code> без sudo печатает для них ошибки доступа. Для полного списка запускайте с sudo.</p>",
+    "<p>В контейнере <code>sysctl</code> показывает параметры ядра хоста, многие из них общие для всех контейнеров, а <code>/proc/sys</code> смонтирован только для чтения.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/sysctl.8.html",
+    "https://docs.kernel.org/admin-guide/sysctl/vm.html"
+   ]
+  },
+  {
+   "slug": "sysctl-persistent",
+   "cmd": "sysctl -w",
+   "text": "sysctl -w и /etc/sysctl.d: изменить параметр ядра",
+   "summary": "<p><code>sysctl -w имя=значение</code> меняет параметр сразу, но только до перезагрузки. Чтобы значение пережило перезагрузку, его записывают строкой <code>имя = значение</code> в файл <code>/etc/sysctl.d/NN-имя.conf</code>. При загрузке эти файлы читает служба <code>systemd-sysctl</code>, а вручную их применяет <code>sysctl --system</code>.</p><p>Файлы читаются в порядке имён, поэтому номер в начале имени задаёт порядок. Если один параметр задан в двух файлах, действует значение из файла, который прочитан позже.</p>",
+   "examples": [
+    {
+     "line": "sudo sysctl -w net.ipv4.ip_forward=1",
+     "d": "Включить пересылку IPv4-пакетов сейчас, до перезагрузки.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "sysctl",
+       "k": "cmd",
+       "d": "Изменить параметр ядра."
+      },
+      {
+       "t": "-w",
+       "k": "opt",
+       "d": "--write, считать все аргументы присваиваниями, ошибка, если аргумент не в форме имя=значение."
+      },
+      {
+       "t": "net.ipv4.ip_forward=1",
+       "k": "arg",
+       "d": "Присваивание одним словом.",
+       "sub": [
+        {
+         "t": "net.ipv4.ip_forward",
+         "k": "arg",
+         "d": "Имя параметра."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Разделитель имени и значения, без пробелов вокруг."
+        },
+        {
+         "t": "1",
+         "k": "num",
+         "d": "Новое значение, 1 включить."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "echo 'vm.swappiness = 10' | sudo tee /etc/sysctl.d/60-swappiness.conf",
+     "d": "Записать настройку в файл, чтобы она применялась при каждой загрузке.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать строку настройки."
+      },
+      {
+       "t": "'vm.swappiness = 10'",
+       "k": "str",
+       "d": "Строка в одинарных кавычках, пробелы вокруг = в файле допустимы.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать строку в tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать вход в файл. Через tee, потому что перенаправление > выполнила бы ваша оболочка без прав root."
+      },
+      {
+       "t": "/etc/sysctl.d/60-swappiness.conf",
+       "k": "path",
+       "d": "Файл настроек ядра, имя обязано кончаться на .conf."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo sysctl --system",
+     "d": "Перечитать все файлы настроек и применить. Печатает каждый файл и каждый параметр.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "sysctl",
+       "k": "cmd",
+       "d": "Применить настройки ядра."
+      },
+      {
+       "t": "--system",
+       "k": "opt",
+       "d": "Загрузить настройки из всех системных каталогов, /etc/sysctl.d, /run/sysctl.d, /usr/lib/sysctl.d и других, и из /etc/sysctl.conf."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>sysctl -w vm.swappiness = 10</code> с пробелами не работает. Оболочка делит это на три аргумента, и sysctl не видит присваивания. В командной строке пишите без пробелов, в файле пробелы можно.</p>",
+    "<p>Изменили через <code>-w</code> и забыли записать в файл, после перезагрузки значение вернётся. Сначала проверьте на живой системе, потом сохраните в <code>/etc/sysctl.d</code>.</p>",
+    "<p><code>sysctl -p</code> без аргумента читает только <code>/etc/sysctl.conf</code>, файлы из <code>/etc/sysctl.d</code> он не трогает. Для них нужен <code>--system</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/sysctl.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/sysctl.d.5.html"
+   ]
+  },
+  {
+   "slug": "proc-sys",
+   "cmd": "/proc/sys",
+   "text": "/proc/sys: параметры ядра в виде файлов",
+   "summary": "<p><code>/proc/sys</code> это не каталог на диске, его создаёт ядро. Каждый файл внутри это один параметр, чтение файла возвращает текущее значение, запись меняет его. Подкаталоги делят параметры по темам: <code>kernel</code> общие, <code>vm</code> память, <code>net</code> сеть, <code>fs</code> файловые системы.</p><p><code>sysctl</code> работает с этими же файлами, точки в имени соответствуют косым чертам в пути. Запись в файл, как и <code>sysctl -w</code>, действует до перезагрузки.</p>",
+   "examples": [
+    {
+     "line": "ls /proc/sys",
+     "d": "Группы параметров ядра.",
+     "parts": [
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать содержимое каталога."
+      },
+      {
+       "t": "/proc/sys",
+       "k": "path",
+       "d": "Корень дерева параметров ядра."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "abi\ndebug\ndev\nfs\nkernel\nnet\nuser\nvm"
+    },
+    {
+     "line": "cat /proc/sys/vm/swappiness",
+     "d": "Значение параметра vm.swappiness, прочитанное как файл.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Напечатать файл."
+      },
+      {
+       "t": "/proc/sys/vm/swappiness",
+       "k": "path",
+       "d": "Файл параметра, то же, что sysctl vm.swappiness."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "60"
+    },
+    {
+     "line": "echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward",
+     "d": "Включить пересылку пакетов записью в файл, до перезагрузки.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать новое значение."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Значение, 1 включить."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать значение в tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать вход в файл с правами root."
+      },
+      {
+       "t": "/proc/sys/net/ipv4/ip_forward",
+       "k": "path",
+       "d": "Файл параметра net.ipv4.ip_forward."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>sudo echo 1 > /proc/sys/...</code> даёт Permission denied. sudo получает только echo, а перенаправление в файл делает ваша оболочка без прав root. Используйте <code>tee</code> или <code>sysctl -w</code>.</p>",
+    "<p>Размер файлов в <code>/proc/sys</code> показан как 0, это нормально. Содержимое создаётся в момент чтения.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_sys.5.html",
+    "https://docs.kernel.org/admin-guide/sysctl/index.html"
+   ]
+  },
+  {
+   "slug": "lsmod-modinfo",
+   "cmd": "lsmod",
+   "text": "lsmod и modinfo: загруженные модули ядра и сведения о них",
+   "summary": "<p>Модуль ядра это драйвер или другая часть ядра, которую можно загрузить и выгрузить без перезагрузки. <code>lsmod</code> показывает загруженные модули в три колонки: имя, размер в памяти и сколько раз модуль используется, плюс какие модули от него зависят. Данные берутся из <code>/proc/modules</code>.</p><p><code>modinfo</code> печатает сведения о модуле из его файла в <code>/lib/modules/$(uname -r)</code>: путь, описание, лицензию, зависимости, параметры, которые можно передать при загрузке.</p>",
+   "examples": [
+    {
+     "line": "lsmod | grep -i usb",
+     "d": "Загруженные модули, в имени которых есть usb.",
+     "parts": [
+      {
+       "t": "lsmod",
+       "k": "cmd",
+       "d": "Показать загруженные модули."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать список в grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "Без учёта регистра."
+      },
+      {
+       "t": "usb",
+       "k": "pat",
+       "d": "Подстрока в имени модуля."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "modinfo ext4",
+     "d": "Все сведения о модуле файловой системы ext4.",
+     "parts": [
+      {
+       "t": "modinfo",
+       "k": "cmd",
+       "d": "Показать сведения о модуле."
+      },
+      {
+       "t": "ext4",
+       "k": "arg",
+       "d": "Имя модуля, без пути и расширения .ko."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "modinfo -F depends br_netfilter",
+     "d": "Только поле depends, модули, без которых этот не загрузится.",
+     "parts": [
+      {
+       "t": "modinfo",
+       "k": "cmd",
+       "d": "Показать сведения о модуле."
+      },
+      {
+       "t": "-F",
+       "k": "opt",
+       "d": "--field, напечатать только значение указанного поля."
+      },
+      {
+       "t": "depends",
+       "k": "val",
+       "d": "Поле зависимостей."
+      },
+      {
+       "t": "br_netfilter",
+       "k": "arg",
+       "d": "Модуль фильтрации трафика через сетевой мост, его требуют Docker и Kubernetes."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Модуль, встроенный в ядро при сборке, в <code>lsmod</code> не виден, хотя работает. <code>modinfo</code> для него покажет <code>filename: (builtin)</code>.</p>",
+    "<p>В контейнере <code>lsmod</code> не работает, модули принадлежат ядру хоста, а файлов модулей в образе нет.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsmod.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/modinfo.8.html"
+   ]
+  },
+  {
+   "slug": "modprobe",
+   "cmd": "modprobe",
+   "text": "modprobe: загрузить и выгрузить модуль ядра",
+   "summary": "<p><code>modprobe</code> загружает модуль ядра по имени и сам подгружает модули, от которых он зависит. Зависимости берутся из файла <code>modules.dep.bin</code> в <code>/lib/modules/$(uname -r)</code>. С <code>-r</code> выгружает модуль, а заодно и его зависимости, если они больше никем не заняты.</p><p>Загрузка через <code>modprobe</code> действует до перезагрузки. Чтобы модуль грузился всегда, его имя пишут в файл в <code>/etc/modules-load.d/</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo modprobe br_netfilter",
+     "d": "Загрузить модуль и всё, от чего он зависит.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "modprobe",
+       "k": "cmd",
+       "d": "Загрузить модуль ядра."
+      },
+      {
+       "t": "br_netfilter",
+       "k": "arg",
+       "d": "Имя модуля."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo modprobe -r br_netfilter",
+     "d": "Выгрузить модуль. Не получится, если он используется.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "modprobe",
+       "k": "cmd",
+       "d": "Управлять модулями ядра."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "--remove, выгрузить модуль вместо загрузки."
+      },
+      {
+       "t": "br_netfilter",
+       "k": "arg",
+       "d": "Имя модуля."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "modprobe --show-depends br_netfilter",
+     "d": "Показать, какие файлы модулей будут загружены и в каком порядке, ничего не загружая.",
+     "parts": [
+      {
+       "t": "modprobe",
+       "k": "cmd",
+       "d": "Управлять модулями ядра."
+      },
+      {
+       "t": "--show-depends",
+       "k": "opt",
+       "d": "Перечислить зависимости и сам модуль строками insmod."
+      },
+      {
+       "t": "br_netfilter",
+       "k": "arg",
+       "d": "Имя модуля."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>insmod</code> загружает один файл и не разбирает зависимости. Для повседневной работы используйте <code>modprobe</code>.</p>",
+    "<p><code>modprobe: FATAL: Module ... is in use</code> при <code>-r</code> значит, что модуль занят. Сначала остановите то, что его использует, счётчик видно в <code>lsmod</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/modprobe.8.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/modules-load.d.html"
+   ]
+  },
+  {
+   "slug": "modprobe-blacklist",
+   "cmd": "/etc/modprobe.d",
+   "text": "Чёрный список модулей: /etc/modprobe.d",
+   "summary": "<p>В <code>/etc/modprobe.d/*.conf</code> лежат настройки <code>modprobe</code>. Строка <code>blacklist имя</code> запрещает загружать модуль автоматически по найденному устройству. Так отключают конфликтующий или ненужный драйвер, например встроенный динамик <code>pcspkr</code> или драйвер видеокарты <code>nouveau</code> перед установкой драйвера NVIDIA.</p><p>Модули, нужные в начале загрузки, и настройки modprobe копируются в образ initramfs. Если модуль грузится оттуда, после правки чёрного списка initramfs нужно пересобрать, иначе продолжит действовать старая копия настроек.</p>",
+   "examples": [
+    {
+     "line": "grep -c '^blacklist' /etc/modprobe.d/*.conf",
+     "d": "Сколько модулей запрещено в каждом файле настроек Ubuntu. Сами строки покажет тот же grep без -c.",
+     "parts": [
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Печатать не строки, а их число для каждого файла."
+      },
+      {
+       "t": "'^blacklist'",
+       "k": "pat",
+       "d": "Строки, которые начинаются со слова blacklist.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открыть кавычки, чтобы ^ попал в grep как есть.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "^",
+         "k": "pat",
+         "d": "Начало строки."
+        },
+        {
+         "t": "blacklist",
+         "k": "pat",
+         "d": "Само слово."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрыть кавычки.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      },
+      {
+       "t": "/etc/modprobe.d/*.conf",
+       "k": "path",
+       "d": "Все файлы настроек modprobe.",
+       "sub": [
+        {
+         "t": "/etc/modprobe.d/",
+         "k": "path",
+         "d": "Каталог настроек."
+        },
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Любое имя, оболочка подставит все файлы.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".conf",
+         "k": "path",
+         "d": "Учитываются только файлы с этим окончанием."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/etc/modprobe.d/blacklist-ath_pci.conf:1\n/etc/modprobe.d/blacklist-firewire.conf:5\n/etc/modprobe.d/blacklist-framebuffer.conf:27\n/etc/modprobe.d/blacklist-rare-network.conf:0\n/etc/modprobe.d/blacklist.conf:15\n/etc/modprobe.d/disable-algif_aead.conf:0\n/etc/modprobe.d/iwlwifi.conf:0\n/etc/modprobe.d/mdadm.conf:0"
+    },
+    {
+     "line": "echo 'blacklist pcspkr' | sudo tee /etc/modprobe.d/blacklist-pcspkr.conf",
+     "d": "Запретить автозагрузку модуля встроенного динамика.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать строку настройки."
+      },
+      {
+       "t": "'blacklist pcspkr'",
+       "k": "str",
+       "d": "Ключевое слово blacklist и имя модуля.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать строку в tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать в файл с правами root."
+      },
+      {
+       "t": "/etc/modprobe.d/blacklist-pcspkr.conf",
+       "k": "path",
+       "d": "Новый файл настроек, имя должно кончаться на .conf."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "echo 'install pcspkr /bin/false' | sudo tee -a /etc/modprobe.d/blacklist-pcspkr.conf",
+     "d": "Запретить модуль полностью, в том числе ручную загрузку и загрузку как зависимости.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать строку настройки."
+      },
+      {
+       "t": "'install pcspkr /bin/false'",
+       "k": "str",
+       "d": "Вместо загрузки pcspkr modprobe выполнит команду /bin/false, которая ничего не делает и завершается ошибкой.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать строку в tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать в файл с правами root."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "Дописать в конец файла, не стирая строку blacklist."
+      },
+      {
+       "t": "/etc/modprobe.d/blacklist-pcspkr.conf",
+       "k": "path",
+       "d": "Тот же файл настроек."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>blacklist</code> отключает только автоматическую загрузку по устройству. Модуль всё равно загрузится через <code>modprobe имя</code> или как зависимость другого модуля. Для полного запрета нужна строка <code>install</code>, как во втором примере.</p>",
+    "<p>Файл без окончания <code>.conf</code> в <code>/etc/modprobe.d</code> не читается.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man5/modprobe.d.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/modprobe.8.html"
+   ]
+  },
+  {
+   "slug": "kernel-cmdline-grub",
+   "cmd": "/proc/cmdline",
+   "text": "Параметры загрузки ядра: /proc/cmdline и GRUB",
+   "summary": "<p>Загрузчик GRUB передаёт ядру строку параметров: какой раздел корневой, включать ли тихую загрузку, какие драйверы отключить. Ядро, с которым система работает сейчас, показывает эту строку в <code>/proc/cmdline</code>.</p><p>Постоянные параметры задают в <code>/etc/default/grub</code>, в переменной <code>GRUB_CMDLINE_LINUX_DEFAULT</code> (только обычный пункт меню) или <code>GRUB_CMDLINE_LINUX</code> (все пункты, включая режим восстановления). После правки нужен <code>update-grub</code>, он пересобирает <code>/boot/grub/grub.cfg</code>. Изменения вступают в силу при следующей загрузке.</p>",
+   "examples": [
+    {
+     "line": "cat /proc/cmdline",
+     "d": "Параметры, с которыми загружено текущее ядро. В Ubuntu строка начинается с BOOT_IMAGE и root=.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Напечатать файл."
+      },
+      {
+       "t": "/proc/cmdline",
+       "k": "path",
+       "d": "Строка параметров ядра текущей загрузки."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "grep GRUB_CMDLINE /etc/default/grub",
+     "d": "Какие параметры GRUB добавит ядру при следующей загрузке.",
+     "parts": [
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки."
+      },
+      {
+       "t": "GRUB_CMDLINE",
+       "k": "pat",
+       "d": "Начало имён обеих переменных с параметрами ядра."
+      },
+      {
+       "t": "/etc/default/grub",
+       "k": "path",
+       "d": "Настройки GRUB, из них собирается grub.cfg."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo update-grub",
+     "d": "Пересобрать /boot/grub/grub.cfg после правки /etc/default/grub. Ошибка в настройках может помешать загрузке.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "update-grub",
+       "k": "cmd",
+       "d": "Обёртка над grub-mkconfig -o /boot/grub/grub.cfg."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Правка <code>/etc/default/grub</code> без <code>update-grub</code> ничего не меняет, GRUB читает только <code>grub.cfg</code>. Сам <code>grub.cfg</code> руками не правьте, он перезапишется при обновлении ядра.</p>",
+    "<p>Перед рискованным параметром проверьте его разово. В меню GRUB нажмите <code>e</code>, допишите параметр в строку <code>linux</code> и загрузитесь через Ctrl+X. Изменение не сохранится.</p>"
+   ],
+   "sources": [
+    "https://docs.kernel.org/admin-guide/kernel-parameters.html",
+    "https://www.gnu.org/software/grub/manual/grub/html_node/Simple-configuration.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/update-grub.8.html"
+   ]
+  },
+  {
+   "slug": "systemd-default-target",
+   "cmd": "systemctl get-default",
+   "text": "systemctl get-default и set-default: цель загрузки",
+   "summary": "<p>Цель (target) в systemd это юнит, который объединяет группу других юнитов и обозначает состояние системы. При загрузке systemd запускает всё, от чего зависит <code>default.target</code>, а это ссылка на одну из целей:</p><ul><li><code>multi-user.target</code>, многопользовательская система без графики, обычный выбор для сервера;</li><li><code>graphical.target</code>, то же плюс графический экран входа, для рабочей станции;</li><li><code>rescue.target</code>, режим восстановления, файловые системы смонтированы, службы почти не запущены, оболочка root;</li><li><code>emergency.target</code>, минимальный режим, только оболочка root, остальные файловые системы и службы не запускаются.</li></ul><p><code>get-default</code> показывает, на какую цель указывает <code>default.target</code>, <code>set-default</code> меняет ссылку.</p>",
+   "diagram": "питание\n   │\n   ▼\nUEFI или BIOS ....... проверяет железо, находит загрузчик\n   │\n   ▼\nGRUB ................ меню, читает /boot/grub/grub.cfg,\n   │                  загружает в память ядро и initramfs,\n   │                  передаёт ядру параметры (/proc/cmdline)\n   ▼\nядро + initramfs .... драйверы, поиск и монтирование\n   │                  корневой файловой системы\n   ▼\nsystemd, PID 1 ...... первый процесс, запускает юниты\n   │\n   ▼\ndefault.target ...... ссылка на multi-user.target\n   │                  или graphical.target\n   ▼\nвход ................ текстовый getty или экран входа",
+   "examples": [
+    {
+     "line": "systemctl get-default",
+     "d": "Цель, в которую система загружается по умолчанию.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управлять systemd."
+      },
+      {
+       "t": "get-default",
+       "k": "sub",
+       "d": "Напечатать имя цели, на которую ссылается default.target."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl set-default multi-user.target",
+     "d": "Загружаться без графики. Действует со следующей загрузки.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управлять systemd."
+      },
+      {
+       "t": "set-default",
+       "k": "sub",
+       "d": "Перенаправить ссылку default.target на указанную цель."
+      },
+      {
+       "t": "multi-user.target",
+       "k": "arg",
+       "d": "Многопользовательский режим без графики."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemctl isolate rescue.target",
+     "d": "Перейти в режим восстановления сейчас. Остановит все службы и сеансы, кроме самых базовых.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управлять systemd."
+      },
+      {
+       "t": "isolate",
+       "k": "sub",
+       "d": "Запустить цель с её зависимостями и остановить всё остальное."
+      },
+      {
+       "t": "rescue.target",
+       "k": "arg",
+       "d": "Режим восстановления с оболочкой root."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>isolate</code> по SSH обрывает ваш сеанс, в <code>rescue.target</code> сетевых служб нет. Переходить в этот режим нужно с консоли.</p>",
+    "<p>Цель на одну загрузку задают параметром ядра <code>systemd.unit=rescue.target</code> в меню GRUB, без <code>set-default</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/bootup.html"
+   ]
+  },
+  {
+   "slug": "ulimit",
+   "cmd": "ulimit",
+   "text": "ulimit: ограничения ресурсов процесса",
+   "summary": "<p><code>ulimit</code> встроенная команда bash. Она показывает и меняет лимиты ресурсов для текущей оболочки и всех процессов, которые она запустит: сколько файлов можно открыть, какого размера core-файл, сколько процессов на пользователя. Лимиты наследуются от родителя к потомку.</p><p>У каждого лимита два значения. Мягкий (soft) действует сейчас, процесс сам может поднять его до жёсткого. Жёсткий (hard) это потолок, поднять его может только root. Лимиты любого процесса видны в файле <code>/proc/PID/limits</code>.</p>",
+   "examples": [
+    {
+     "line": "ulimit -a",
+     "d": "Все текущие мягкие лимиты с единицами и буквой опции.",
+     "parts": [
+      {
+       "t": "ulimit",
+       "k": "cmd",
+       "d": "Встроенная команда bash для лимитов."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "Показать все лимиты, ничего не меняя."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "real-time non-blocking time  (microseconds, -R) unlimited\ncore file size              (blocks, -c) 0\ndata seg size               (kbytes, -d) unlimited\nscheduling priority                 (-e) 0\nfile size                   (blocks, -f) unlimited\npending signals                     (-i) 64299\nmax locked memory           (kbytes, -l) 8192\nmax memory size             (kbytes, -m) unlimited\nopen files                          (-n) 20000\npipe size                (512 bytes, -p) 8\nPOSIX message queues         (bytes, -q) 819200\nreal-time priority                  (-r) 0\nstack size                  (kbytes, -s) 8192\ncpu time                   (seconds, -t) unlimited\nmax user processes                  (-u) 64299\nvirtual memory              (kbytes, -v) unlimited\nfile locks                          (-x) unlimited"
+    },
+    {
+     "line": "ulimit -Sn; ulimit -Hn",
+     "d": "Мягкий и жёсткий лимит на число открытых файлов.",
+     "parts": [
+      {
+       "t": "ulimit",
+       "k": "cmd",
+       "d": "Показать лимит."
+      },
+      {
+       "t": "-Sn",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "S",
+         "k": "opt",
+         "d": "Мягкий лимит."
+        },
+        {
+         "t": "n",
+         "k": "opt",
+         "d": "Число открытых файловых дескрипторов."
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Выполнить следующую команду после первой.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "ulimit",
+       "k": "cmd",
+       "d": "Показать лимит."
+      },
+      {
+       "t": "-Hn",
+       "k": "opt",
+       "d": "Две опции склеены.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Начало коротких опций."
+        },
+        {
+         "t": "H",
+         "k": "opt",
+         "d": "Жёсткий лимит."
+        },
+        {
+         "t": "n",
+         "k": "opt",
+         "d": "Число открытых файловых дескрипторов."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "20000\n20000"
+    },
+    {
+     "line": "grep 'open files' /proc/$$/limits",
+     "d": "Лимит на открытые файлы у текущей оболочки, мягкий и жёсткий в одной строке.",
+     "parts": [
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки."
+      },
+      {
+       "t": "'open files'",
+       "k": "pat",
+       "d": "Строка лимита Max open files, в кавычках из-за пробела.",
+       "ref": "sym-single-quotes"
+      },
+      {
+       "t": "/proc/$$/limits",
+       "k": "path",
+       "d": "Файл лимитов процесса.",
+       "sub": [
+        {
+         "t": "/proc/",
+         "k": "path",
+         "d": "Каталог процессов."
+        },
+        {
+         "t": "$$",
+         "k": "var",
+         "d": "PID текущей оболочки, подставит bash.",
+         "ref": "sym-special-vars"
+        },
+        {
+         "t": "/limits",
+         "k": "path",
+         "d": "Таблица лимитов с колонками Soft Limit, Hard Limit, Units."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "Max open files            20000                20000                files"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>ulimit -n 1024</code> без <code>-S</code> или <code>-H</code> ставит оба лимита сразу. Обычный пользователь после этого уже не поднимет жёсткий лимит обратно в этой оболочке. Для временного изменения пишите <code>ulimit -Sn</code>.</p>",
+    "<p>Лимит, заданный в своём терминале, не действует на службу systemd. Для службы его задают в unit-файле директивой <code>LimitNOFILE=</code>, а для входа пользователей в <code>/etc/security/limits.conf</code>.</p>"
+   ],
+   "sources": [
+    "https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins",
+    "https://manpages.ubuntu.com/manpages/noble/man5/proc_pid_limits.5.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html"
+   ]
+  },
+  {
+   "slug": "lsns",
+   "cmd": "lsns",
+   "text": "lsns: пространства имён (namespaces)",
+   "summary": "<p>Пространство имён (namespace) отделяет для группы процессов часть системы. Процесс в своём pid-пространстве видит только своих соседей и сам считается PID 1, в своём net-пространстве видит только свои интерфейсы и маршруты. Типы: <code>mnt</code> точки монтирования, <code>uts</code> имя хоста, <code>ipc</code>, <code>pid</code>, <code>net</code>, <code>user</code> идентификаторы пользователей, <code>cgroup</code>, <code>time</code>. Контейнеры Docker и LXC построены на них.</p><p><code>lsns</code> перечисляет пространства имён: номер, тип, сколько процессов в нём, первый процесс и его команду. Сведения берутся из <code>/proc</code>, поэтому без root список неполный.</p>",
+   "examples": [
+    {
+     "line": "lsns",
+     "d": "Все пространства имён, которые видны из текущего. В контейнере это его собственные пространства.",
+     "parts": [
+      {
+       "t": "lsns",
+       "k": "cmd",
+       "d": "Перечислить пространства имён."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "        NS TYPE   NPROCS PID USER COMMAND\n4026531835 cgroup      2   1 root bash\n4026531837 user        2   1 root bash\n4026532264 mnt         2   1 root bash\n4026532265 uts         2   1 root bash\n4026532266 ipc         2   1 root bash\n4026532267 time        2   1 root bash\n4026532271 pid         2   1 root bash\n4026532280 net         2   1 root bash"
+    },
+    {
+     "line": "lsns -t net",
+     "d": "Только сетевые пространства имён.",
+     "parts": [
+      {
+       "t": "lsns",
+       "k": "cmd",
+       "d": "Перечислить пространства имён."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--type, показать только указанный тип."
+      },
+      {
+       "t": "net",
+       "k": "val",
+       "d": "Сетевые пространства имён."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "        NS TYPE NPROCS PID USER    NETNSID NSFS COMMAND\n4026532276 net       2   1 root unassigned      bash"
+    },
+    {
+     "line": "sudo lsns -t pid",
+     "d": "На хосте с Docker видно отдельное pid-пространство у каждого контейнера.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "lsns",
+       "k": "cmd",
+       "d": "Перечислить пространства имён."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--type, показать только указанный тип."
+      },
+      {
+       "t": "pid",
+       "k": "val",
+       "d": "Пространства идентификаторов процессов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Номер в колонке NS это номер inode файла <code>/proc/PID/ns/тип</code>. Одинаковый номер у двух процессов значит, что они в одном пространстве.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/lsns.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/namespaces.7.html"
+   ]
+  },
+  {
+   "slug": "unshare",
+   "cmd": "unshare",
+   "text": "unshare: запустить программу в новых пространствах имён",
+   "summary": "<p><code>unshare</code> создаёт новые пространства имён указанных типов и запускает в них программу. Так на одной команде видно, как устроен контейнер. В новом pid-пространстве программа получает PID 1 и не видит процессов хоста, в новом uts-пространстве можно сменить имя хоста, не трогая настоящее.</p><p>Нужны права root. Внутри обычного контейнера Docker <code>unshare</code> обычно запрещён и печатает <code>Operation not permitted</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo unshare --pid --fork --mount-proc bash -c 'ps'",
+     "d": "ps в новом pid-пространстве увидит только bash с PID 1 и сам себя.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "unshare",
+       "k": "cmd",
+       "d": "Запустить программу в новых пространствах имён."
+      },
+      {
+       "t": "--pid",
+       "k": "opt",
+       "d": "-p, создать новое pid-пространство."
+      },
+      {
+       "t": "--fork",
+       "k": "opt",
+       "d": "-f, запустить программу дочерним процессом, иначе она не станет PID 1 в новом пространстве."
+      },
+      {
+       "t": "--mount-proc",
+       "k": "opt",
+       "d": "Смонтировать свежий /proc, чтобы ps читал процессы нового пространства. Заодно создаёт новое mnt-пространство."
+      },
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Программа, которую запустить."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Выполнить команду из следующей строки."
+      },
+      {
+       "t": "'ps'",
+       "k": "str",
+       "d": "Команда для bash.",
+       "ref": "sym-single-quotes"
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo unshare --uts bash -c 'hostname test; hostname'",
+     "d": "Сменить имя хоста только внутри нового uts-пространства. Настоящее имя не изменится.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "unshare",
+       "k": "cmd",
+       "d": "Запустить программу в новых пространствах имён."
+      },
+      {
+       "t": "--uts",
+       "k": "opt",
+       "d": "-u, новое пространство имени хоста."
+      },
+      {
+       "t": "bash",
+       "k": "cmd",
+       "d": "Программа, которую запустить."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Выполнить команду из строки."
+      },
+      {
+       "t": "'hostname test; hostname'",
+       "k": "str",
+       "d": "Две команды, задать имя и напечатать его.",
+       "ref": "sym-single-quotes"
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Без <code>--fork</code> с <code>--pid</code> первая же команда внутри падает с ошибкой <code>Cannot allocate memory</code>. Первым процессом пространства становится не bash, а его потомок, а после его выхода новые процессы создать нельзя.</p>",
+    "<p>Без <code>--mount-proc</code> <code>ps</code> читает старый /proc и показывает процессы хоста, будто изоляции нет.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/unshare.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/namespaces.7.html"
+   ]
+  },
+  {
+   "slug": "nsenter",
+   "cmd": "nsenter",
+   "text": "nsenter: войти в пространства имён другого процесса",
+   "summary": "<p><code>nsenter</code> запускает программу в пространствах имён уже работающего процесса. Нужен, когда в контейнере нет нужных утилит. Вы берёте PID процесса контейнера на хосте и запускаете в его сетевом пространстве <code>ip</code> или <code>ss</code> с хоста, видя сеть глазами контейнера.</p><p>Какие пространства войти, задают опции <code>-n</code> сеть, <code>-m</code> монтирования, <code>-p</code> процессы, <code>-u</code> имя хоста или <code>-a</code> все сразу. Нужны права root.</p>",
+   "examples": [
+    {
+     "line": "sudo nsenter -t 4321 -n ip addr",
+     "d": "Адреса интерфейсов, какими их видит процесс 4321, например контейнер.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "nsenter",
+       "k": "cmd",
+       "d": "Войти в пространства имён процесса."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--target, процесс, чьи пространства использовать."
+      },
+      {
+       "t": "4321",
+       "k": "num",
+       "d": "PID процесса на хосте. Для контейнера Docker его даёт docker inspect -f '{{.State.Pid}}' имя."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "--net, войти только в сетевое пространство. Файлы и программы остаются хоста."
+      },
+      {
+       "t": "ip",
+       "k": "cmd",
+       "d": "Программа с хоста, которую запустить внутри."
+      },
+      {
+       "t": "addr",
+       "k": "sub",
+       "d": "Показать адреса интерфейсов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo nsenter -t 4321 -a ps aux",
+     "d": "Процессы внутри контейнера, как будто вы зашли в него.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "nsenter",
+       "k": "cmd",
+       "d": "Войти в пространства имён процесса."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--target, процесс, чьи пространства использовать."
+      },
+      {
+       "t": "4321",
+       "k": "num",
+       "d": "PID процесса на хосте."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "--all, войти во все пространства процесса, включая mnt, поэтому ps увидит /proc контейнера."
+      },
+      {
+       "t": "ps",
+       "k": "cmd",
+       "d": "Показать процессы."
+      },
+      {
+       "t": "aux",
+       "k": "opt",
+       "d": "Все процессы в пользовательском формате.",
+       "sub": [
+        {
+         "t": "a",
+         "k": "opt",
+         "d": "Процессы всех пользователей."
+        },
+        {
+         "t": "u",
+         "k": "opt",
+         "d": "Пользовательский формат."
+        },
+        {
+         "t": "x",
+         "k": "opt",
+         "d": "Включая процессы без терминала."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>С <code>-a</code> корень меняется на файловую систему контейнера, и программа берётся оттуда. Если в образе нет <code>ps</code>, будет ошибка. С одним <code>-n</code> программа берётся с хоста.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/nsenter.1.html"
+   ]
+  },
+  {
+   "slug": "chroot",
+   "cmd": "chroot",
+   "text": "chroot: запустить команду с другим корневым каталогом",
+   "summary": "<p><code>chroot</code> делает указанный каталог корнем <code>/</code> для запускаемой команды. Программа видит только то, что лежит внутри, и ищет там же свои библиотеки. Это не изоляция для безопасности, а смена корня файловой системы.</p><p>Главное применение это восстановление системы, которая не загружается. Вы загружаетесь с Live USB, монтируете корневой раздел установленной системы в <code>/mnt</code>, подключаете <code>/dev</code>, <code>/proc</code>, <code>/sys</code> и через <code>chroot /mnt</code> работаете будто в ней: переустанавливаете GRUB, пересобираете initramfs, меняете пароль root.</p>",
+   "examples": [
+    {
+     "line": "chroot jail /bin/ls /",
+     "d": "ls запущен с корнем в каталоге jail и видит только его содержимое. В jail заранее скопированы bash, ls и их библиотеки.",
+     "parts": [
+      {
+       "t": "chroot",
+       "k": "cmd",
+       "d": "Сменить корень и запустить команду."
+      },
+      {
+       "t": "jail",
+       "k": "path",
+       "d": "Каталог, который станет корнем /, путь относительно /lab."
+      },
+      {
+       "t": "/bin/ls",
+       "k": "path",
+       "d": "Команда, путь уже внутри нового корня, то есть jail/bin/ls."
+      },
+      {
+       "t": "/",
+       "k": "path",
+       "d": "Аргумент ls, новый корень."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p jail/bin && cp /bin/bash /bin/ls jail/bin/ && for f in $(ldd /bin/bash /bin/ls | grep -o '/lib[^ ]*'); do cp --parents \"$f\" jail; done",
+     "output": "bin\nlib\nlib64"
+    },
+    {
+     "line": "for d in dev proc sys; do sudo mount --bind /$d /mnt/$d; done",
+     "d": "С Live USB, после sudo mount /dev/sda2 /mnt. Подключить системные каталоги к смонтированной системе.",
+     "parts": [
+      {
+       "t": "for",
+       "k": "kw",
+       "d": "Цикл по списку слов."
+      },
+      {
+       "t": "d",
+       "k": "var",
+       "d": "Переменная цикла."
+      },
+      {
+       "t": "in",
+       "k": "kw",
+       "d": "Дальше идёт список."
+      },
+      {
+       "t": "dev proc sys",
+       "k": "arg",
+       "d": "Три каталога, без которых не работают программы внутри."
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Конец списка.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "do",
+       "k": "kw",
+       "d": "Начало тела цикла."
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "mount",
+       "k": "cmd",
+       "d": "Смонтировать."
+      },
+      {
+       "t": "--bind",
+       "k": "opt",
+       "d": "Показать уже смонтированный каталог ещё в одном месте."
+      },
+      {
+       "t": "/$d",
+       "k": "path",
+       "d": "Исходный каталог Live-системы.",
+       "sub": [
+        {
+         "t": "/",
+         "k": "path",
+         "d": "Корень."
+        },
+        {
+         "t": "$d",
+         "k": "var",
+         "d": "Имя каталога из цикла.",
+         "ref": "sym-var"
+        }
+       ]
+      },
+      {
+       "t": "/mnt/$d",
+       "k": "path",
+       "d": "Тот же каталог внутри восстанавливаемой системы.",
+       "sub": [
+        {
+         "t": "/mnt/",
+         "k": "path",
+         "d": "Куда смонтирован корень установленной системы."
+        },
+        {
+         "t": "$d",
+         "k": "var",
+         "d": "Имя каталога из цикла.",
+         "ref": "sym-var"
+        }
+       ]
+      },
+      {
+       "t": ";",
+       "k": "op",
+       "d": "Конец команды в теле.",
+       "ref": "sym-semicolon"
+      },
+      {
+       "t": "done",
+       "k": "kw",
+       "d": "Конец цикла."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo chroot /mnt /bin/bash",
+     "d": "Войти в установленную систему. Дальше команды работают с её файлами, выход по exit.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Выполнить команду от имени root, иначе у обычного пользователя не хватит прав."
+      },
+      {
+       "t": "chroot",
+       "k": "cmd",
+       "d": "Сменить корень и запустить команду."
+      },
+      {
+       "t": "/mnt",
+       "k": "path",
+       "d": "Корень установленной системы."
+      },
+      {
+       "t": "/bin/bash",
+       "k": "path",
+       "d": "Оболочка из установленной системы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p><code>chroot: failed to run command '/bin/bash': No such file or directory</code> часто значит, что в новом корне нет не самой программы, а её библиотек. Список нужных библиотек показывает <code>ldd</code>.</p>",
+    "<p>Без смонтированных <code>/dev</code>, <code>/proc</code> и <code>/sys</code> внутри chroot не работают <code>grub-install</code> и <code>update-initramfs</code>. После выхода из chroot размонтируйте их, иначе раздел не отмонтируется.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/chroot.8.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/chroot-invocation.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/mount.8.html"
+   ]
+  },
+  {
+   "slug": "psi-pressure",
+   "cmd": "/proc/pressure",
+   "text": "/proc/pressure: нехватка CPU, памяти и диска (PSI)",
+   "summary": "<p>PSI (Pressure Stall Information) показывает, какую долю времени задачи простаивали, потому что ждали ресурс. Файлы <code>cpu</code>, <code>memory</code>, <code>io</code> в <code>/proc/pressure</code> содержат по две строки:</p><ul><li><code>some</code>, доля времени, когда хотя бы одна задача ждала ресурс;</li><li><code>full</code>, доля времени, когда ждали все активные задачи сразу, и работа фактически стояла.</li></ul><p><code>avg10</code>, <code>avg60</code>, <code>avg300</code> это проценты за последние 10, 60 и 300 секунд, <code>total</code> общее время ожидания в микросекундах. В отличие от load average, PSI сразу говорит, какого ресурса не хватает.</p>",
+   "examples": [
+    {
+     "line": "cat /proc/pressure/cpu",
+     "d": "Нехватка процессора. Строка full для CPU на уровне системы не определена и всегда 0.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Напечатать файл."
+      },
+      {
+       "t": "/proc/pressure/cpu",
+       "k": "path",
+       "d": "Давление на процессор."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "some avg10=7.73 avg60=2.79 avg300=1.31 total=15346925\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+     "line": "cat /proc/pressure/memory",
+     "d": "Нехватка памяти. Рост full значит, что система занята вытеснением страниц, а не работой.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Напечатать файл."
+      },
+      {
+       "t": "/proc/pressure/memory",
+       "k": "path",
+       "d": "Давление на память."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "some avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+     "line": "head /proc/pressure/*",
+     "d": "Все три ресурса сразу, head печатает имя перед каждым файлом.",
+     "parts": [
+      {
+       "t": "head",
+       "k": "cmd",
+       "d": "Напечатать начало файлов, при нескольких файлах с заголовками ==> имя <==."
+      },
+      {
+       "t": "/proc/pressure/*",
+       "k": "path",
+       "d": "Все файлы каталога.",
+       "sub": [
+        {
+         "t": "/proc/pressure/",
+         "k": "path",
+         "d": "Каталог PSI."
+        },
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Оболочка подставит cpu, io, memory.",
+         "ref": "sym-glob-star"
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "==> /proc/pressure/cpu <==\nsome avg10=7.73 avg60=2.79 avg300=1.31 total=15378971\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n\n==> /proc/pressure/io <==\nsome avg10=1.23 avg60=0.47 avg300=0.26 total=8395981\nfull avg10=0.42 avg60=0.19 avg300=0.14 total=7414676\n\n==> /proc/pressure/memory <==\nsome avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Если каталога <code>/proc/pressure</code> нет, ядро собрано без PSI или PSI выключен параметром загрузки <code>psi=0</code>.</p>",
+    "<p>Высокий load average при нулевом <code>some</code> в cpu и высоком в io значит, что процессы ждут диск, а не процессор.</p>"
+   ],
+   "sources": [
+    "https://docs.kernel.org/accounting/psi.html"
+   ]
+  }
+ ]
+}
