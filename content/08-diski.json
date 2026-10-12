@@ -2020,6 +2020,7 @@
    "cmd": "lvcreate",
    "text": "pvcreate, vgcreate, lvcreate: создать тома LVM",
    "summary": "<p>LVM собирает диски в общий пул и нарезает из него логические тома, которые потом можно увеличивать без переразметки. Три уровня:</p><ul><li>PV (physical volume), диск или раздел, отданный LVM;</li><li>VG (volume group), группа из одного или нескольких PV;</li><li>LV (logical volume), том из места группы, на нём создают файловую систему.</li></ul><p>Ubuntu Server по умолчанию ставится на LVM, группа <code>ubuntu-vg</code>, том <code>ubuntu-lv</code>. Логический том доступен как <code>/dev/группа/том</code>.</p>",
+   "diagram": " Диски (PV)      Группа (VG)            Тома (LV)      Файловые системы\n┌──────────┐    ┌─────────────────┐    ┌─────────┐    ┌──────┐\n│ /dev/sdb │──┐ │                 │ ┌─▶│ data-lv │───▶│ ext4 │ /srv/data\n└──────────┘  ├▶│ data-vg         │─┤  └─────────┘    └──────┘\n┌──────────┐  │ │ общий пул места │ │  ┌─────────┐    ┌──────┐\n│ /dev/sdc │──┘ │ всех дисков     │ └─▶│ logs-lv │───▶│ ext4 │ /srv/logs\n└──────────┘    └─────────────────┘    └─────────┘    └──────┘\n  pvcreate       vgcreate, vgextend     lvcreate       mkfs.ext4, mount\n\n Том берёт место из пула группы и может лежать на нескольких дисках.\n Новый диск добавляют в группу, и место пула растёт без переразметки.",
    "examples": [
     {
      "line": "sudo pvcreate /dev/sdb",
@@ -2374,6 +2375,1086 @@
     "https://manpages.ubuntu.com/manpages/noble/man8/resize2fs.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/vgs.8.html",
     "https://documentation.ubuntu.com/server/how-to/storage/manage-logical-volumes/"
+   ]
+  },
+  {
+   "slug": "findmnt",
+   "cmd": "findmnt",
+   "text": "findmnt: что и куда смонтировано, проверка fstab",
+   "summary": "<p><code>findmnt</code> показывает смонтированные файловые системы деревом, что смонтировано, в какой каталог, с каким типом и опциями. Вывод читается легче, чем у <code>mount</code> без аргументов, и его можно сузить по типу, по каталогу или по столбцам.</p><p><code>findmnt --verify</code> проверяет <code>/etc/fstab</code> без монтирования, есть ли устройство с таким UUID, существует ли каталог, известен ли тип файловой системы. Ошибка в fstab может остановить загрузку, поэтому проверяйте файл после каждой правки.</p>",
+   "examples": [
+    {
+     "line": "findmnt -t tmpfs -o TARGET,SIZE,OPTIONS",
+     "d": "Показать только файловые системы tmpfs с размером и опциями.",
+     "parts": [
+      {
+       "t": "findmnt",
+       "k": "cmd",
+       "d": "Программа поиска смонтированных файловых систем."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--types, только файловые системы этих типов, список через запятую."
+      },
+      {
+       "t": "tmpfs",
+       "k": "val",
+       "d": "Тип, файловая система в памяти."
+      },
+      {
+       "t": "-o",
+       "k": "opt",
+       "d": "--output, какие столбцы показать."
+      },
+      {
+       "t": "TARGET,SIZE,OPTIONS",
+       "k": "val",
+       "d": "Список столбцов через запятую.",
+       "sub": [
+        {
+         "t": "TARGET",
+         "k": "val",
+         "d": "Точка монтирования, каталог."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель."
+        },
+        {
+         "t": "SIZE",
+         "k": "val",
+         "d": "Размер файловой системы."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель."
+        },
+        {
+         "t": "OPTIONS",
+         "k": "val",
+         "d": "Опции монтирования."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "TARGET            SIZE OPTIONS\n/proc/acpi          4K ro,relatime,size=4k,nr_inodes=1\n/proc/interrupts   64M rw,nosuid,size=65536k,mode=755\n/proc/keys         64M rw,nosuid,size=65536k,mode=755\n/proc/timer_list   64M rw,nosuid,size=65536k,mode=755\n/dev               64M rw,nosuid,size=65536k,mode=755\n└─/dev/shm         64M rw,nosuid,nodev,noexec,relatime,size=65536k\n/sys/fs/cgroup    7.9G rw,nosuid,nodev,noexec,relatime,mode=755\n/sys/firmware       4K ro,relatime,size=4k,nr_inodes=1"
+    },
+    {
+     "line": "findmnt -T /var/log",
+     "d": "Узнать, на какой файловой системе лежит каталог /var/log.",
+     "parts": [
+      {
+       "t": "findmnt",
+       "k": "cmd",
+       "d": "Программа поиска смонтированных файловых систем."
+      },
+      {
+       "t": "-T",
+       "k": "opt",
+       "d": "--target, найти точку монтирования, к которой относится путь. Если путь не точка монтирования, findmnt поднимается к родительским каталогам."
+      },
+      {
+       "t": "/var/log",
+       "k": "path",
+       "d": "Каталог с журналами."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "findmnt --verify",
+     "d": "Проверить /etc/fstab. В контейнере в fstab заранее дописаны две строки с несуществующими устройствами и каталогами.",
+     "parts": [
+      {
+       "t": "findmnt",
+       "k": "cmd",
+       "d": "Программа поиска смонтированных файловых систем."
+      },
+      {
+       "t": "--verify",
+       "k": "opt",
+       "d": "Проверить таблицу монтирования, по умолчанию /etc/fstab, и вывести ошибки [E] и предупреждения [W]."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'UUID=1234-abcd /data ext4 defaults 0 2\\n/dev/sdz1 /backup xfs defaults 0 3\\n' >> /etc/fstab",
+     "output": "\n0 parse errors, 3 errors, 2 warnings\n/data\n   [E] unreachable on boot required target: No such file or directory\n   [E] unreachable on boot required source: UUID=1234-abcd\n/backup\n   [E] unreachable on boot required target: No such file or directory\n   [W] unreachable source: /dev/sdz1: No such file or directory\n   [W] cannot detect on-disk filesystem type (No such file or directory)"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Считать, что <code>--verify</code> без ошибок гарантирует загрузку. Проверка ничего не монтирует. После неё выполните <code>sudo mount -a</code>, тогда ошибка проявится сейчас, а не при следующей загрузке.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/findmnt.8.html"
+   ]
+  },
+  {
+   "slug": "losetup",
+   "cmd": "losetup",
+   "text": "losetup: файл как блочное устройство",
+   "summary": "<p><code>losetup</code> связывает обычный файл с устройством <code>/dev/loopN</code>. После этого с файлом работают как с диском, его размечают, форматируют и монтируют. Так тренируются на LVM и RAID без настоящих дисков и открывают образы дисков.</p><p>Нужны права root и доступ к loop-устройствам ядра. В учебном контейнере их нет, примеры выполняйте на ВМ.</p>",
+   "examples": [
+    {
+     "line": "sudo losetup -f --show disk.img",
+     "d": "Привязать файл disk.img к первому свободному loop-устройству и напечатать его имя.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "losetup",
+       "k": "cmd",
+       "d": "Программа управления loop-устройствами."
+      },
+      {
+       "t": "-f",
+       "k": "opt",
+       "d": "--find, найти первое свободное loop-устройство. С именем файла привязать файл к нему."
+      },
+      {
+       "t": "--show",
+       "k": "opt",
+       "d": "Напечатать имя выбранного устройства, например /dev/loop0."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ, например созданный командой truncate -s 1G disk.img."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "losetup -a",
+     "d": "Показать все занятые loop-устройства и файлы за ними.",
+     "parts": [
+      {
+       "t": "losetup",
+       "k": "cmd",
+       "d": "Программа управления loop-устройствами."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "--all, состояние всех loop-устройств."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo losetup -d /dev/loop0",
+     "d": "Отвязать файл от устройства /dev/loop0.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "losetup",
+       "k": "cmd",
+       "d": "Программа управления loop-устройствами."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "--detach, отвязать файл от указанного устройства."
+      },
+      {
+       "t": "/dev/loop0",
+       "k": "path",
+       "d": "Loop-устройство, имя из вывода --show или losetup -a."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Пугаться множества устройств <code>/dev/loop</code> в <code>lsblk</code> на Ubuntu. Это пакеты snap, каждый смонтирован из файла через loop-устройство.</p>",
+    "<p>Отвязывать устройство, пока файловая система на нём смонтирована. Сначала <code>umount</code>, потом <code>losetup -d</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/losetup.8.html"
+   ]
+  },
+  {
+   "slug": "resize2fs",
+   "cmd": "resize2fs",
+   "text": "resize2fs: изменить размер файловой системы ext4",
+   "summary": "<p><code>resize2fs</code> меняет размер файловой системы ext2, ext3, ext4. Без размера растягивает её на всё устройство. Это второй шаг после увеличения раздела (<code>growpart</code>) или тома LVM (<code>lvextend</code>).</p><p>Увеличивать можно смонтированную файловую систему. Уменьшать только отмонтированную и после проверки <code>e2fsck -f</code>. При уменьшении сначала уменьшают файловую систему, потом раздел или том.</p>",
+   "examples": [
+    {
+     "line": "resize2fs disk.img",
+     "d": "Растянуть ext4 на весь размер файла. Файл увеличен с 64 до 128 МиБ заранее, как будто вырос диск.",
+     "parts": [
+      {
+       "t": "resize2fs",
+       "k": "cmd",
+       "d": "Программа изменения размера ext2, ext3, ext4."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ с ext4, в учебном контейнере он заменяет диск. На сервере здесь пишут устройство, например /dev/sdb1."
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 64M disk.img; mkfs.ext4 -q disk.img; truncate -s 128M disk.img; e2fsck -f -y disk.img",
+     "output": "resize2fs 1.47.0 (5-Feb-2023)\nResizing the filesystem on disk.img to 32768 (4k) blocks.\nThe filesystem on disk.img is now 32768 (4k) blocks long."
+    },
+    {
+     "line": "resize2fs -P disk.img",
+     "d": "Оценить, до какого размера можно уменьшить файловую систему.",
+     "parts": [
+      {
+       "t": "resize2fs",
+       "k": "cmd",
+       "d": "Программа изменения размера ext2, ext3, ext4."
+      },
+      {
+       "t": "-P",
+       "k": "opt",
+       "d": "Напечатать оценку минимального размера в блоках файловой системы и выйти, ничего не меняя."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ с ext4, в учебном контейнере он заменяет диск. На сервере здесь пишут устройство, например /dev/sdb1."
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 64M disk.img; mkfs.ext4 -q disk.img; e2fsck -f -y disk.img",
+     "output": "resize2fs 1.47.0 (5-Feb-2023)\nEstimated minimum size of the filesystem: 2076"
+    },
+    {
+     "line": "resize2fs disk.img 32M",
+     "d": "Уменьшить отмонтированную файловую систему до 32 МиБ.",
+     "parts": [
+      {
+       "t": "resize2fs",
+       "k": "cmd",
+       "d": "Программа изменения размера ext2, ext3, ext4."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ с ext4, в учебном контейнере он заменяет диск. На сервере здесь пишут устройство, например /dev/sdb1."
+      },
+      {
+       "t": "32M",
+       "k": "val",
+       "d": "Новый размер.",
+       "sub": [
+        {
+         "t": "32",
+         "k": "num",
+         "d": "Число."
+        },
+        {
+         "t": "M",
+         "k": "val",
+         "d": "Мегабайты, по 1024 КиБ. Без суффикса число считается в блоках файловой системы."
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 64M disk.img; mkfs.ext4 -q disk.img; e2fsck -f -y disk.img",
+     "output": "resize2fs 1.47.0 (5-Feb-2023)\nResizing the filesystem on disk.img to 8192 (4k) blocks.\nThe filesystem on disk.img is now 8192 (4k) blocks long."
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Уменьшить раздел или том раньше файловой системы. Конец данных окажется за границей раздела и будет потерян. Порядок при уменьшении обратный, сначала <code>resize2fs</code>, потом раздел или том.</p>",
+    "<p>Запускать resize2fs для XFS. Он работает только с ext2, ext3, ext4. XFS растягивают командой <code>xfs_growfs</code>, а уменьшить её нельзя.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/resize2fs.8.html"
+   ]
+  },
+  {
+   "slug": "tune2fs",
+   "cmd": "tune2fs",
+   "text": "tune2fs: параметры файловой системы ext4",
+   "summary": "<p><code>tune2fs</code> показывает и меняет параметры ext2, ext3, ext4, которые хранятся в суперблоке, метку, UUID, долю зарезервированных блоков, частоту проверок. <code>tune2fs -l</code> только читает, это безопасный способ посмотреть, как создана файловая система.</p><p>Обычно ext4 резервирует 5% блоков для root, чтобы системные службы могли писать, когда диск заполнен пользователями. На большом диске только с данными этот запас часто уменьшают до 1%.</p>",
+   "examples": [
+    {
+     "line": "tune2fs -l disk.img | grep -i -E 'uuid|state|count'",
+     "d": "Показать UUID, состояние и счётчики из суперблока.",
+     "parts": [
+      {
+       "t": "tune2fs",
+       "k": "cmd",
+       "d": "Программа настройки ext2, ext3, ext4."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Напечатать содержимое суперблока."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ с ext4, в учебном контейнере он заменяет диск. На сервере здесь пишут устройство, например /dev/sdb1."
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать вывод tune2fs на вход grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отбор строк по шаблону."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "Без учёта регистра букв."
+      },
+      {
+       "t": "-E",
+       "k": "opt",
+       "d": "Расширенные регулярные выражения, в них | означает ИЛИ."
+      },
+      {
+       "t": "'uuid|state|count'",
+       "k": "pat",
+       "d": "Шаблон, строка с любым из трёх слов.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Одинарная кавычка, оболочка не трактует | внутри как конвейер.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "uuid",
+         "k": "pat",
+         "d": "Строка Filesystem UUID."
+        },
+        {
+         "t": "|",
+         "k": "op",
+         "d": "ИЛИ в регулярном выражении."
+        },
+        {
+         "t": "state",
+         "k": "pat",
+         "d": "Строка Filesystem state, clean значит чистое отключение."
+        },
+        {
+         "t": "|",
+         "k": "op",
+         "d": "ИЛИ."
+        },
+        {
+         "t": "count",
+         "k": "pat",
+         "d": "Строки со счётчиками, число блоков, инодов, монтирований."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Конец шаблона.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 64M disk.img; mkfs.ext4 -q disk.img",
+     "output": "Filesystem UUID:          303b6fc3-7b8b-4625-8478-5925853a60b9\nFilesystem state:         clean\nInode count:              16384\nBlock count:              16384\nReserved block count:     819\nMount count:              0\nMaximum mount count:      -1"
+    },
+    {
+     "line": "tune2fs -m 1 disk.img",
+     "d": "Уменьшить резерв для root до 1% блоков.",
+     "parts": [
+      {
+       "t": "tune2fs",
+       "k": "cmd",
+       "d": "Программа настройки ext2, ext3, ext4."
+      },
+      {
+       "t": "-m",
+       "k": "opt",
+       "d": "Процент блоков, которые может занять только привилегированный процесс."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Один процент."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Файл-образ с ext4, в учебном контейнере он заменяет диск. На сервере здесь пишут устройство, например /dev/sdb1."
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 64M disk.img; mkfs.ext4 -q disk.img",
+     "output": "tune2fs 1.47.0 (5-Feb-2023)\nSetting reserved blocks percentage to 1% (163 blocks)"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Путать <code>-l</code> и <code>-L</code>. Маленькая l только печатает суперблок, большая L меняет метку файловой системы.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/tune2fs.8.html"
+   ]
+  },
+  {
+   "slug": "growpart",
+   "cmd": "growpart",
+   "text": "growpart: растянуть раздел до конца диска",
+   "summary": "<p><code>growpart</code> из пакета cloud-guest-utils сдвигает конец раздела до конца диска или до начала следующего раздела. Она нужна, когда диск виртуальной машины увеличили в облаке или гипервизоре, а раздел остался прежнего размера.</p><p>Порядок действий после увеличения диска:</p><ul><li><code>growpart</code> растягивает раздел;</li><li>для ext4 на разделе <code>resize2fs</code> растягивает файловую систему;</li><li>если на разделе LVM, <code>pvresize</code> увеличивает физический том, затем <code>lvextend -r</code> отдаёт место тому.</li></ul>",
+   "examples": [
+    {
+     "line": "sudo growpart /dev/sda 3",
+     "d": "Растянуть третий раздел диска sda до конца диска.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "growpart",
+       "k": "cmd",
+       "d": "Программа увеличения раздела."
+      },
+      {
+       "t": "/dev/sda",
+       "k": "path",
+       "d": "Диск целиком, а не раздел."
+      },
+      {
+       "t": "3",
+       "k": "num",
+       "d": "Номер раздела, отдельным аргументом через пробел, счёт с 1."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "growpart -N disk.img 1",
+     "d": "Пробный запуск на образе диска, показать, как изменится таблица разделов. Образ увеличен со 100 до 200 МиБ, раздел занимает 50 МиБ.",
+     "parts": [
+      {
+       "t": "growpart",
+       "k": "cmd",
+       "d": "Программа увеличения раздела."
+      },
+      {
+       "t": "-N",
+       "k": "opt",
+       "d": "--dry-run, только показать, что будет сделано."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Образ диска с таблицей разделов, growpart работает и с файлом."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Номер раздела."
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 100M disk.img; echo ',50M' | sfdisk -q disk.img; truncate -s 200M disk.img",
+     "output": "CHANGE: partition=1 start=2048 old: size=102400 end=104447 new: size=407519 end=409566\n# === old sfdisk -d ===\nlabel: dos\nlabel-id: 0xfe2ca229\ndevice: disk.img\nunit: sectors\nsector-size: 512\n\ndisk.img1 : start=        2048, size=      102400, type=83\n# === new sfdisk -d ===\nlabel: dos\nlabel-id: 0xfe2ca229\ndevice: disk.img\nunit: sectors\nsector-size: 512\n\ndisk.img1 : start=        2048, size=      407519, type=83"
+    },
+    {
+     "line": "growpart disk.img 1",
+     "d": "Растянуть первый раздел образа на всё свободное место.",
+     "parts": [
+      {
+       "t": "growpart",
+       "k": "cmd",
+       "d": "Программа увеличения раздела."
+      },
+      {
+       "t": "disk.img",
+       "k": "path",
+       "d": "Образ диска с таблицей разделов."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Номер раздела."
+      }
+     ],
+     "run": "container",
+     "setup": "truncate -s 100M disk.img; echo ',50M' | sfdisk -q disk.img; truncate -s 200M disk.img",
+     "output": "CHANGED: partition=1 start=2048 old: size=102400 end=104447 new: size=407519 end=409566"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Писать раздел одним словом, <code>growpart /dev/sda3</code>. Диск и номер раздела это два аргумента, <code>/dev/sda 3</code>.</p>",
+    "<p>Ждать, что <code>df -h</code> покажет новый размер сразу после growpart. Вырос только раздел, файловую систему нужно растянуть отдельно.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/growpart.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/pvresize.8.html"
+   ]
+  },
+  {
+   "slug": "lvm-pvs-vgs-lvs",
+   "cmd": "pvs, vgs, lvs",
+   "text": "pvs, vgs, lvs: обзор томов LVM",
+   "summary": "<p>Три короткие команды выводят по строке на каждый объект LVM:</p><ul><li><code>pvs</code> физические тома, к какой группе относятся, размер (PSize) и свободное место (PFree);</li><li><code>vgs</code> группы, сколько в них физических и логических томов, размер (VSize) и свободное место (VFree);</li><li><code>lvs</code> логические тома, их группа и размер (LSize).</li></ul><p>Подробный многострочный вывод дают <code>pvdisplay</code>, <code>vgdisplay</code>, <code>lvdisplay</code>. Для быстрой проверки удобнее короткие команды.</p>",
+   "examples": [
+    {
+     "line": "sudo pvs",
+     "d": "Показать физические тома и их группы.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "pvs",
+       "k": "cmd",
+       "d": "Краткий вывод физических томов."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo vgs ubuntu-vg",
+     "d": "Показать одну группу, колонка VFree это место, которое ещё можно отдать томам.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "vgs",
+       "k": "cmd",
+       "d": "Краткий вывод групп томов."
+      },
+      {
+       "t": "ubuntu-vg",
+       "k": "arg",
+       "d": "Группа томов в установке Ubuntu Server по умолчанию."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo lvs -o +devices",
+     "d": "Показать логические тома и на каких дисках они лежат.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "lvs",
+       "k": "cmd",
+       "d": "Краткий вывод логических томов."
+      },
+      {
+       "t": "-o",
+       "k": "opt",
+       "d": "--options, столбцы вывода. Список всех полей выводит lvs -o help."
+      },
+      {
+       "t": "+devices",
+       "k": "val",
+       "d": "Добавить столбец.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Добавить к стандартным столбцам, а не заменить их."
+        },
+        {
+         "t": "devices",
+         "k": "val",
+         "d": "Устройства, на которых лежит том."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Искать свободное место группы в <code>df</code>. df показывает место внутри смонтированных файловых систем, а нераспределённое место группы видно только в колонке VFree команды <code>vgs</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/pvs.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/vgs.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/lvs.8.html"
+   ]
+  },
+  {
+   "slug": "vgextend",
+   "cmd": "vgextend",
+   "text": "pvcreate и vgextend: добавить диск в группу томов",
+   "summary": "<p>Когда в группе томов кончилось место, в неё добавляют новый диск. <code>pvcreate</code> размечает диск под LVM, <code>vgextend</code> добавляет его в существующую группу, и свободное место группы растёт на размер диска. Если диск не размечен, vgextend выполнит pvcreate сам.</p><p>После этого место отдают тому командой <code>lvextend</code>. Том может занимать место на нескольких дисках группы.</p>",
+   "examples": [
+    {
+     "line": "sudo pvcreate /dev/sdc",
+     "d": "Разметить новый диск sdc как физический том LVM.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "pvcreate",
+       "k": "cmd",
+       "d": "Программа создания физического тома."
+      },
+      {
+       "t": "/dev/sdc",
+       "k": "path",
+       "d": "Новый пустой диск. Данные на нём станут недоступны."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo vgextend ubuntu-vg /dev/sdc",
+     "d": "Добавить диск sdc в группу ubuntu-vg.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "vgextend",
+       "k": "cmd",
+       "d": "Программа добавления физических томов в группу."
+      },
+      {
+       "t": "ubuntu-vg",
+       "k": "arg",
+       "d": "Группа, которую увеличиваем."
+      },
+      {
+       "t": "/dev/sdc",
+       "k": "path",
+       "d": "Физический том, который войдёт в группу."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo pvs /dev/sdc",
+     "d": "Проверить, что диск вошёл в группу, в колонке VG будет ubuntu-vg.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "pvs",
+       "k": "cmd",
+       "d": "Краткий вывод физических томов."
+      },
+      {
+       "t": "/dev/sdc",
+       "k": "path",
+       "d": "Только этот физический том."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Добавить в группу диск с данными. pvcreate запишет метку LVM, и данные станут недоступны. Перед разметкой проверьте диск командой <code>lsblk -f</code>, у нового диска нет файловой системы и точек монтирования.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/vgextend.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/pvcreate.8.html"
+   ]
+  },
+  {
+   "slug": "mdadm",
+   "cmd": "mdadm",
+   "text": "mdadm: программный RAID",
+   "summary": "<p><code>mdadm</code> собирает программный RAID из нескольких дисков в одно устройство <code>/dev/mdN</code>. RAID 1 (зеркало) пишет одинаковые данные на два диска, при отказе одного данные остаются на втором. Состояние всех массивов ядро показывает в файле <code>/proc/mdstat</code>.</p><p>После создания массив синхронизирует диски, ход видно в <code>/proc/mdstat</code>. Пользоваться массивом можно сразу, не дожидаясь конца синхронизации.</p>",
+   "examples": [
+    {
+     "line": "sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc",
+     "d": "Создать зеркало /dev/md0 из дисков sdb и sdc.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "mdadm",
+       "k": "cmd",
+       "d": "Программа управления программным RAID."
+      },
+      {
+       "t": "--create",
+       "k": "opt",
+       "d": "Создать новый массив."
+      },
+      {
+       "t": "/dev/md0",
+       "k": "path",
+       "d": "Имя устройства массива."
+      },
+      {
+       "t": "--level=1",
+       "k": "opt",
+       "d": "Уровень RAID.",
+       "sub": [
+        {
+         "t": "--level",
+         "k": "opt",
+         "d": "Уровень массива."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "1",
+         "k": "val",
+         "d": "RAID 1, зеркало."
+        }
+       ]
+      },
+      {
+       "t": "--raid-devices=2",
+       "k": "opt",
+       "d": "Число активных дисков.",
+       "sub": [
+        {
+         "t": "--raid-devices",
+         "k": "opt",
+         "d": "Сколько дисков в массиве."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "2",
+         "k": "num",
+         "d": "Два диска."
+        }
+       ]
+      },
+      {
+       "t": "/dev/sdb",
+       "k": "path",
+       "d": "Первый диск, данные на нём будут потеряны."
+      },
+      {
+       "t": "/dev/sdc",
+       "k": "path",
+       "d": "Второй диск."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "cat /proc/mdstat",
+     "d": "Состояние всех массивов, [UU] значит оба диска в работе, [U_] один выпал.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Вывести файл."
+      },
+      {
+       "t": "/proc/mdstat",
+       "k": "path",
+       "d": "Файл ядра со списком массивов, их дисков и ходом синхронизации."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo mdadm --detail /dev/md0",
+     "d": "Подробно о массиве, уровень, размер, состояние каждого диска.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "mdadm",
+       "k": "cmd",
+       "d": "Программа управления программным RAID."
+      },
+      {
+       "t": "--detail",
+       "k": "opt",
+       "d": "Подробности об указанном массиве."
+      },
+      {
+       "t": "/dev/md0",
+       "k": "path",
+       "d": "Массив."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Не сохранить массив в <code>/etc/mdadm/mdadm.conf</code>. После перезагрузки он может собраться под другим именем, например <code>/dev/md127</code>. Допишите в файл вывод <code>sudo mdadm --detail --scan</code> и выполните <code>sudo update-initramfs -u</code>.</p>",
+    "<p>Считать RAID резервной копией. Удалённый или испорченный файл сразу пропадает на обоих дисках зеркала.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/mdadm.8.html"
+   ]
+  },
+  {
+   "slug": "smartctl",
+   "cmd": "smartctl",
+   "text": "smartctl: здоровье диска по SMART",
+   "summary": "<p><code>smartctl</code> из пакета smartmontools читает SMART, самодиагностику диска. Диск сам считает переназначенные сектора, ошибки, часы работы и температуру. По этим счётчикам видно, что диск начинает выходить из строя, раньше, чем пропадут данные.</p><p>В виртуальной машине диск виртуальный, и SMART обычно недоступен. Команда имеет смысл на физическом сервере.</p>",
+   "examples": [
+    {
+     "line": "sudo smartctl -H /dev/sda",
+     "d": "Короткий итог, PASSED или FAILED.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "smartctl",
+       "k": "cmd",
+       "d": "Программа чтения SMART."
+      },
+      {
+       "t": "-H",
+       "k": "opt",
+       "d": "--health, общий итог самодиагностики. FAILED значит, что диск уже отказал или ждёт отказа в ближайшие 24 часа."
+      },
+      {
+       "t": "/dev/sda",
+       "k": "path",
+       "d": "Диск."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo smartctl -a /dev/sda",
+     "d": "Вся информация SMART, модель, итог, таблица атрибутов и журнал ошибок.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "smartctl",
+       "k": "cmd",
+       "d": "Программа чтения SMART."
+      },
+      {
+       "t": "-a",
+       "k": "opt",
+       "d": "--all, вся информация SMART о диске."
+      },
+      {
+       "t": "/dev/sda",
+       "k": "path",
+       "d": "Диск."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo smartctl -t short /dev/sda",
+     "d": "Запустить короткий самотест, он идёт внутри диска несколько минут.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "smartctl",
+       "k": "cmd",
+       "d": "Программа чтения SMART."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "--test, запустить самотест диска."
+      },
+      {
+       "t": "short",
+       "k": "val",
+       "d": "Короткий тест. Результат потом виден в -a, в журнале самотестов."
+      },
+      {
+       "t": "/dev/sda",
+       "k": "path",
+       "d": "Диск."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Считать PASSED в <code>-H</code> гарантией. Это общий итог, диск может проходить его с растущим числом переназначенных секторов. Смотрите таблицу атрибутов в <code>-a</code>, например Reallocated_Sector_Ct.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/smartctl.8.html"
+   ]
+  },
+  {
+   "slug": "sync",
+   "cmd": "sync",
+   "text": "sync: записать данные из кэша на диск",
+   "summary": "<p><code>sync</code> записывает на диск данные, которые ядро держит в памяти. Запись обычно идёт с задержкой, и после <code>cp</code> часть данных ещё может быть только в кэше. sync завершается, когда всё записано.</p><p>Он нужен перед тем, как вынуть флешку, перед снимком виртуальной машины, в скриптах после записи важного файла. <code>umount</code> сам записывает данные своей файловой системы.</p>",
+   "examples": [
+    {
+     "line": "sync",
+     "d": "Записать на диск все данные из кэша.",
+     "parts": [
+      {
+       "t": "sync",
+       "k": "cmd",
+       "d": "Программа сброса кэша записи."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "cp backup.tar.gz /media/usb/ && sync",
+     "d": "Скопировать архив на флешку и дождаться, пока он реально запишется.",
+     "parts": [
+      {
+       "t": "cp",
+       "k": "cmd",
+       "d": "Копирование."
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Что копировать."
+      },
+      {
+       "t": "/media/usb/",
+       "k": "path",
+       "d": "Каталог, куда смонтирована флешка."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Запустить sync, только если cp завершился успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sync",
+       "k": "cmd",
+       "d": "Записать кэш на диск."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sync -f /media/usb",
+     "d": "Записать данные только той файловой системы, где лежит путь.",
+     "parts": [
+      {
+       "t": "sync",
+       "k": "cmd",
+       "d": "Программа сброса кэша записи."
+      },
+      {
+       "t": "-f",
+       "k": "opt",
+       "d": "--file-system, сбросить файловые системы, на которых лежат указанные файлы."
+      },
+      {
+       "t": "/media/usb",
+       "k": "path",
+       "d": "Путь на нужной файловой системе."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Вынимать носитель сразу после того, как <code>cp</code> вернул управление. Данные могут быть ещё в кэше. Выполните <code>sync</code> или отмонтируйте носитель.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/sync.1.html"
    ]
   }
  ]

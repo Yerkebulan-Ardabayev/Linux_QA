@@ -135,6 +135,7 @@
    "cmd": "* * * * *",
    "text": "Строка cron: пять полей времени и команда",
    "summary": "<p>Строка в crontab состоит из пяти полей времени и команды. Поля по порядку, минута (0-59), час (0-23), день месяца (1-31), месяц (1-12), день недели (0-7, где 0 и 7 это воскресенье). Команда запускается, когда совпали минута, час, месяц и день. Если заданы оба поля дня (ни в одном нет <code>*</code>), хватает совпадения любого из них. Если одно из полей начинается с <code>*</code> (в том числе <code>*/2</code>), должны совпасть оба поля. Для одиночной <code>*</code> это значит, что день проверяется по второму полю.</p><p>В поле допустимы <code>*</code> (любое значение), диапазон <code>1-5</code>, список <code>1,15</code> и шаг <code>*/5</code>. Для месяца и дня недели можно писать первые три буквы английского названия, например <code>mon</code>. Время считается по часовому поясу сервера.</p>",
+   "diagram": " ┌───────────── минута          0-59\n │ ┌─────────── час             0-23\n │ │ ┌───────── день месяца     1-31\n │ │ │ ┌─────── месяц           1-12 или jan-dec\n │ │ │ │ ┌───── день недели     0-7 или sun-sat, 0 и 7 воскресенье\n │ │ │ │ │\n * * * * * команда\n\n В каждом поле: * любое, 1-5 диапазон, 1,15 список, */5 шаг.",
    "examples": [
     {
      "line": "*/5 * * * * /opt/scripts/check.sh",
@@ -1173,6 +1174,242 @@
     "https://git.launchpad.net/ubuntu/+source/cron/tree/crontab.5?h=applied/ubuntu/noble",
     "https://git.launchpad.net/ubuntu/+source/cron/tree/cron.8?h=applied/ubuntu/noble",
     "https://www.gnu.org/software/bash/manual/bash.html#Redirections"
+   ]
+  },
+  {
+   "slug": "logrotate",
+   "cmd": "logrotate",
+   "text": "logrotate: ротация и сжатие журналов",
+   "summary": "<p><code>logrotate</code> не даёт журналам расти бесконечно. По расписанию он переименовывает текущий лог в <code>app.log.1</code>, старые копии сдвигает дальше, сжимает их и удаляет самые старые. Сам logrotate раз в сутки запускает таймер systemd <code>logrotate.timer</code>.</p><p>Правила для своих логов кладут отдельным файлом в <code>/etc/logrotate.d/</code>. Перед включением конфиг проверяют с <code>-d</code>, это пробный прогон без изменений. С <code>-f</code> ротация выполняется сразу, без ожидания срока. Дату последней ротации каждого файла logrotate хранит в state-файле <code>/var/lib/logrotate/status</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo logrotate -d /etc/logrotate.d/myapp",
+     "d": "Проверить конфиг пробным прогоном. В контейнере конфиг из разбора ниже и лог на 50 строк созданы заранее. Лог встречается впервые, logrotate берёт текущее время за дату последней ротации и отвечает, что ротация пока не нужна.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "logrotate",
+       "k": "cmd",
+       "d": "Программа ротации журналов."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "--debug, только напечатать, что было бы сделано. Логи и state-файл не меняются."
+      },
+      {
+       "t": "/etc/logrotate.d/myapp",
+       "k": "path",
+       "d": "Конфиг, который проверяем."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p /var/log/myapp; seq 1 50 | sed 's/^/line /' > /var/log/myapp/app.log\ncat > /etc/logrotate.d/myapp <<'EOF'\n/var/log/myapp/*.log {\n    daily\n    rotate 7\n    compress\n    delaycompress\n    missingok\n    notifempty\n    copytruncate\n}\nEOF",
+     "output": "warning: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.\n\nreading config file /etc/logrotate.d/myapp\nReading state from file: /var/lib/logrotate/status\nstate file /var/lib/logrotate/status does not exist\nAllocating hash table for state file, size 64 entries\n\nHandling 1 logs\n\nrotating pattern: /var/log/myapp/*.log  after 1 days (7 rotations)\nempty log files are not rotated, old logs are removed\nconsidering log /var/log/myapp/app.log\nCreating new state\n  Now: 2026-10-12 22:30\n  Last rotated at 2026-10-12 22:00\n  log does not need rotating (log has already been rotated)"
+    },
+    {
+     "line": "logrotate -v -f -s state myapp.conf && ls log",
+     "d": "Принудительно повернуть логи по своему конфигу и state-файлу и показать, что получилось. Первая ротация в контейнере уже сделана, поэтому появится сжатая копия.",
+     "parts": [
+      {
+       "t": "logrotate",
+       "k": "cmd",
+       "d": "Программа ротации журналов."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "--verbose, печатать каждое действие."
+      },
+      {
+       "t": "-f",
+       "k": "opt",
+       "d": "--force, ротировать сейчас, даже если срок не наступил."
+      },
+      {
+       "t": "-s",
+       "k": "opt",
+       "d": "--state, свой state-файл вместо /var/lib/logrotate/status."
+      },
+      {
+       "t": "state",
+       "k": "path",
+       "d": "State-файл в текущем каталоге."
+      },
+      {
+       "t": "myapp.conf",
+       "k": "path",
+       "d": "Свой конфиг, те же правила для /lab/log/*.log и rotate 3."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Показать каталог, только если logrotate завершился успешно.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Список файлов."
+      },
+      {
+       "t": "log",
+       "k": "path",
+       "d": "Каталог с логами, app.log, app.log.1 и app.log.2.gz."
+      }
+     ],
+     "run": "container",
+     "setup": "mkdir -p log; seq 1 50 | sed 's/^/line /' > log/app.log\ncat > myapp.conf <<'EOF'\n/lab/log/*.log {\n    daily\n    rotate 3\n    compress\n    delaycompress\n    missingok\n    notifempty\n    copytruncate\n}\nEOF\nlogrotate -f -s state myapp.conf; seq 51 80 | sed 's/^/line /' >> log/app.log",
+     "output": "reading config file myapp.conf\nacquired lock on state file stateReading state from file: state\nAllocating hash table for state file, size 64 entries\nCreating new state\n\nHandling 1 logs\n\nrotating pattern: /lab/log/*.log  forced from command line (3 rotations)\nempty log files are not rotated, old logs are removed\nconsidering log /lab/log/app.log\n  Now: 2026-10-12 22:30\n  Last rotated at 2026-10-12 22:30\n  log needs rotating\nrotating log /lab/log/app.log, log->rotateCount is 3\ndateext suffix '-20261012'\nglob pattern '-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'\ncompressing log with: /bin/gzip\nrenaming /lab/log/app.log.3.gz to /lab/log/app.log.4.gz (rotatecount 3, logstart 1, i 3), \nold log /lab/log/app.log.3.gz does not exist\nrenaming /lab/log/app.log.2.gz to /lab/log/app.log.3.gz (rotatecount 3, logstart 1, i 2), \nold log /lab/log/app.log.2.gz does not exist\nrenaming /lab/log/app.log.1.gz to /lab/log/app.log.2.gz (rotatecount 3, logstart 1, i 1), \nlog /lab/log/app.log.4.gz doesn't exist -- won't try to dispose of it\ncopying /lab/log/app.log to /lab/log/app.log.1\ntruncating /lab/log/app.log\napp.log\napp.log.1\napp.log.2.gz"
+    }
+   ],
+   "script": {
+    "name": "myapp",
+    "d": "Файл /etc/logrotate.d/myapp. Каждый день переименовывать логи приложения, хранить 7 старых копий, сжимать их и не останавливать приложение.",
+    "lines": [
+     {
+      "line": "/var/log/myapp/*.log {",
+      "d": "Какие файлы ротировать, дальше в фигурных скобках правила для них.",
+      "parts": [
+       {
+        "t": "/var/log/myapp/*.log",
+        "k": "path",
+        "d": "Шаблон имён логов.",
+        "sub": [
+         {
+          "t": "/var/log/myapp/",
+          "k": "path",
+          "d": "Каталог логов приложения."
+         },
+         {
+          "t": "*",
+          "k": "op",
+          "d": "Любое имя. Шаблон раскрывает сам logrotate, а не оболочка.",
+          "ref": "sym-glob-star"
+         },
+         {
+          "t": ".log",
+          "k": "path",
+          "d": "Окончание имени."
+         }
+        ]
+       },
+       {
+        "t": "{",
+        "k": "op",
+        "d": "Начало блока правил для этих файлов."
+       }
+      ]
+     },
+     {
+      "line": "    daily",
+      "d": "Ротация раз в сутки.",
+      "parts": [
+       {
+        "t": "daily",
+        "k": "kw",
+        "d": "Ротировать раз в сутки. Другие варианты weekly, monthly или size с размером."
+       }
+      ]
+     },
+     {
+      "line": "    rotate 7",
+      "d": "Хранить 7 старых копий.",
+      "parts": [
+       {
+        "t": "rotate",
+        "k": "kw",
+        "d": "Сколько раз файл ротируется, прежде чем самая старая копия удаляется."
+       },
+       {
+        "t": "7",
+        "k": "num",
+        "d": "Семь копий, от app.log.1 до app.log.7.gz."
+       }
+      ]
+     },
+     {
+      "line": "    compress",
+      "d": "Сжимать старые копии.",
+      "parts": [
+       {
+        "t": "compress",
+        "k": "kw",
+        "d": "Сжимать старые копии через gzip, получаются файлы .gz."
+       }
+      ]
+     },
+     {
+      "line": "    delaycompress",
+      "d": "Самую свежую копию не сжимать.",
+      "parts": [
+       {
+        "t": "delaycompress",
+        "k": "kw",
+        "d": "Отложить сжатие app.log.1 до следующей ротации. Работает только вместе с compress."
+       }
+      ]
+     },
+     {
+      "line": "    missingok",
+      "d": "Нет логов, не ошибка.",
+      "parts": [
+       {
+        "t": "missingok",
+        "k": "kw",
+        "d": "Если файла нет, перейти к следующему без сообщения об ошибке."
+       }
+      ]
+     },
+     {
+      "line": "    notifempty",
+      "d": "Пустой лог не трогать.",
+      "parts": [
+       {
+        "t": "notifempty",
+        "k": "kw",
+        "d": "Не ротировать пустой лог."
+       }
+      ]
+     },
+     {
+      "line": "    copytruncate",
+      "d": "Копировать и обрезать вместо переименования.",
+      "parts": [
+       {
+        "t": "copytruncate",
+        "k": "kw",
+        "d": "Скопировать лог в app.log.1 и обрезать оригинал до нуля. Приложение продолжает писать в тот же открытый файл. Строки, записанные между копированием и обрезкой, могут потеряться."
+       }
+      ]
+     },
+     {
+      "line": "}",
+      "d": "Конец блока.",
+      "parts": [
+       {
+        "t": "}",
+        "k": "op",
+        "d": "Конец блока правил."
+       }
+      ]
+     }
+    ],
+    "run": "system",
+    "setup": "",
+    "args": "",
+    "output": ""
+   },
+   "mistakes": [
+    "<p>Ротировать лог программы, которая держит файл открытым, без <code>copytruncate</code> и без <code>postrotate</code>. Файл переименован, а программа продолжает писать в <code>app.log.1</code>, новый <code>app.log</code> остаётся пустым.</p>",
+    "<p>Запустить logrotate вручную второй раз за день и удивиться, что ничего не произошло. По state-файлу видно, что сегодня ротация уже была. Для проверки используйте <code>-f</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/logrotate.8.html"
    ]
   }
  ]

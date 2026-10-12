@@ -2565,6 +2565,589 @@
    "sources": [
     "https://www.freedesktop.org/software/systemd/man/latest/timedatectl.html"
    ]
+  },
+  {
+   "slug": "loginctl",
+   "cmd": "loginctl",
+   "text": "loginctl: сессии пользователей и linger",
+   "summary": "<p><code>loginctl</code> управляет systemd-logind, службой, которая учитывает входы пользователей. Каждый вход по SSH или с консоли становится сессией со своим номером. По списку сессий видно, кто сейчас работает на сервере и с какого терминала.</p><p>Linger нужен для пользовательских служб. Обычно менеджер служб пользователя запускается при входе и останавливается после выхода. С включённым linger он запускается при загрузке и не останавливается после выхода, поэтому службы <code>systemctl --user</code> работают постоянно.</p>",
+   "examples": [
+    {
+     "line": "loginctl list-sessions",
+     "d": "Показать текущие сессии, их номер, пользователя и терминал.",
+     "parts": [
+      {
+       "t": "loginctl",
+       "k": "cmd",
+       "d": "Программа управления systemd-logind."
+      },
+      {
+       "t": "list-sessions",
+       "k": "sub",
+       "d": "Список текущих сессий."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo loginctl enable-linger devops",
+     "d": "Включить linger пользователю devops, его службы будут работать без входа в систему.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "loginctl",
+       "k": "cmd",
+       "d": "Программа управления systemd-logind."
+      },
+      {
+       "t": "enable-linger",
+       "k": "sub",
+       "d": "Запускать менеджер служб пользователя при загрузке и не останавливать после выхода. Обратная команда disable-linger."
+      },
+      {
+       "t": "devops",
+       "k": "arg",
+       "d": "Имя пользователя. Без имени linger включается тому, кто вызвал команду."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "loginctl show-user devops -p Linger",
+     "d": "Проверить, включён ли linger, ответ Linger=yes или Linger=no.",
+     "parts": [
+      {
+       "t": "loginctl",
+       "k": "cmd",
+       "d": "Программа управления systemd-logind."
+      },
+      {
+       "t": "show-user",
+       "k": "sub",
+       "d": "Свойства пользователя в виде ИМЯ=значение."
+      },
+      {
+       "t": "devops",
+       "k": "arg",
+       "d": "Пользователь."
+      },
+      {
+       "t": "-p",
+       "k": "opt",
+       "d": "--property, показать только указанное свойство."
+      },
+      {
+       "t": "Linger",
+       "k": "val",
+       "d": "Свойство, включён ли linger."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Включают службу через <code>systemctl --user enable</code>, выходят с сервера, и служба останавливается. Без <code>enable-linger</code> менеджер служб пользователя работает, только пока пользователь вошёл в систему.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/loginctl.html"
+   ]
+  },
+  {
+   "slug": "systemd-cgls-cgtop",
+   "cmd": "systemd-cgls, systemd-cgtop",
+   "text": "systemd-cgls и systemd-cgtop: процессы и нагрузка по службам",
+   "summary": "<p>systemd раскладывает процессы по контрольным группам (cgroup), у каждой службы своя группа. Ядро ведёт учёт процессора, памяти и ввода-вывода по группе целиком. <code>systemd-cgls</code> показывает дерево групп с процессами внутри, <code>systemd-cgtop</code> показывает, какая группа сколько потребляет, как top, только по службам.</p><p>Верхние ветки дерева это срезы (slice). <code>system.slice</code> содержит системные службы, <code>user.slice</code> сессии пользователей.</p>",
+   "examples": [
+    {
+     "line": "systemd-cgls -u ssh.service",
+     "d": "Показать процессы службы ssh в её контрольной группе.",
+     "parts": [
+      {
+       "t": "systemd-cgls",
+       "k": "cmd",
+       "d": "Программа вывода дерева контрольных групп."
+      },
+      {
+       "t": "-u",
+       "k": "opt",
+       "d": "--unit, показать поддерево только указанных юнитов."
+      },
+      {
+       "t": "ssh.service",
+       "k": "arg",
+       "d": "Служба SSH-сервера."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemd-cgtop -m",
+     "d": "Показать группы, отсортированные по занятой памяти, с обновлением на экране.",
+     "parts": [
+      {
+       "t": "systemd-cgtop",
+       "k": "cmd",
+       "d": "Программа вывода нагрузки по контрольным группам."
+      },
+      {
+       "t": "-m",
+       "k": "opt",
+       "d": "--order=memory, сортировать по памяти. Сортировка по CPU -c, по вводу-выводу -i."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemd-cgtop -b -n 1",
+     "d": "Один снимок нагрузки текстом, без интерактивного режима. Подходит для отчёта или скрипта.",
+     "parts": [
+      {
+       "t": "systemd-cgtop",
+       "k": "cmd",
+       "d": "Программа вывода нагрузки по контрольным группам."
+      },
+      {
+       "t": "-b",
+       "k": "opt",
+       "d": "--batch, пакетный режим, клавиши не читаются, вывод идёт текстом."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "--iterations, сколько раз обновить и выйти."
+      },
+      {
+       "t": "1",
+       "k": "num",
+       "d": "Один раз."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Искать процесс одной службы по всему дереву <code>systemd-cgls</code>. Быстрее <code>systemctl status имя</code>, в нём есть ветка CGroup с процессами этой службы.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd-cgls.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd-cgtop.html"
+   ]
+  },
+  {
+   "slug": "systemd-run",
+   "cmd": "systemd-run",
+   "text": "systemd-run: запустить команду как временный юнит",
+   "summary": "<p><code>systemd-run</code> запускает команду как временный юнит systemd. Юнит существует, пока работает команда, и к нему применяются те же свойства, что пишут в unit-файле, например лимит памяти. Так можно ограничить тяжёлую команду или отложить её запуск без своего unit-файла.</p><p>По умолчанию создаётся служба <code>.service</code>, команда работает в фоне, вывод уходит в журнал. С <code>--scope</code> создаётся юнит <code>.scope</code>, команда выполняется прямо в вашем терминале, а systemd только учитывает и ограничивает её.</p>",
+   "examples": [
+    {
+     "line": "sudo systemd-run --scope -p MemoryMax=200M ./import.sh",
+     "d": "Запустить скрипт в терминале с лимитом памяти 200 МиБ. При превышении процессы этого юнита завершит OOM killer.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "systemd-run",
+       "k": "cmd",
+       "d": "Программа запуска временных юнитов."
+      },
+      {
+       "t": "--scope",
+       "k": "opt",
+       "d": "Создать юнит .scope, команда выполняется синхронно в текущем терминале."
+      },
+      {
+       "t": "-p",
+       "k": "opt",
+       "d": "--property, задать свойство юнита в том же виде, что в systemctl set-property."
+      },
+      {
+       "t": "MemoryMax=200M",
+       "k": "val",
+       "d": "Свойство и его значение.",
+       "sub": [
+        {
+         "t": "MemoryMax",
+         "k": "kw",
+         "d": "Жёсткий предел памяти для всех процессов юнита, описан в systemd.resource-control."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Разделитель имени и значения."
+        },
+        {
+         "t": "200M",
+         "k": "val",
+         "d": "Значение.",
+         "sub": [
+          {
+           "t": "200",
+           "k": "num",
+           "d": "Число."
+          },
+          {
+           "t": "M",
+           "k": "val",
+           "d": "Мегабайты по основанию 1024."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "t": "./import.sh",
+       "k": "path",
+       "d": "Команда, которую нужно ограничить.",
+       "sub": [
+        {
+         "t": "./",
+         "k": "op",
+         "d": "Текущий каталог.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "import.sh",
+         "k": "path",
+         "d": "Скрипт."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo systemd-run --on-active=30s /usr/bin/touch /tmp/done",
+     "d": "Создать файл через 30 секунд. systemd создаёт временный таймер и службу.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "systemd-run",
+       "k": "cmd",
+       "d": "Программа запуска временных юнитов."
+      },
+      {
+       "t": "--on-active=30s",
+       "k": "opt",
+       "d": "Запустить команду через заданное время.",
+       "sub": [
+        {
+         "t": "--on-active",
+         "k": "opt",
+         "d": "Таймер относительно момента запуска, то же, что OnActiveSec= в таймере. С --scope не сочетается."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции."
+        },
+        {
+         "t": "30s",
+         "k": "val",
+         "d": "30 секунд."
+        }
+       ]
+      },
+      {
+       "t": "/usr/bin/touch",
+       "k": "path",
+       "d": "Команда, полный путь."
+      },
+      {
+       "t": "/tmp/done",
+       "k": "path",
+       "d": "Аргумент команды, файл, который появится."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ждать вывод команды в терминале без <code>--scope</code>. Временная служба работает в фоне, systemd-run печатает её имя (Running as unit), а вывод смотрят через <code>journalctl -u имя</code>.</p>",
+    "<p>Сочетать <code>--on-active</code> с <code>--scope</code>. Таймеры работают только со службой, с --scope и --pty их не совместить.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd-run.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html"
+   ]
+  },
+  {
+   "slug": "systemctl-user",
+   "cmd": "systemctl --user",
+   "text": "systemctl --user: пользовательские службы без sudo",
+   "summary": "<p>Кроме системного менеджера служб у каждого пользователя может работать свой. Он запускает службы от имени пользователя, без sudo. Unit-файлы таких служб лежат в <code>~/.config/systemd/user/</code>, а управляют ими теми же командами systemctl с опцией <code>--user</code>.</p><p>Менеджер пользователя работает, пока пользователь вошёл в систему. Чтобы служба работала после выхода и запускалась при загрузке, включите linger командой <code>loginctl enable-linger</code>.</p>",
+   "examples": [
+    {
+     "line": "systemctl --user daemon-reload",
+     "d": "Перечитать unit-файлы из ~/.config/systemd/user после создания или правки.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Программа управления systemd."
+      },
+      {
+       "t": "--user",
+       "k": "opt",
+       "d": "Обращаться к менеджеру служб текущего пользователя, а не к системному."
+      },
+      {
+       "t": "daemon-reload",
+       "k": "sub",
+       "d": "Перечитать unit-файлы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl --user enable --now notes.service",
+     "d": "Включить автозапуск своей службы и сразу запустить её.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Программа управления systemd."
+      },
+      {
+       "t": "--user",
+       "k": "opt",
+       "d": "Менеджер служб текущего пользователя."
+      },
+      {
+       "t": "enable",
+       "k": "sub",
+       "d": "Включить автозапуск."
+      },
+      {
+       "t": "--now",
+       "k": "opt",
+       "d": "Вместе с enable сразу запустить службу."
+      },
+      {
+       "t": "notes.service",
+       "k": "arg",
+       "d": "Служба из ~/.config/systemd/user/notes.service."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "systemctl --user status notes.service",
+     "d": "Посмотреть состояние своей службы.",
+     "parts": [
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Программа управления systemd."
+      },
+      {
+       "t": "--user",
+       "k": "opt",
+       "d": "Менеджер служб текущего пользователя."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Состояние и последние строки журнала."
+      },
+      {
+       "t": "notes.service",
+       "k": "arg",
+       "d": "Служба."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Запускать <code>sudo systemctl --user</code>. Команда обратится к менеджеру пользователя root, а ваша служба там не видна. Пользовательские службы запускают без sudo.</p>",
+    "<p>Писать в пользовательском unit <code>WantedBy=multi-user.target</code>. У менеджера пользователя такой цели нет, для автозапуска используйте <code>WantedBy=default.target</code>.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/loginctl.html"
+   ]
+  },
+  {
+   "slug": "shutdown-reboot",
+   "cmd": "shutdown, reboot, poweroff",
+   "text": "shutdown, reboot, poweroff: выключить и перезагрузить машину",
+   "summary": "<p><code>shutdown</code> выключает или перезагружает машину сразу или в заданное время. Время пишут как <code>now</code>, как <code>+минуты</code> от текущего момента или как <code>чч:мм</code>. Без времени подразумевается <code>+1</code>. За 5 минут до срока создаётся файл <code>/run/nologin</code>, и новые входы запрещаются. Запланированное выключение отменяет <code>shutdown -c</code>.</p><p><code>reboot</code> и <code>poweroff</code> выполняют действие сразу. В обоих случаях systemd останавливает службы по порядку, а не обрывает их.</p>",
+   "examples": [
+    {
+     "line": "sudo shutdown -r +5 \"Обновление ядра\"",
+     "d": "Перезагрузить сервер через 5 минут и предупредить всех вошедших пользователей.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "shutdown",
+       "k": "cmd",
+       "d": "Программа выключения и перезагрузки."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "--reboot, перезагрузить, а не выключить."
+      },
+      {
+       "t": "+5",
+       "k": "val",
+       "d": "Когда выполнить.",
+       "sub": [
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Отсчёт от текущего момента."
+        },
+        {
+         "t": "5",
+         "k": "num",
+         "d": "Минуты."
+        }
+       ]
+      },
+      {
+       "t": "\"Обновление ядра\"",
+       "k": "str",
+       "d": "Сообщение, его получат все вошедшие пользователи. Сообщение можно указать, только если задано время.",
+       "sub": [
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Начало строки, пробел внутри не делит её на два аргумента.",
+         "ref": "sym-double-quotes"
+        },
+        {
+         "t": "Обновление ядра",
+         "k": "str",
+         "d": "Текст сообщения."
+        },
+        {
+         "t": "\"",
+         "k": "op",
+         "d": "Конец строки.",
+         "ref": "sym-double-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo shutdown -c",
+     "d": "Отменить запланированное выключение или перезагрузку.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "shutdown",
+       "k": "cmd",
+       "d": "Программа выключения и перезагрузки."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Отменить отложенное выключение, заданное временем, а не now."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo reboot",
+     "d": "Перезагрузить машину сейчас.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "reboot",
+       "k": "cmd",
+       "d": "Перезагрузка без задержки."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo poweroff",
+     "d": "Выключить машину сейчас.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "poweroff",
+       "k": "cmd",
+       "d": "Выключение питания без задержки."
+      }
+     ],
+     "run": "danger",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Выключить удалённый сервер вместо перезагрузки, <code>shutdown -h now</code> или <code>poweroff</code>. По SSH его потом не включить, нужен доступ к консоли или панели хостинга. Для перезагрузки пишите <code>-r</code>.</p>",
+    "<p>Набрать <code>shutdown</code> без аргументов и ждать немедленного выключения. Без времени подразумевается +1, машина выключится через минуту.</p>"
+   ],
+   "sources": [
+    "https://www.freedesktop.org/software/systemd/man/latest/shutdown.html",
+    "https://www.freedesktop.org/software/systemd/man/latest/poweroff.html"
+   ]
   }
  ]
 }

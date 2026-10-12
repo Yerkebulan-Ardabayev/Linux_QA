@@ -6,9 +6,9 @@
 
 ## Как устроен проект
 
-- `content/NN-*.json`, карточки команд, один файл на раздел. Формат и правила в `content/SCHEMA.md`. Правится только здесь.
+- `content/NN-*.json`, карточки команд, один файл на раздел. Формат и правила в `content/SCHEMA.md`. Правится только здесь. У карточки может быть схема из псевдографики, поле `diagram`.
 - `scripts/build-corpus.mjs`, проверяет контент и собирает `Linux_Commands.html` (в корне и в `Linux_Commands/public/`). Главная проверка, части разбора покрывают строку команды целиком, без пропусков.
-- `scripts/run-examples.mjs`, запускает каждый пример с `run: "container"` в свежем контейнере `linuxqa-lab` и записывает вывод в поле `output`. Отчёт `_reports/run.md`.
+- `scripts/run-examples.mjs`, запускает каждый пример с `run: "container"` в свежем контейнере `linuxqa-lab` и записывает вывод в поле `output`. Отчёт `_reports/run.md`. С `--slugs a,b` запускает только перечисленные карточки, вывод остальных не трогает.
 - `scripts/check-links.mjs`, проверяет, что ссылки на источники открываются и якоря вида `#Pipelines` есть на странице. Отчёт `_reports/links.md`.
 - `lab/Dockerfile`, образ учебного стенда, Ubuntu 24.04 с нужными утилитами.
 - `Linux_Commands/`, сайт на React и Vite.
