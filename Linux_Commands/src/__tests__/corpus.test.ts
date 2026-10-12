@@ -53,8 +53,8 @@ function walk(parts: Part[] | undefined, fn: (p: Part) => void) {
 }
 
 describe('целостность корпуса', () => {
-  it('карточки есть и разложены по 14 разделам', () => {
-    expect(data.categories.length).toBe(14);
+  it('карточки есть и разложены по 18 разделам', () => {
+    expect(data.categories.length).toBe(18);
     expect(data.cards.length).toBeGreaterThanOrEqual(250);
   });
 
@@ -140,6 +140,13 @@ describe('источники и стиль', () => {
       return false;
     });
     expect(dups.map((c) => c.slug)).toEqual([]);
+  });
+
+  it('схемы, если есть, непустые и не шире 72 символов', () => {
+    const bad = data.cards.filter(
+      (c) => c.diagram !== undefined && (!c.diagram.trim() || c.diagram.split('\n').some((l) => l.length > 72)),
+    );
+    expect(bad.map((c) => c.slug)).toEqual([]);
   });
 
   it('нет заглушек', () => {
