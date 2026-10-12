@@ -1,0 +1,2575 @@
+{
+ "category": "Безопасность и защита сервера",
+ "cards": [
+  {
+   "slug": "sshd-test-config",
+   "cmd": "sshd -t",
+   "text": "sshd -t и sshd -T: проверить настройки SSH до перезапуска",
+   "summary": "<p><code>sshd -t</code> читает <code>/etc/ssh/sshd_config</code> вместе со всеми подключёнными файлами, проверяет синтаксис и ключи сервера и завершается. Если всё в порядке, команда ничего не печатает и возвращает код 0. <code>sshd -T</code> делает ту же проверку и печатает итоговое значение каждой настройки, имена строчными буквами.</p><p>Безопасный порядок правки на Ubuntu такой. Положите свои строки отдельным файлом в <code>/etc/ssh/sshd_config.d/</code>, проверьте <code>sshd -t</code>, посмотрите итог в <code>sshd -T</code> и только потом перезапустите службу <code>ssh</code>, не закрывая текущую сессию. Сами настройки входа разобраны в карточке про sshd_config.</p>",
+   "examples": [
+    {
+     "line": "printf 'PasswordAuthentication no\\nPermitRootLogin no\\n' | sudo tee /etc/ssh/sshd_config.d/05-hardening.conf",
+     "d": "Записать две настройки в отдельный файл. Основной sshd_config остаётся нетронутым.",
+     "parts": [
+      {
+       "t": "printf",
+       "k": "cmd",
+       "d": "Напечатать строку, \\n в ней превращается в перевод строки."
+      },
+      {
+       "t": "'PasswordAuthentication no\\nPermitRootLogin no\\n'",
+       "k": "str",
+       "d": "Содержимое будущего файла, две строки.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открывающая кавычка, оболочка не трогает текст внутри.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "PasswordAuthentication",
+         "k": "opt",
+         "d": "Разрешена ли проверка по паролю."
+        },
+        {
+         "t": "no",
+         "k": "val",
+         "d": "Пароль не принимается, вход только по ключу."
+        },
+        {
+         "t": "\\n",
+         "k": "op",
+         "d": "Для printf это перевод строки."
+        },
+        {
+         "t": "PermitRootLogin",
+         "k": "opt",
+         "d": "Может ли root войти по SSH."
+        },
+        {
+         "t": "no",
+         "k": "val",
+         "d": "root не входит никаким способом."
+        },
+        {
+         "t": "\\n",
+         "k": "op",
+         "d": "Перевод строки в конце файла."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать текст на вход tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Писать в /etc/ssh может только root. Через tee под sudo работает только запись, printf идёт от вашего пользователя."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать вход в файл и повторить его на экран."
+      },
+      {
+       "t": "/etc/ssh/sshd_config.d/05-hardening.conf",
+       "k": "path",
+       "d": "Файл подключается строкой Include из sshd_config. Нужно окончание .conf, номер 05 ставит файл раньше остальных."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo sshd -t && sudo systemctl restart ssh",
+     "d": "Проверить настройки и перезапустить сервер, только если проверка прошла.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "sshd читает ключи сервера, доступные только root."
+      },
+      {
+       "t": "sshd",
+       "k": "cmd",
+       "d": "Сервер SSH."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "Test mode, только проверить файл настроек и ключи, сервер не запускать."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Перезапуск выполнится, только если sshd -t вернул 0.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Управлять службами может только root."
+      },
+      {
+       "t": "systemctl",
+       "k": "cmd",
+       "d": "Управление службами systemd."
+      },
+      {
+       "t": "restart",
+       "k": "sub",
+       "d": "Остановить и снова запустить службу."
+      },
+      {
+       "t": "ssh",
+       "k": "arg",
+       "d": "Служба OpenSSH в Ubuntu называется ssh, а не sshd."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo sshd -T -C user=root,host=office.example.com,addr=203.0.113.5 | grep -E '^(permitrootlogin|passwordauthentication)'",
+     "d": "Показать, какие значения получит конкретное подключение, с учётом блоков Match.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "sshd читает файлы, доступные только root."
+      },
+      {
+       "t": "sshd",
+       "k": "cmd",
+       "d": "Сервер SSH."
+      },
+      {
+       "t": "-T",
+       "k": "opt",
+       "d": "Extended test mode, проверить настройки и напечатать итоговые значения всех параметров."
+      },
+      {
+       "t": "-C",
+       "k": "opt",
+       "d": "Параметры воображаемого подключения. Блоки Match, которые к нему подходят, применяются перед печатью."
+      },
+      {
+       "t": "user=root,host=office.example.com,addr=203.0.113.5",
+       "k": "val",
+       "d": "Пары ключ=значение через запятую.",
+       "sub": [
+        {
+         "t": "user=root",
+         "k": "val",
+         "d": "Пользователь, под которым входят."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель пар."
+        },
+        {
+         "t": "host=office.example.com",
+         "k": "val",
+         "d": "Имя узла клиента."
+        },
+        {
+         "t": ",",
+         "k": "op",
+         "d": "Разделитель пар."
+        },
+        {
+         "t": "addr=203.0.113.5",
+         "k": "val",
+         "d": "Адрес клиента."
+        }
+       ]
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать список настроек в grep.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки по шаблону."
+      },
+      {
+       "t": "-E",
+       "k": "opt",
+       "d": "Расширенные регулярные выражения, нужны для ( ) и |."
+      },
+      {
+       "t": "'^(permitrootlogin|passwordauthentication)'",
+       "k": "pat",
+       "d": "Строка начинается с одного из двух имён.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открывающая кавычка, | и скобки не достанутся оболочке.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "^",
+         "k": "pat",
+         "d": "Начало строки."
+        },
+        {
+         "t": "(",
+         "k": "pat",
+         "d": "Начало группы вариантов."
+        },
+        {
+         "t": "permitrootlogin",
+         "k": "pat",
+         "d": "Первое имя."
+        },
+        {
+         "t": "|",
+         "k": "pat",
+         "d": "Или."
+        },
+        {
+         "t": "passwordauthentication",
+         "k": "pat",
+         "d": "Второе имя."
+        },
+        {
+         "t": ")",
+         "k": "pat",
+         "d": "Конец группы."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Перезапускают службу без проверки. Если в файле ошибка, sshd не запустится и новые подключения станут невозможны. Связка <code>sshd -t &amp;&amp; systemctl restart ssh</code> защищает от этого.</p>",
+    "<p>Кладут файл без окончания <code>.conf</code>, и он не читается. В Ubuntu строка <code>Include /etc/ssh/sshd_config.d/*.conf</code> подключает только такие файлы.</p>",
+    "<p>Ставят свой файл после чужого. Файлы читаются по алфавиту, а действует первое найденное значение. На облачных образах cloud-init может положить <code>50-cloud-init.conf</code> с <code>PasswordAuthentication yes</code>, поэтому имя своего файла начинайте с меньшего номера и проверяйте итог через <code>sshd -T</code>.</p>"
+   ],
+   "sources": [
+    "https://man.openbsd.org/sshd",
+    "https://man.openbsd.org/sshd_config",
+    "https://documentation.ubuntu.com/server/how-to/security/openssh-server/",
+    "https://raw.githubusercontent.com/canonical/cloud-init/main/cloudinit/ssh_util.py"
+   ]
+  },
+  {
+   "slug": "fail2ban-client",
+   "cmd": "fail2ban-client",
+   "text": "fail2ban-client: кто заблокирован и как снять блокировку",
+   "summary": "<p>fail2ban читает журналы, считает неудачные попытки входа с одного адреса и, когда их больше порога, блокирует адрес через межсетевой экран. В Ubuntu блокировку ставит nftables, а jail <code>sshd</code> включён сразу после установки пакета файлом <code>/etc/fail2ban/jail.d/defaults-debian.conf</code>.</p><p><code>fail2ban-client</code> управляет работающим сервером fail2ban. Через него смотрят состояние, список заблокированных адресов и снимают блокировку вручную, например когда заблокировали своего коллегу.</p>",
+   "examples": [
+    {
+     "line": "sudo fail2ban-client status",
+     "d": "Показать, работает ли сервер и какие jail включены.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Сокет сервера fail2ban доступен только root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент для управления сервером fail2ban."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Общее состояние сервера, число и список jail."
+      }
+     ],
+     "run": "container",
+     "setup": "printf '[sshd]\\nbackend = polling\\nlogpath = /var/log/auth.log\\n' > /etc/fail2ban/jail.d/lab.local; touch /var/log/auth.log; mkdir -p /run/fail2ban; fail2ban-client start; sleep 2",
+     "output": "Status\n|- Number of jail:\t1\n`- Jail list:\tsshd"
+    },
+    {
+     "line": "sudo fail2ban-client status sshd",
+     "d": "Состояние одного jail, сколько попыток неудачно и какие адреса заблокированы.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Сокет сервера доступен только root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент fail2ban."
+      },
+      {
+       "t": "status",
+       "k": "sub",
+       "d": "Состояние."
+      },
+      {
+       "t": "sshd",
+       "k": "arg",
+       "d": "Имя jail. Без него status показывает весь сервер."
+      }
+     ],
+     "run": "container",
+     "setup": "printf '[sshd]\\nbackend = polling\\nlogpath = /var/log/auth.log\\n' > /etc/fail2ban/jail.d/lab.local; touch /var/log/auth.log; mkdir -p /run/fail2ban; fail2ban-client start; sleep 2; fail2ban-client set sshd banip 203.0.113.7",
+     "output": "Status for the jail: sshd\n|- Filter\n|  |- Currently failed:\t0\n|  |- Total failed:\t0\n|  `- File list:\t/var/log/auth.log\n`- Actions\n   |- Currently banned:\t1\n   |- Total banned:\t1\n   `- Banned IP list:\t203.0.113.7"
+    },
+    {
+     "line": "sudo fail2ban-client set sshd unbanip 203.0.113.7",
+     "d": "Снять блокировку с адреса в jail sshd. Команда печатает, сколько адресов разблокировано.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Сокет сервера доступен только root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент fail2ban."
+      },
+      {
+       "t": "set",
+       "k": "sub",
+       "d": "Изменить что-то в работающем jail."
+      },
+      {
+       "t": "sshd",
+       "k": "arg",
+       "d": "Имя jail."
+      },
+      {
+       "t": "unbanip",
+       "k": "sub",
+       "d": "Вручную разблокировать адрес в этом jail."
+      },
+      {
+       "t": "203.0.113.7",
+       "k": "arg",
+       "d": "Адрес, который надо разблокировать. Можно перечислить несколько."
+      }
+     ],
+     "run": "container",
+     "setup": "printf '[sshd]\\nbackend = polling\\nlogpath = /var/log/auth.log\\n' > /etc/fail2ban/jail.d/lab.local; touch /var/log/auth.log; mkdir -p /run/fail2ban; fail2ban-client start; sleep 2; fail2ban-client set sshd banip 203.0.113.7",
+     "output": "1"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Блокируют самих себя, перепутав пароль несколько раз. Добавьте свой постоянный адрес в <code>ignoreip</code> в jail.local, а если уже заблокированы, войдите с другого адреса и выполните <code>unbanip</code>.</p>",
+    "<p>Забывают имя jail. <code>set sshd unbanip</code> снимает блокировку только в sshd, а <code>fail2ban-client unban 203.0.113.7</code> снимает её во всех jail сразу.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/fail2ban-client.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man5/jail.conf.5.html"
+   ]
+  },
+  {
+   "slug": "fail2ban-jail-local",
+   "cmd": "jail.local",
+   "text": "jail.local: свои настройки fail2ban для SSH",
+   "summary": "<p>Настройки fail2ban лежат в <code>/etc/fail2ban/jail.conf</code>, но этот файл принадлежит пакету и меняется при обновлении. Свои значения кладут в <code>/etc/fail2ban/jail.local</code>. Он читается после .conf файлов, и в нём пишут только то, что хотят изменить.</p><p>Секция <code>[DEFAULT]</code> задаёт значения для всех jail, секция с именем jail, например <code>[sshd]</code>, перекрывает их для одного jail. После правки проверьте файл <code>fail2ban-client -t</code> и перечитайте настройки <code>fail2ban-client reload</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo fail2ban-client -t",
+     "d": "Проверить все файлы настроек fail2ban, не трогая работающий сервер.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Файлы в /etc/fail2ban читает root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент fail2ban."
+      },
+      {
+       "t": "-t",
+       "k": "opt",
+       "d": "test, проверить настройки и выйти."
+      }
+     ],
+     "run": "container",
+     "setup": "printf '[DEFAULT]\\nbantime = 1h\\nfindtime = 10m\\nmaxretry = 5\\nignoreip = 127.0.0.1/8 ::1 203.0.113.10\\n\\n[sshd]\\nenabled = true\\nmaxretry = 3\\n' > /etc/fail2ban/jail.local",
+     "output": "2026-10-12 22:41:26,179 fail2ban.configreader   [12]: WARNING 'allowipv6' not defined in 'Definition'. Using default one: 'auto'\nOK: configuration test is successful"
+    },
+    {
+     "line": "sudo fail2ban-client get sshd maxretry",
+     "d": "Узнать значение, с которым работает jail sshd. Так видно, что jail.local применился.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Сокет сервера доступен только root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент fail2ban."
+      },
+      {
+       "t": "get",
+       "k": "sub",
+       "d": "Прочитать параметр работающего jail."
+      },
+      {
+       "t": "sshd",
+       "k": "arg",
+       "d": "Имя jail."
+      },
+      {
+       "t": "maxretry",
+       "k": "arg",
+       "d": "Сколько неудачных попыток за findtime приводят к блокировке."
+      }
+     ],
+     "run": "container",
+     "setup": "printf '[DEFAULT]\\nbantime = 1h\\nfindtime = 10m\\nmaxretry = 5\\nignoreip = 127.0.0.1/8 ::1 203.0.113.10\\n\\n[sshd]\\nenabled = true\\nmaxretry = 3\\n' > /etc/fail2ban/jail.local; printf '[sshd]\\nbackend = polling\\nlogpath = /var/log/auth.log\\n' > /etc/fail2ban/jail.d/lab.local; touch /var/log/auth.log; mkdir -p /run/fail2ban; fail2ban-client start; sleep 2",
+     "output": "3"
+    },
+    {
+     "line": "sudo fail2ban-client reload",
+     "d": "Перечитать настройки без перезапуска сервера.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Сокет сервера доступен только root."
+      },
+      {
+       "t": "fail2ban-client",
+       "k": "cmd",
+       "d": "Клиент fail2ban."
+      },
+      {
+       "t": "reload",
+       "k": "sub",
+       "d": "Перечитать настройки всех jail, сервер продолжает работать."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": {
+    "name": "/etc/fail2ban/jail.local",
+    "d": "Свои настройки fail2ban. Блокировка на час после 3 неудачных входов по SSH за 10 минут, свой офис в исключениях.",
+    "lines": [
+     {
+      "line": "[DEFAULT]",
+      "d": "Секция значений по умолчанию для всех jail.",
+      "parts": [
+       {
+        "t": "[DEFAULT]",
+        "k": "arg",
+        "d": "Имя секции в квадратных скобках. DEFAULT действует на все jail, если jail не задаёт своё значение."
+       }
+      ]
+     },
+     {
+      "line": "bantime = 1h",
+      "d": "На сколько блокировать адрес.",
+      "parts": [
+       {
+        "t": "bantime",
+        "k": "opt",
+        "d": "Длительность блокировки."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель имени и значения."
+       },
+       {
+        "t": "1h",
+        "k": "val",
+        "d": "Один час. Число без суффикса означает секунды."
+       }
+      ]
+     },
+     {
+      "line": "findtime = 10m",
+      "d": "За какое время считать попытки.",
+      "parts": [
+       {
+        "t": "findtime",
+        "k": "opt",
+        "d": "Окно, в котором неудачные попытки складываются."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель."
+       },
+       {
+        "t": "10m",
+        "k": "val",
+        "d": "Десять минут."
+       }
+      ]
+     },
+     {
+      "line": "maxretry = 5",
+      "d": "Порог по умолчанию.",
+      "parts": [
+       {
+        "t": "maxretry",
+        "k": "opt",
+        "d": "Сколько неудачных попыток за findtime приводят к блокировке."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель."
+       },
+       {
+        "t": "5",
+        "k": "num",
+        "d": "Пять попыток."
+       }
+      ]
+     },
+     {
+      "line": "ignoreip = 127.0.0.1/8 ::1 203.0.113.10",
+      "d": "Адреса, которые никогда не блокируются.",
+      "parts": [
+       {
+        "t": "ignoreip",
+        "k": "opt",
+        "d": "Список адресов, которые не блокировать. Можно писать сети с маской."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель."
+       },
+       {
+        "t": "127.0.0.1/8",
+        "k": "val",
+        "d": "Вся сеть localhost IPv4."
+       },
+       {
+        "t": "::1",
+        "k": "val",
+        "d": "localhost IPv6."
+       },
+       {
+        "t": "203.0.113.10",
+        "k": "val",
+        "d": "Адрес вашего офиса или VPN, подставьте свой."
+       }
+      ]
+     },
+     {
+      "line": "",
+      "d": ""
+     },
+     {
+      "line": "[sshd]",
+      "d": "Секция jail для SSH.",
+      "parts": [
+       {
+        "t": "[sshd]",
+        "k": "arg",
+        "d": "Настройки только для jail sshd, они перекрывают DEFAULT."
+       }
+      ]
+     },
+     {
+      "line": "enabled = true",
+      "d": "Включить jail.",
+      "parts": [
+       {
+        "t": "enabled",
+        "k": "opt",
+        "d": "Включён ли jail."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель."
+       },
+       {
+        "t": "true",
+        "k": "val",
+        "d": "Включён."
+       }
+      ]
+     },
+     {
+      "line": "maxretry = 3",
+      "d": "Для SSH порог строже, чем по умолчанию.",
+      "parts": [
+       {
+        "t": "maxretry",
+        "k": "opt",
+        "d": "Число неудачных попыток до блокировки."
+       },
+       {
+        "t": "=",
+        "k": "op",
+        "d": "Разделитель."
+       },
+       {
+        "t": "3",
+        "k": "num",
+        "d": "Три попытки."
+       }
+      ]
+     }
+    ],
+    "run": "system",
+    "setup": "",
+    "args": "",
+    "output": ""
+   },
+   "mistakes": [
+    "<p>Копируют весь jail.conf в jail.local. Тогда исправления из новых версий пакета не доходят до вас. В jail.local пишите только изменённые параметры.</p>",
+    "<p>Ставят для findtime и bantime голые числа и путают единицы. Число без суффикса это секунды, понятнее писать <code>10m</code>, <code>1h</code>, <code>1d</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man5/jail.conf.5.html",
+    "https://manpages.ubuntu.com/manpages/noble/man1/fail2ban-client.1.html"
+   ]
+  },
+  {
+   "slug": "unattended-upgrades",
+   "cmd": "unattended-upgrade",
+   "text": "unattended-upgrade: автоматическая установка обновлений безопасности",
+   "summary": "<p>В Ubuntu Server пакет <code>unattended-upgrades</code> стоит по умолчанию и раз в день ставит обновления безопасности без участия человека. Запускают его таймеры systemd <code>apt-daily.timer</code> и <code>apt-daily-upgrade.timer</code>.</p><p>Включено ли это, задаёт файл <code>/etc/apt/apt.conf.d/20auto-upgrades</code>. Что именно ставить, из каких репозиториев и перезагружать ли сервер, задаёт <code>/etc/apt/apt.conf.d/50unattended-upgrades</code>. Журнал каждого запуска лежит в <code>/var/log/unattended-upgrades/</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo dpkg-reconfigure -plow unattended-upgrades",
+     "d": "Заново задать вопрос пакета, включать ли автоматические обновления. Ответ записывается в 20auto-upgrades.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Перенастраивать пакеты может только root."
+      },
+      {
+       "t": "dpkg-reconfigure",
+       "k": "cmd",
+       "d": "Заново задать вопросы настройки уже установленного пакета."
+      },
+      {
+       "t": "-plow",
+       "k": "opt",
+       "d": "Опция и значение склеены.",
+       "sub": [
+        {
+         "t": "-p",
+         "k": "opt",
+         "d": "priority, минимальный приоритет вопросов, которые будут показаны."
+        },
+        {
+         "t": "low",
+         "k": "val",
+         "d": "Показать все вопросы, даже низкого приоритета."
+        }
+       ]
+      },
+      {
+       "t": "unattended-upgrades",
+       "k": "arg",
+       "d": "Имя пакета."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "cat /etc/apt/apt.conf.d/20auto-upgrades",
+     "d": "Посмотреть, включены ли обновление списков пакетов и сама установка.",
+     "parts": [
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Вывести файл."
+      },
+      {
+       "t": "/etc/apt/apt.conf.d/20auto-upgrades",
+       "k": "path",
+       "d": "Две строки APT::Periodic. Значение \"1\" значит раз в день, \"0\" выключено."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo unattended-upgrade -v --dry-run",
+     "d": "Показать, что поставилось бы прямо сейчас, ничего не устанавливая.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Программа работает с базой пакетов, нужен root."
+      },
+      {
+       "t": "unattended-upgrade",
+       "k": "cmd",
+       "d": "Сама программа, без s на конце, в отличие от имени пакета."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "verbose, подробный вывод."
+      },
+      {
+       "t": "--dry-run",
+       "k": "opt",
+       "d": "Только смоделировать установку, ничего не менять."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ждут, что обновятся пакеты из подключённого стороннего репозитория. По умолчанию разрешены только официальные источники Ubuntu, другие добавляют в <code>Unattended-Upgrade::Allowed-Origins</code> файла 50unattended-upgrades.</p>",
+    "<p>Ядро обновилось, а сервер работает на старом. По умолчанию <code>Unattended-Upgrade::Automatic-Reboot</code> равно <code>false</code>, перезагрузку планируйте сами или включите её с временем в <code>Automatic-Reboot-Time</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/unattended-upgrade.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/dpkg-reconfigure.8.html",
+    "https://documentation.ubuntu.com/server/how-to/software/automatic-updates/"
+   ]
+  },
+  {
+   "slug": "aa-status",
+   "cmd": "aa-status",
+   "text": "aa-status: какие профили AppArmor загружены и в каком режиме",
+   "summary": "<p>AppArmor ограничивает программы списком файлов и действий, которые им разрешены, даже если программа работает от root. В Ubuntu он включён по умолчанию. Правила для каждой программы называются профилями и лежат в <code>/etc/apparmor.d/</code>.</p><p>Профиль работает в одном из двух режимов. <b>enforce</b> запрещает всё, что не разрешено, и пишет нарушение в журнал. <b>complain</b> ничего не запрещает, только записывает. <code>aa-status</code> показывает, сколько профилей загружено, в каком они режиме и какие процессы сейчас под ними работают.</p>",
+   "examples": [
+    {
+     "line": "sudo aa-status",
+     "d": "Полная сводка, профили по режимам и процессы под профилями.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Без root список процессов и профилей неполный."
+      },
+      {
+       "t": "aa-status",
+       "k": "cmd",
+       "d": "Без опций то же, что --verbose, выводит всё."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo aa-status --enabled && echo 'AppArmor включён'",
+     "d": "Проверить в скрипте, включён ли AppArmor. Сама опция ничего не печатает, отвечает кодом возврата.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "aa-status",
+       "k": "cmd",
+       "d": "Состояние AppArmor."
+      },
+      {
+       "t": "--enabled",
+       "k": "opt",
+       "d": "Вернуть код ошибки, если AppArmor не включён."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "echo выполнится только при коде 0.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать сообщение."
+      },
+      {
+       "t": "'AppArmor включён'",
+       "k": "str",
+       "d": "Текст сообщения.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открывающая кавычка.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "AppArmor включён",
+         "k": "arg",
+         "d": "Сам текст."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo aa-status --filter.mode=complain",
+     "d": "Показать только профили и процессы в режиме complain.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "aa-status",
+       "k": "cmd",
+       "d": "Состояние AppArmor."
+      },
+      {
+       "t": "--filter.mode=complain",
+       "k": "opt",
+       "d": "Фильтр по режиму профиля, регулярное выражение POSIX.",
+       "sub": [
+        {
+         "t": "--filter.mode",
+         "k": "opt",
+         "d": "Отбирать по режиму."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Значение опции идёт сразу после знака."
+        },
+        {
+         "t": "complain",
+         "k": "pat",
+         "d": "Режим, который оставить."
+        }
+       ]
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Программа получает Permission denied, хотя права на файл в порядке. Причиной может быть профиль AppArmor. Ищите в журнале ядра строки с <code>apparmor=\"DENIED\"</code>.</p>",
+    "<p>Запускают <code>aa-status</code> внутри контейнера и видят <code>apparmor not present</code>. AppArmor работает на уровне ядра хоста, смотреть его надо на самом сервере.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/aa-status.8.html",
+    "https://documentation.ubuntu.com/server/how-to/security/apparmor/"
+   ]
+  },
+  {
+   "slug": "aa-complain-enforce",
+   "cmd": "aa-complain",
+   "text": "aa-complain и aa-enforce: переключить режим профиля AppArmor",
+   "summary": "<p>Если AppArmor мешает программе работать, профиль не выключают, а переводят в режим complain. Программа работает без ограничений, а каждое нарушение пишется в журнал. По этим записям видно, чего не хватает в профиле. После исправления профиль возвращают в enforce.</p><p>Команды <code>aa-complain</code> и <code>aa-enforce</code> входят в пакет <code>apparmor-utils</code>, его ставят отдельно. Аргументом можно указать путь к программе или к файлу профиля в <code>/etc/apparmor.d/</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo apt install apparmor-utils",
+     "d": "Поставить утилиты для управления профилями.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Ставить пакеты может только root."
+      },
+      {
+       "t": "apt",
+       "k": "cmd",
+       "d": "Менеджер пакетов."
+      },
+      {
+       "t": "install",
+       "k": "sub",
+       "d": "Установить пакет."
+      },
+      {
+       "t": "apparmor-utils",
+       "k": "arg",
+       "d": "Пакет с aa-complain, aa-enforce и другими утилитами."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo aa-complain /usr/bin/tcpdump",
+     "d": "Перевести профиль tcpdump в режим complain, нарушения только записываются.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Менять загруженные профили может только root."
+      },
+      {
+       "t": "aa-complain",
+       "k": "cmd",
+       "d": "Перевести профиль в режим complain."
+      },
+      {
+       "t": "/usr/bin/tcpdump",
+       "k": "path",
+       "d": "Программа, чей профиль переключить. Её профиль лежит в /etc/apparmor.d/usr.bin.tcpdump."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo aa-enforce /usr/bin/tcpdump",
+     "d": "Вернуть профиль в режим enforce, запреты снова действуют.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "aa-enforce",
+       "k": "cmd",
+       "d": "Перевести профиль в режим enforce."
+      },
+      {
+       "t": "/usr/bin/tcpdump",
+       "k": "path",
+       "d": "Та же программа."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Оставляют профиль в complain навсегда и считают, что защита есть. В этом режиме ничего не запрещается, проверяйте через <code>aa-status</code>, что рабочие профили в enforce.</p>",
+    "<p>Ждут, что в complain разрешится всё. Правила <code>deny</code> в профиле действуют и в этом режиме.</p>",
+    "<p>Не находят записи о нарушениях в журнале ядра. Если стоит auditd, записи AppArmor попадают в <code>/var/log/audit/audit.log</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/aa-complain.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/aa-enforce.8.html",
+    "https://documentation.ubuntu.com/server/how-to/security/apparmor/",
+    "https://gitlab.com/apparmor/apparmor/-/wikis/AppArmor_Failures"
+   ]
+  },
+  {
+   "slug": "auditctl",
+   "cmd": "auditctl",
+   "text": "auditctl: следить за изменением важных файлов",
+   "summary": "<p>Служба <code>auditd</code> получает от ядра записи о событиях и пишет их в <code>/var/log/audit/audit.log</code>. Что записывать, задают правила. Правило-наблюдение <code>-w</code> следит за файлом и записывает, кто, когда и какой программой его открыл на запись или поменял атрибуты.</p><p><code>auditctl</code> добавляет правила в работающее ядро, но после перезагрузки они пропадают. Постоянные правила кладут в файлы <code>/etc/audit/rules.d/*.rules</code> и загружают командой <code>augenrules --load</code>.</p>",
+   "examples": [
+    {
+     "line": "sudo auditctl -w /etc/passwd -p wa -k passwd",
+     "d": "Записывать каждое изменение /etc/passwd с меткой passwd.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Правила аудита меняет только root."
+      },
+      {
+       "t": "auditctl",
+       "k": "cmd",
+       "d": "Управление правилами аудита в ядре."
+      },
+      {
+       "t": "-w",
+       "k": "opt",
+       "d": "watch, следить за файлом или каталогом."
+      },
+      {
+       "t": "/etc/passwd",
+       "k": "path",
+       "d": "Файл учётных записей."
+      },
+      {
+       "t": "-p",
+       "k": "opt",
+       "d": "Какие виды доступа записывать."
+      },
+      {
+       "t": "wa",
+       "k": "val",
+       "d": "Две буквы склеены.",
+       "sub": [
+        {
+         "t": "w",
+         "k": "val",
+         "d": "write, запись в файл."
+        },
+        {
+         "t": "a",
+         "k": "val",
+         "d": "attribute, смена атрибутов, например прав или владельца."
+        }
+       ]
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "key, метка правила, по ней потом ищут события."
+      },
+      {
+       "t": "passwd",
+       "k": "arg",
+       "d": "Текст метки, до 31 байта."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo auditctl -l",
+     "d": "Показать все загруженные правила, по одному в строке.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "auditctl",
+       "k": "cmd",
+       "d": "Управление правилами аудита."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "list, вывести список правил."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "echo '-w /etc/sudoers -p wa -k sudoers' | sudo tee /etc/audit/rules.d/sudoers.rules && sudo augenrules --load",
+     "d": "Сохранить правило в файл, чтобы оно пережило перезагрузку, и сразу загрузить его.",
+     "parts": [
+      {
+       "t": "echo",
+       "k": "cmd",
+       "d": "Напечатать текст правила."
+      },
+      {
+       "t": "'-w /etc/sudoers -p wa -k sudoers'",
+       "k": "str",
+       "d": "Правило в том же виде, что опции auditctl.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открывающая кавычка.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "-w",
+         "k": "opt",
+         "d": "Следить за файлом."
+        },
+        {
+         "t": "/etc/sudoers",
+         "k": "path",
+         "d": "Файл правил sudo."
+        },
+        {
+         "t": "-p",
+         "k": "opt",
+         "d": "Виды доступа."
+        },
+        {
+         "t": "wa",
+         "k": "val",
+         "d": "Запись и смена атрибутов."
+        },
+        {
+         "t": "-k",
+         "k": "opt",
+         "d": "Метка."
+        },
+        {
+         "t": "sudoers",
+         "k": "arg",
+         "d": "Текст метки."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      },
+      {
+       "t": "|",
+       "k": "op",
+       "d": "Передать строку в tee.",
+       "ref": "sym-pipe"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Писать в /etc/audit может только root."
+      },
+      {
+       "t": "tee",
+       "k": "cmd",
+       "d": "Записать вход в файл."
+      },
+      {
+       "t": "/etc/audit/rules.d/sudoers.rules",
+       "k": "path",
+       "d": "Файлы в rules.d читаются, только если имя кончается на .rules."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Загрузить правила, только если файл записан.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "augenrules",
+       "k": "cmd",
+       "d": "Собрать все файлы rules.d в /etc/audit/audit.rules."
+      },
+      {
+       "t": "--load",
+       "k": "opt",
+       "d": "Загрузить собранные правила в ядро."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Добавляют правило через <code>auditctl</code> и удивляются, что после перезагрузки его нет. Постоянные правила живут только в <code>/etc/audit/rules.d/</code>.</p>",
+    "<p>Ставят наблюдение на корень или используют <code>*</code> в пути. Ядро не разрешает наблюдение за <code>/</code>, а шаблоны в <code>-w</code> не поддерживаются.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/auditctl.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/augenrules.8.html"
+   ]
+  },
+  {
+   "slug": "ausearch-aureport",
+   "cmd": "ausearch",
+   "text": "ausearch и aureport: найти события аудита",
+   "summary": "<p>Журнал <code>/var/log/audit/audit.log</code> трудно читать глазами, одно событие там занимает несколько строк с числовыми полями. <code>ausearch</code> отбирает события по метке правила, времени, пользователю или программе. <code>aureport</code> строит сводные отчёты, например по входам в систему или по меткам.</p><p>Метку задают опцией <code>-k</code> при создании правила в <code>auditctl</code>, и по ней же потом ищут.</p>",
+   "examples": [
+    {
+     "line": "sudo ausearch -k passwd -i",
+     "d": "Найти все события по правилу с меткой passwd, числа заменить именами.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Журнал аудита читает только root."
+      },
+      {
+       "t": "ausearch",
+       "k": "cmd",
+       "d": "Поиск в журнале аудита."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "key, искать по метке правила."
+      },
+      {
+       "t": "passwd",
+       "k": "arg",
+       "d": "Метка, заданная в auditctl -k."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "interpret, показать имена вместо чисел, например пользователя вместо uid."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo ausearch -k passwd -ts today",
+     "d": "То же, но только события с начала сегодняшнего дня.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "ausearch",
+       "k": "cmd",
+       "d": "Поиск в журнале аудита."
+      },
+      {
+       "t": "-k",
+       "k": "opt",
+       "d": "Искать по метке."
+      },
+      {
+       "t": "passwd",
+       "k": "arg",
+       "d": "Метка."
+      },
+      {
+       "t": "-ts",
+       "k": "opt",
+       "d": "start, события начиная с указанного времени."
+      },
+      {
+       "t": "today",
+       "k": "val",
+       "d": "С первой секунды после полуночи сегодня. Есть ещё recent, yesterday, this-week."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo aureport -au --failed",
+     "d": "Отчёт по неудачным попыткам аутентификации.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "aureport",
+       "k": "cmd",
+       "d": "Сводные отчёты по журналу аудита."
+      },
+      {
+       "t": "-au",
+       "k": "opt",
+       "d": "auth, отчёт о попытках аутентификации."
+      },
+      {
+       "t": "--failed",
+       "k": "opt",
+       "d": "Только неудачные события. По умолчанию берутся и удачные, и неудачные."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ищут без <code>-i</code> и видят <code>uid=1000</code> вместо имени. С <code>-i</code> ausearch подставляет имена по учётным записям той машины, где запущен поиск.</p>",
+    "<p>Получают <code>&lt;no matches&gt;</code>, хотя файл менялся. Проверьте через <code>auditctl -l</code>, что правило с этой меткой действительно загружено.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/ausearch.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/aureport.8.html"
+   ]
+  },
+  {
+   "slug": "lynis-audit",
+   "cmd": "lynis",
+   "text": "lynis audit system: проверить настройки безопасности сервера",
+   "summary": "<p><code>lynis</code> проходит по сотням проверок: загрузчик, права на файлы, SSH, пакеты, журналы, ядро. В конце печатает предупреждения, советы и индекс защищённости. Ничего не меняет, только проверяет и советует.</p><p>Подробный журнал пишется в <code>/var/log/lynis.log</code>, машиночитаемый отчёт в <code>/var/log/lynis-report.dat</code>. Отчёт удобно сравнивать между запусками, чтобы видеть, что изменилось после настройки.</p>",
+   "examples": [
+    {
+     "line": "sudo lynis audit system",
+     "d": "Полная проверка сервера с выводом на экран.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Без root часть проверок пропускается."
+      },
+      {
+       "t": "lynis",
+       "k": "cmd",
+       "d": "Программа аудита безопасности."
+      },
+      {
+       "t": "audit",
+       "k": "sub",
+       "d": "Выполнить проверку."
+      },
+      {
+       "t": "system",
+       "k": "arg",
+       "d": "Тип проверки, весь локальный сервер."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo lynis audit system --quick --tests-from-group ssh",
+     "d": "Проверить только настройки SSH, не останавливаясь между разделами.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "lynis",
+       "k": "cmd",
+       "d": "Аудит безопасности."
+      },
+      {
+       "t": "audit",
+       "k": "sub",
+       "d": "Выполнить проверку."
+      },
+      {
+       "t": "system",
+       "k": "arg",
+       "d": "Весь сервер."
+      },
+      {
+       "t": "--quick",
+       "k": "opt",
+       "d": "Не ждать нажатия клавиши между разделами."
+      },
+      {
+       "t": "--tests-from-group",
+       "k": "opt",
+       "d": "Выполнить только проверки из одной группы. Список групп показывает lynis show groups."
+      },
+      {
+       "t": "ssh",
+       "k": "val",
+       "d": "Группа проверок SSH."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "grep -E '^(warning|suggestion)' /var/log/lynis-report.dat",
+     "d": "Вытащить из отчёта только предупреждения и советы.",
+     "parts": [
+      {
+       "t": "grep",
+       "k": "cmd",
+       "d": "Отобрать строки по шаблону."
+      },
+      {
+       "t": "-E",
+       "k": "opt",
+       "d": "Расширенные регулярные выражения, нужны для ( ) и |."
+      },
+      {
+       "t": "'^(warning|suggestion)'",
+       "k": "pat",
+       "d": "Строки отчёта, которые начинаются с warning или suggestion.",
+       "sub": [
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Открывающая кавычка.",
+         "ref": "sym-single-quotes"
+        },
+        {
+         "t": "^",
+         "k": "pat",
+         "d": "Начало строки."
+        },
+        {
+         "t": "(",
+         "k": "pat",
+         "d": "Начало группы."
+        },
+        {
+         "t": "warning",
+         "k": "pat",
+         "d": "Предупреждение."
+        },
+        {
+         "t": "|",
+         "k": "pat",
+         "d": "Или."
+        },
+        {
+         "t": "suggestion",
+         "k": "pat",
+         "d": "Совет."
+        },
+        {
+         "t": ")",
+         "k": "pat",
+         "d": "Конец группы."
+        },
+        {
+         "t": "'",
+         "k": "op",
+         "d": "Закрывающая кавычка.",
+         "ref": "sym-single-quotes"
+        }
+       ]
+      },
+      {
+       "t": "/var/log/lynis-report.dat",
+       "k": "path",
+       "d": "Отчёт последнего запуска, строки вида имя[]=значение."
+      }
+     ],
+     "run": "container",
+     "setup": "lynis audit system --quiet --tests-from-group file_permissions",
+     "output": "suggestion[]=LYNIS|This release is more than 4 months old. Check the website or GitHub to see if there is an update available.|-|-|\nsuggestion[]=DEB-0280|Install libpam-tmpdir to set $TMP and $TMPDIR for PAM sessions|-|-|\nsuggestion[]=DEB-0810|Install apt-listbugs to display a list of critical bugs prior to each APT installation.|-|-|\nsuggestion[]=DEB-0811|Install apt-listchanges to display any significant changes prior to any upgrade via APT.|-|-|\nsuggestion[]=DEB-0831|Install needrestart, alternatively to debian-goodies, so that you can run needrestart after upgrades to determine which daemons are using old versions of libraries and need restarting.|-|-|\nsuggestion[]=DEB-0880|Copy /etc/fail2ban/jail.conf to jail.local to prevent it being changed by updates.|-|-|\nsuggestion[]=FILE-7524|Consider restricting file permissions|See screen output or log file|text:Use chmod to change file permissions|"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Пытаются довести индекс до 100 любой ценой. Советы lynis общие, часть из них не нужна на вашем сервере. Читайте каждый совет и решайте по смыслу.</p>",
+    "<p>Ставят lynis в cron без <code>--cronjob</code> и получают в почте вывод с цветовыми кодами. Опция <code>--cronjob</code> убирает цвета и вопросы.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/lynis.8.html"
+   ]
+  },
+  {
+   "slug": "suid-audit",
+   "cmd": "find -perm -4000",
+   "text": "find -perm -4000: найти все программы с SUID",
+   "summary": "<p>Программа с битом SUID запускается с правами владельца файла, обычно root. Ошибка в такой программе даёт обычному пользователю права root, поэтому список SUID-файлов на сервере проверяют при аудите. Сами биты разобраны в карточке про SUID, SGID и sticky bit.</p><p>Удобный приём, сохранить список сразу после установки и потом сравнивать с ним. Новый SUID-файл в <code>/tmp</code>, <code>/var/tmp</code> или домашнем каталоге почти всегда признак взлома.</p>",
+   "examples": [
+    {
+     "line": "find / -perm -4000 -type f 2>/dev/null",
+     "d": "Найти все обычные файлы с битом SUID на всём сервере.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Поиск файлов."
+      },
+      {
+       "t": "/",
+       "k": "path",
+       "d": "Начать с корня, весь сервер.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-perm",
+       "k": "opt",
+       "d": "Отбор по битам прав."
+      },
+      {
+       "t": "-4000",
+       "k": "val",
+       "d": "Минус значит все указанные биты установлены, остальные любые.",
+       "sub": [
+        {
+         "t": "-",
+         "k": "op",
+         "d": "Режим «все эти биты есть»."
+        },
+        {
+         "t": "4000",
+         "k": "num",
+         "d": "Восьмеричный бит SUID."
+        }
+       ]
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Отбор по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "2>",
+       "k": "op",
+       "d": "Перенаправить поток ошибок find.",
+       "ref": "sym-stderr"
+      },
+      {
+       "t": "/dev/null",
+       "k": "path",
+       "d": "Пустое устройство, сообщения вроде Permission denied пропадают.",
+       "ref": "sym-dev-null"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/usr/lib/openssh/ssh-keysign\n/usr/bin/gpasswd\n/usr/bin/newgrp\n/usr/bin/chfn\n/usr/bin/umount\n/usr/bin/mount\n/usr/bin/passwd\n/usr/bin/chsh\n/usr/bin/su\n/usr/bin/sudo\n/usr/bin/at"
+    },
+    {
+     "line": "find / -xdev \\( -perm -4000 -o -perm -2000 \\) -type f -ls 2>/dev/null",
+     "d": "Найти файлы с SUID или SGID на корневой файловой системе и показать их права и владельца.",
+     "parts": [
+      {
+       "t": "find",
+       "k": "cmd",
+       "d": "Поиск файлов."
+      },
+      {
+       "t": "/",
+       "k": "path",
+       "d": "Корень.",
+       "ref": "sym-dot-paths"
+      },
+      {
+       "t": "-xdev",
+       "k": "opt",
+       "d": "Не заходить на другие файловые системы, например /proc."
+      },
+      {
+       "t": "\\(",
+       "k": "op",
+       "d": "Начало группы условий. Скобка экранирована, иначе её заберёт оболочка.",
+       "ref": "sym-backslash"
+      },
+      {
+       "t": "-perm",
+       "k": "opt",
+       "d": "Отбор по правам."
+      },
+      {
+       "t": "-4000",
+       "k": "val",
+       "d": "Бит SUID установлен."
+      },
+      {
+       "t": "-o",
+       "k": "opt",
+       "d": "Или."
+      },
+      {
+       "t": "-perm",
+       "k": "opt",
+       "d": "Отбор по правам."
+      },
+      {
+       "t": "-2000",
+       "k": "val",
+       "d": "Бит SGID установлен."
+      },
+      {
+       "t": "\\)",
+       "k": "op",
+       "d": "Конец группы.",
+       "ref": "sym-backslash"
+      },
+      {
+       "t": "-type",
+       "k": "opt",
+       "d": "Отбор по типу."
+      },
+      {
+       "t": "f",
+       "k": "val",
+       "d": "Обычный файл."
+      },
+      {
+       "t": "-ls",
+       "k": "opt",
+       "d": "Печатать каждый файл в формате ls -dils, с правами, владельцем и размером."
+      },
+      {
+       "t": "2>",
+       "k": "op",
+       "d": "Перенаправить поток ошибок find.",
+       "ref": "sym-stderr"
+      },
+      {
+       "t": "/dev/null",
+       "k": "path",
+       "d": "Пустое устройство, сообщения вроде Permission denied пропадают.",
+       "ref": "sym-dev-null"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "   649056     28 -rwxr-sr-x   1 root     shadow      26944 Aug 27 00:28 /usr/sbin/pam_extrausers_chkpwd\n   649085     32 -rwxr-sr-x   1 root     shadow      31040 Aug 27 00:28 /usr/sbin/unix_chkpwd\n   745624     16 -rwxr-sr-x   1 root     utmp        14488 Apr  8  2024 /usr/lib/x86_64-linux-gnu/utempter/utempter\n   730604    336 -rwsr-xr-x   1 root     root       342632 Aug 31 23:38 /usr/lib/openssh/ssh-keysign\n   647497     76 -rwsr-xr-x   1 root     root        76248 May 30  2024 /usr/bin/gpasswd\n   647481     28 -rwxr-sr-x   1 root     shadow      27152 May 30  2024 /usr/bin/expiry\n   647561     40 -rwsr-xr-x   1 root     root        40664 May 30  2024 /usr/bin/newgrp\n   647427     72 -rwxr-sr-x   1 root     shadow      72184 May 30  2024 /usr/bin/chage\n   647430     72 -rwsr-xr-x   1 root     root        72792 May 30  2024 /usr/bin/chfn\n   647664     40 -rwsr-xr-x   1 root     root        39296 Aug 19 21:47 /usr/bin/umount\n   647556     52 -rwsr-xr-x   1 root     root        51584 Aug 19 21:47 /usr/bin/mount\n   647572     64 -rwsr-xr-x   1 root     root        64152 May 30  2024 /usr/bin/passwd\n   647436     44 -rwsr-xr-x   1 root     root        44760 May 30  2024 /usr/bin/chsh\n   647638     56 -rwsr-xr-x   1 root     root        55680 Aug 19 21:47 /usr/bin/su\n   730388    308 -rwxr-sr-x   1 root     plocate    313912 Apr 18  2024 /usr/bin/plocate\n   730259     40 -rwxr-sr-x   1 root     crontab     39664 Mar 31  2024 /usr/bin/crontab\n   730433    276 -rwsr-xr-x   1 root     root       282032 Oct  6 18:51 /usr/bin/sudo\n   730230     56 -rwsr-sr-x   1 daemon   daemon      55624 Apr  1  2024 /usr/bin/at\n   730424    304 -rwxr-sr-x   1 root     _ssh       309688 Aug 31 23:38 /usr/bin/ssh-agent"
+    },
+    {
+     "line": "diff /root/suid.base <(find / -xdev -perm -4000 -type f 2>/dev/null | sort)",
+     "d": "Сравнить текущий список SUID-файлов с сохранённым. Строки с > появились после сохранения.",
+     "parts": [
+      {
+       "t": "diff",
+       "k": "cmd",
+       "d": "Сравнить два списка построчно."
+      },
+      {
+       "t": "/root/suid.base",
+       "k": "path",
+       "d": "Список, сохранённый раньше той же командой find с sort."
+      },
+      {
+       "t": "<(find / -xdev -perm -4000 -type f 2>/dev/null | sort)",
+       "k": "op",
+       "d": "Текущий список подставлен как файл.",
+       "ref": "sym-process-subst",
+       "sub": [
+        {
+         "t": "<(",
+         "k": "op",
+         "d": "Начало подстановки процесса, diff читает вывод как файл.",
+         "ref": "sym-process-subst"
+        },
+        {
+         "t": "find",
+         "k": "cmd",
+         "d": "Поиск."
+        },
+        {
+         "t": "/",
+         "k": "path",
+         "d": "Корень.",
+         "ref": "sym-dot-paths"
+        },
+        {
+         "t": "-xdev",
+         "k": "opt",
+         "d": "Только корневая файловая система."
+        },
+        {
+         "t": "-perm",
+         "k": "opt",
+         "d": "Отбор по правам."
+        },
+        {
+         "t": "-4000",
+         "k": "val",
+         "d": "Бит SUID установлен."
+        },
+        {
+         "t": "-type",
+         "k": "opt",
+         "d": "Отбор по типу."
+        },
+        {
+         "t": "f",
+         "k": "val",
+         "d": "Обычный файл."
+        },
+        {
+         "t": "2>",
+         "k": "op",
+         "d": "Ошибки find.",
+         "ref": "sym-stderr"
+        },
+        {
+         "t": "/dev/null",
+         "k": "path",
+         "d": "Выбросить.",
+         "ref": "sym-dev-null"
+        },
+        {
+         "t": "|",
+         "k": "op",
+         "d": "Передать список в sort.",
+         "ref": "sym-pipe"
+        },
+        {
+         "t": "sort",
+         "k": "cmd",
+         "d": "Упорядочить, чтобы diff сравнивал одинаково отсортированные списки."
+        },
+        {
+         "t": ")",
+         "k": "op",
+         "d": "Конец подстановки.",
+         "ref": "sym-process-subst"
+        }
+       ]
+      }
+     ],
+     "run": "container",
+     "setup": "find / -xdev -perm -4000 -type f 2>/dev/null | sort > /root/suid.base; cp /usr/bin/bash /var/tmp/.cache; chmod 4755 /var/tmp/.cache",
+     "output": "11a12\n> /var/tmp/.cache"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ищут <code>-perm 4000</code> без минуса. Без минуса права должны совпасть точно, то есть только SUID и ни одного бита rwx, и такой поиск почти ничего не находит.</p>",
+    "<p>Не прячут ошибки и тонут в сообщениях Permission denied из <code>/proc</code>. Добавляйте <code>2&gt;/dev/null</code> и <code>-xdev</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/find.1.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/capabilities.7.html"
+   ]
+  },
+  {
+   "slug": "getcap-setcap",
+   "cmd": "setcap",
+   "text": "getcap и setcap: дать программе одну привилегию вместо SUID",
+   "summary": "<p>Права root в Linux разделены на отдельные возможности (capabilities). Например <code>CAP_NET_BIND_SERVICE</code> разрешает занимать порты ниже 1024, <code>CAP_NET_RAW</code> разрешает сырые сокеты для ping. Возможность можно записать прямо в файл программы, тогда она получит только её, а не все права root, как с SUID.</p><p><code>setcap</code> записывает возможности в файл, <code>getcap</code> показывает их. Запись <code>=+ep</code> значит набор permitted и флаг effective, то есть программа получает возможность сразу при запуске.</p>",
+   "examples": [
+    {
+     "line": "getcap -r /usr/bin 2>/dev/null",
+     "d": "Найти все программы в /usr/bin, у которых записаны возможности.",
+     "parts": [
+      {
+       "t": "getcap",
+       "k": "cmd",
+       "d": "Показать возможности файлов."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "Обойти каталог рекурсивно."
+      },
+      {
+       "t": "/usr/bin",
+       "k": "path",
+       "d": "Где искать."
+      },
+      {
+       "t": "2>",
+       "k": "op",
+       "d": "Перенаправить поток ошибок getcap.",
+       "ref": "sym-stderr"
+      },
+      {
+       "t": "/dev/null",
+       "k": "path",
+       "d": "Пустое устройство, сообщения вроде Permission denied пропадают.",
+       "ref": "sym-dev-null"
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "/usr/bin/ping cap_net_raw=ep\n/usr/bin/mtr-packet cap_net_raw=ep"
+    },
+    {
+     "line": "sudo setcap cap_net_bind_service=+ep /lab/webapp && getcap /lab/webapp",
+     "d": "Разрешить программе слушать порт 80 без root и проверить результат.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Записывать возможности в файл может только root."
+      },
+      {
+       "t": "setcap",
+       "k": "cmd",
+       "d": "Записать возможности в файл."
+      },
+      {
+       "t": "cap_net_bind_service=+ep",
+       "k": "val",
+       "d": "Текстовая запись возможностей.",
+       "sub": [
+        {
+         "t": "cap_net_bind_service",
+         "k": "arg",
+         "d": "Возможность занимать порты меньше 1024."
+        },
+        {
+         "t": "=",
+         "k": "op",
+         "d": "Сначала сбросить эту возможность во всех трёх наборах."
+        },
+        {
+         "t": "+",
+         "k": "op",
+         "d": "Затем поднять её в наборах, перечисленных дальше."
+        },
+        {
+         "t": "ep",
+         "k": "val",
+         "d": "Наборы e (effective) и p (permitted)."
+        }
+       ]
+      },
+      {
+       "t": "/lab/webapp",
+       "k": "path",
+       "d": "Файл программы."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "getcap выполнится, только если setcap прошёл.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "getcap",
+       "k": "cmd",
+       "d": "Показать возможности файла."
+      },
+      {
+       "t": "/lab/webapp",
+       "k": "path",
+       "d": "Тот же файл."
+      }
+     ],
+     "run": "container",
+     "setup": "cp /usr/bin/sleep /lab/webapp",
+     "output": "/lab/webapp cap_net_bind_service=ep"
+    },
+    {
+     "line": "sudo setcap -r /lab/webapp && getcap -v /lab/webapp",
+     "d": "Убрать возможности с файла и убедиться, что их нет.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "Права root."
+      },
+      {
+       "t": "setcap",
+       "k": "cmd",
+       "d": "Изменить возможности файла."
+      },
+      {
+       "t": "-r",
+       "k": "opt",
+       "d": "remove, удалить весь набор возможностей с файла."
+      },
+      {
+       "t": "/lab/webapp",
+       "k": "path",
+       "d": "Файл программы."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "Проверка только после успешного удаления.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "getcap",
+       "k": "cmd",
+       "d": "Показать возможности."
+      },
+      {
+       "t": "-v",
+       "k": "opt",
+       "d": "Печатать файл, даже если возможностей у него нет."
+      },
+      {
+       "t": "/lab/webapp",
+       "k": "path",
+       "d": "Тот же файл, в выводе будет только имя."
+      }
+     ],
+     "run": "container",
+     "setup": "cp /usr/bin/sleep /lab/webapp; setcap cap_net_bind_service=+ep /lab/webapp",
+     "output": "/lab/webapp"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Ставят возможность на интерпретатор, например <code>/usr/bin/python3</code>. Тогда её получает любой скрипт на Python у любого пользователя. Давайте возможности только конкретной программе.</p>",
+    "<p>Копируют или пересобирают программу и теряют возможности. Они хранятся в расширенных атрибутах файла, после обновления файла <code>setcap</code> нужно выполнить заново.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man8/setcap.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man8/getcap.8.html",
+    "https://manpages.ubuntu.com/manpages/noble/man7/capabilities.7.html",
+    "https://manpages.ubuntu.com/manpages/noble/man3/cap_from_text.3.html"
+   ]
+  },
+  {
+   "slug": "sha256sum",
+   "cmd": "sha256sum",
+   "text": "sha256sum: создать и проверить контрольные суммы",
+   "summary": "<p><code>sha256sum</code> считает хеш SHA-256 файла, строку из 64 шестнадцатеричных символов. Если в файле изменится хоть один байт, хеш станет другим. Так проверяют, что скачанный образ или копия резервной копии дошли без повреждений и подмены.</p><p>Хеши сохраняют в файл, обычно <code>SHA256SUMS</code>, по строке на файл. Потом <code>sha256sum -c</code> пересчитывает хеши и печатает OK или FAILED для каждого файла. <code>md5sum</code> работает так же, но MD5 устарел и для защиты от подмены не годится.</p>",
+   "examples": [
+    {
+     "line": "sha256sum backup.tar.gz",
+     "d": "Посчитать хеш одного файла.",
+     "parts": [
+      {
+       "t": "sha256sum",
+       "k": "cmd",
+       "d": "Посчитать SHA-256."
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Файл. Вывод это хеш, два пробела и имя."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'backup data\\n' > backup.tar.gz; printf 'site files\\n' > site.tar.gz",
+     "output": "90b6103efde5451e16a4ece48a2e19c3df38fdf61f0185823a290c3d19fc1918  backup.tar.gz"
+    },
+    {
+     "line": "sha256sum *.tar.gz > SHA256SUMS && cat SHA256SUMS",
+     "d": "Сохранить хеши всех архивов в файл для будущей проверки и посмотреть его.",
+     "parts": [
+      {
+       "t": "sha256sum",
+       "k": "cmd",
+       "d": "Посчитать SHA-256."
+      },
+      {
+       "t": "*.tar.gz",
+       "k": "pat",
+       "d": "Все архивы в каталоге.",
+       "sub": [
+        {
+         "t": "*",
+         "k": "op",
+         "d": "Любые символы в начале имени.",
+         "ref": "sym-glob-star"
+        },
+        {
+         "t": ".tar.gz",
+         "k": "arg",
+         "d": "Окончание имени."
+        }
+       ]
+      },
+      {
+       "t": ">",
+       "k": "op",
+       "d": "Записать вывод в файл, перезаписав его.",
+       "ref": "sym-redirect-out"
+      },
+      {
+       "t": "SHA256SUMS",
+       "k": "path",
+       "d": "Файл со списком хешей."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "cat выполнится, только если запись прошла.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "cat",
+       "k": "cmd",
+       "d": "Вывести файл."
+      },
+      {
+       "t": "SHA256SUMS",
+       "k": "path",
+       "d": "Тот же файл, по строке на архив."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'backup data\\n' > backup.tar.gz; printf 'site files\\n' > site.tar.gz",
+     "output": "90b6103efde5451e16a4ece48a2e19c3df38fdf61f0185823a290c3d19fc1918  backup.tar.gz\n45c95f8d759ea1bdb07c28a94ff7f1b17327f4800202e3e66d9451a256b768df  site.tar.gz"
+    },
+    {
+     "line": "sha256sum -c SHA256SUMS",
+     "d": "Пересчитать хеши и сравнить с сохранёнными. Здесь второй архив изменён после сохранения.",
+     "parts": [
+      {
+       "t": "sha256sum",
+       "k": "cmd",
+       "d": "Посчитать SHA-256."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "check, прочитать хеши из файла и проверить их."
+      },
+      {
+       "t": "SHA256SUMS",
+       "k": "path",
+       "d": "Ранее сохранённый список."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'backup data\\n' > backup.tar.gz; printf 'site files\\n' > site.tar.gz; sha256sum *.tar.gz > SHA256SUMS; echo changed >> site.tar.gz",
+     "output": "backup.tar.gz: OK\nsite.tar.gz: FAILED\nsha256sum: WARNING: 1 computed checksum did NOT match"
+    },
+    {
+     "line": "sha256sum -c --ignore-missing SHA256SUMS",
+     "d": "Проверить только те файлы из списка, которые есть в каталоге. Так проверяют один скачанный образ из большого списка.",
+     "parts": [
+      {
+       "t": "sha256sum",
+       "k": "cmd",
+       "d": "Посчитать SHA-256."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "Проверить хеши из файла."
+      },
+      {
+       "t": "--ignore-missing",
+       "k": "opt",
+       "d": "Не считать ошибкой файлы, которых нет на диске."
+      },
+      {
+       "t": "SHA256SUMS",
+       "k": "path",
+       "d": "Список хешей."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'backup data\\n' > backup.tar.gz; printf 'site files\\n' > site.tar.gz; sha256sum *.tar.gz > SHA256SUMS; rm site.tar.gz",
+     "output": "backup.tar.gz: OK"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Скачивают файл и хеш с одного и того же сервера и считают это защитой от подмены. Если сервер взломан, подменят оба. Проверяйте подпись самого файла с хешами через <code>gpg --verify</code>.</p>",
+    "<p>Запускают <code>-c</code> не из того каталога. Пути в файле хешей относительные, проверку выполняйте там, где лежат файлы.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/sha256sum.1.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/sha2-utilities.html",
+    "https://www.gnu.org/software/coreutils/manual/html_node/md5sum-invocation.html"
+   ]
+  },
+  {
+   "slug": "gpg-encrypt-verify",
+   "cmd": "gpg",
+   "text": "gpg -c и gpg --verify: зашифровать файл паролем и проверить подпись",
+   "summary": "<p><code>gpg -c</code> шифрует файл симметрично, одной парольной фразой. Ключи не нужны, расшифровать сможет любой, кто знает фразу. Так удобно защитить резервную копию перед отправкой на чужой сервер. Результат записывается рядом, с окончанием <code>.gpg</code>.</p><p><code>gpg --verify</code> проверяет подпись, сделанную закрытым ключом автора. Для проверки нужен его открытый ключ в вашей связке. Так проверяют, что скачанный файл выпущен именно автором и не изменён.</p>",
+   "examples": [
+    {
+     "line": "gpg -c backup.tar.gz",
+     "d": "Зашифровать файл парольной фразой. gpg спросит фразу дважды и создаст backup.tar.gz.gpg.",
+     "parts": [
+      {
+       "t": "gpg",
+       "k": "cmd",
+       "d": "GnuPG, шифрование и подписи OpenPGP."
+      },
+      {
+       "t": "-c",
+       "k": "opt",
+       "d": "symmetric, шифровать симметрично по парольной фразе."
+      },
+      {
+       "t": "backup.tar.gz",
+       "k": "path",
+       "d": "Что зашифровать. Исходный файл остаётся, удалите его сами."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "gpg --batch --pinentry-mode loopback --passphrase-file pass.txt -d notes.txt.gpg",
+     "d": "Расшифровать файл в скрипте, фраза читается из файла. Текст выводится на экран.",
+     "parts": [
+      {
+       "t": "gpg",
+       "k": "cmd",
+       "d": "GnuPG."
+      },
+      {
+       "t": "--batch",
+       "k": "opt",
+       "d": "Пакетный режим, ничего не спрашивать."
+      },
+      {
+       "t": "--pinentry-mode",
+       "k": "opt",
+       "d": "Как запрашивать фразу."
+      },
+      {
+       "t": "loopback",
+       "k": "val",
+       "d": "Не открывать окно ввода, брать фразу у вызывающей программы."
+      },
+      {
+       "t": "--passphrase-file",
+       "k": "opt",
+       "d": "Прочитать фразу из первой строки файла."
+      },
+      {
+       "t": "pass.txt",
+       "k": "path",
+       "d": "Файл с фразой. Держите его с правами 600."
+      },
+      {
+       "t": "-d",
+       "k": "opt",
+       "d": "decrypt, расшифровать и вывести на экран, или в файл через -o."
+      },
+      {
+       "t": "notes.txt.gpg",
+       "k": "path",
+       "d": "Зашифрованный файл."
+      }
+     ],
+     "run": "container",
+     "setup": "printf 'db_password=Secr3t\\n' > notes.txt; echo 'Str0ng-Passphrase' > pass.txt; gpg --batch --pinentry-mode loopback --passphrase-file pass.txt -c notes.txt; rm notes.txt",
+     "output": "gpg: AES256.CFB encrypted data\ngpg: encrypted with 1 passphrase\ndb_password=Secr3t"
+    },
+    {
+     "line": "gpg --verify app.tar.gz.sig app.tar.gz",
+     "d": "Проверить отдельную подпись архива. Good signature значит, что файл не менялся после подписи.",
+     "parts": [
+      {
+       "t": "gpg",
+       "k": "cmd",
+       "d": "GnuPG."
+      },
+      {
+       "t": "--verify",
+       "k": "opt",
+       "d": "Проверить подпись, ничего не расшифровывая."
+      },
+      {
+       "t": "app.tar.gz.sig",
+       "k": "path",
+       "d": "Файл отдельной подписи."
+      },
+      {
+       "t": "app.tar.gz",
+       "k": "path",
+       "d": "Сам подписанный файл."
+      }
+     ],
+     "run": "container",
+     "setup": "gpg --batch --passphrase '' --quick-gen-key 'Lab Release <release@example.com>' default default never; echo 'release 1.0' > app.tar.gz; gpg --batch --detach-sign app.tar.gz",
+     "output": "gpg: Signature made Mon Oct 12 22:41:29 2026 +05\ngpg:                using EDDSA key 1074F6241FCD81AD44D2C5F6611A9311ED4ECBED\ngpg: checking the trustdb\ngpg: marginals needed: 3  completes needed: 1  trust model: pgp\ngpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u\ngpg: Good signature from \"Lab Release <release@example.com>\" [ultimate]"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Передают парольную фразу опцией <code>--passphrase</code> в командной строке. Её видно в <code>ps</code> и в истории bash. Если нужно без вопросов, используйте <code>--passphrase-file</code> с файлом, закрытым правами.</p>",
+    "<p>Видят <code>Good signature</code> и предупреждение, что ключ не заверен, и не сверяют отпечаток. Подпись верна только для того ключа, что у вас в связке. Отпечаток ключа сверяйте с опубликованным на сайте автора.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/gpg.1.html"
+   ]
+  },
+  {
+   "slug": "last-lastb",
+   "cmd": "last",
+   "text": "last и lastb: история входов и неудачные попытки",
+   "summary": "<p><code>last</code> читает файл <code>/var/log/wtmp</code> и показывает, кто, откуда и когда входил в систему и сколько длилась сессия. Последние входы идут сверху. Особый пользователь <code>reboot</code> отмечает каждую загрузку системы.</p><p><code>lastb</code> делает то же с файлом <code>/var/log/btmp</code>, где записаны неудачные попытки входа. Этот файл читает только root. Много записей с одного адреса значит перебор паролей, повод включить fail2ban и вход только по ключу.</p>",
+   "examples": [
+    {
+     "line": "last -n 10 -i",
+     "d": "Последние 10 входов, с IP-адресами вместо имён узлов.",
+     "parts": [
+      {
+       "t": "last",
+       "k": "cmd",
+       "d": "История входов из /var/log/wtmp."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "limit, сколько строк показать."
+      },
+      {
+       "t": "10",
+       "k": "num",
+       "d": "Десять последних записей."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "ip, показывать IP-адрес удалённого узла."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "last reboot",
+     "d": "Когда сервер перезагружался.",
+     "parts": [
+      {
+       "t": "last",
+       "k": "cmd",
+       "d": "История входов."
+      },
+      {
+       "t": "reboot",
+       "k": "arg",
+       "d": "Псевдопользователь, который входит при каждой загрузке системы."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    },
+    {
+     "line": "sudo lastb -n 20 -i",
+     "d": "Последние 20 неудачных попыток входа с адресами.",
+     "parts": [
+      {
+       "t": "sudo",
+       "k": "cmd",
+       "d": "/var/log/btmp читает только root."
+      },
+      {
+       "t": "lastb",
+       "k": "cmd",
+       "d": "Как last, но по неудачным попыткам из /var/log/btmp."
+      },
+      {
+       "t": "-n",
+       "k": "opt",
+       "d": "Сколько строк показать."
+      },
+      {
+       "t": "20",
+       "k": "num",
+       "d": "Двадцать записей."
+      },
+      {
+       "t": "-i",
+       "k": "opt",
+       "d": "Показывать IP-адреса."
+      }
+     ],
+     "run": "system",
+     "setup": "",
+     "output": ""
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Видят пустой вывод в контейнере и считают, что команда сломана. В контейнере никто не входит через login или sshd, поэтому wtmp пуст.</p>",
+    "<p>Ищут вход за прошлый месяц и не находят. wtmp и btmp ротируются, старые записи лежат в <code>/var/log/wtmp.1</code>, их читают через <code>last -f /var/log/wtmp.1</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/last.1.html",
+    "https://git.launchpad.net/ubuntu/+source/logrotate/tree/examples/wtmp?h=applied/ubuntu/noble"
+   ]
+  },
+  {
+   "slug": "openssl-rand",
+   "cmd": "openssl rand",
+   "text": "openssl rand: случайный пароль или ключ",
+   "summary": "<p><code>openssl rand</code> выдаёт заданное число случайных байт из криптографически стойкого генератора. Байты бывают непечатаемыми, поэтому их кодируют. <code>-base64</code> даёт короткую строку для пароля, <code>-hex</code> только цифры и буквы a-f, такую строку удобно вставлять в конфиги.</p><p>Число в конце это количество байт, а не символов. 24 байта в base64 дают 32 символа, 32 байта в hex дают 64 символа.</p>",
+   "examples": [
+    {
+     "line": "openssl rand -base64 24",
+     "d": "Случайный пароль из 32 символов.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Набор криптографических инструментов."
+      },
+      {
+       "t": "rand",
+       "k": "sub",
+       "d": "Сгенерировать случайные байты."
+      },
+      {
+       "t": "-base64",
+       "k": "opt",
+       "d": "Закодировать результат в base64, символы A-Z, a-z, 0-9, + и /."
+      },
+      {
+       "t": "24",
+       "k": "num",
+       "d": "Сколько случайных байт взять."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "bVzbb/n6DmHZDlV3GB+VyWJ8USlvnoPs"
+    },
+    {
+     "line": "openssl rand -hex 32",
+     "d": "Секретный ключ 256 бит в виде 64 шестнадцатеричных символов.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Криптографические инструменты."
+      },
+      {
+       "t": "rand",
+       "k": "sub",
+       "d": "Случайные байты."
+      },
+      {
+       "t": "-hex",
+       "k": "opt",
+       "d": "Вывести шестнадцатеричной строкой."
+      },
+      {
+       "t": "32",
+       "k": "num",
+       "d": "32 байта, то есть 256 бит."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "b55e31623c28455c473b92615c0f689c0bbc86d0a1988a7b6e91d6c29aa94a2b"
+    },
+    {
+     "line": "openssl rand -out /lab/secret.key 32 && ls -l /lab/secret.key",
+     "d": "Записать 32 случайных байта в файл ключа и проверить его размер.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Криптографические инструменты."
+      },
+      {
+       "t": "rand",
+       "k": "sub",
+       "d": "Случайные байты."
+      },
+      {
+       "t": "-out",
+       "k": "opt",
+       "d": "Записать в файл, а не на экран."
+      },
+      {
+       "t": "/lab/secret.key",
+       "k": "path",
+       "d": "Файл ключа."
+      },
+      {
+       "t": "32",
+       "k": "num",
+       "d": "Число байт, размер файла будет 32."
+      },
+      {
+       "t": "&&",
+       "k": "op",
+       "d": "ls выполнится, только если файл создан.",
+       "ref": "sym-and"
+      },
+      {
+       "t": "ls",
+       "k": "cmd",
+       "d": "Показать файл."
+      },
+      {
+       "t": "-l",
+       "k": "opt",
+       "d": "Длинный формат с правами и размером."
+      },
+      {
+       "t": "/lab/secret.key",
+       "k": "path",
+       "d": "Тот же файл."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "-rw-r--r-- 1 root root 32 Oct 12 22:41 /lab/secret.key"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Оставляют файл ключа с правами по умолчанию, и его читают все. После создания выполните <code>chmod 600</code>.</p>",
+    "<p>Вставляют пароль из base64 в URL или строку подключения, а там <code>/</code> и <code>+</code> ломают разбор. Для таких мест берите <code>-hex</code>.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/openssl-rand.1ssl.html"
+   ]
+  },
+  {
+   "slug": "openssl-x509-dates",
+   "cmd": "openssl x509",
+   "text": "openssl x509 -dates: когда истекает сертификат",
+   "summary": "<p><code>openssl x509</code> читает сертификат в формате PEM и печатает нужные поля. <code>-dates</code> показывает начало (notBefore) и конец (notAfter) срока действия, <code>-subject</code> и <code>-issuer</code> показывают, кому и кем выдан сертификат. <code>-noout</code> убирает из вывода сам сертификат.</p><p>Для мониторинга удобна <code>-checkend</code>. Она проверяет, истечёт ли сертификат за указанное число секунд, и отвечает кодом возврата. Такую проверку ставят в cron, чтобы узнать о конце срока заранее.</p>",
+   "examples": [
+    {
+     "line": "openssl x509 -in cert.pem -noout -subject -dates",
+     "d": "Показать владельца и срок действия сертификата.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Криптографические инструменты."
+      },
+      {
+       "t": "x509",
+       "k": "sub",
+       "d": "Работа с сертификатами X.509."
+      },
+      {
+       "t": "-in",
+       "k": "opt",
+       "d": "Откуда читать сертификат."
+      },
+      {
+       "t": "cert.pem",
+       "k": "path",
+       "d": "Файл сертификата."
+      },
+      {
+       "t": "-noout",
+       "k": "opt",
+       "d": "Не печатать сам сертификат, только запрошенные поля."
+      },
+      {
+       "t": "-subject",
+       "k": "opt",
+       "d": "Кому выдан."
+      },
+      {
+       "t": "-dates",
+       "k": "opt",
+       "d": "Начало и конец срока действия."
+      }
+     ],
+     "run": "container",
+     "setup": "openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 20 -subj /CN=lab.example.com",
+     "output": "subject=CN = lab.example.com\nnotBefore=Oct 12 17:41:30 2026 GMT\nnotAfter=Nov  1 17:41:30 2026 GMT"
+    },
+    {
+     "line": "openssl x509 -in cert.pem -noout -checkend 2592000",
+     "d": "Проверить, истечёт ли сертификат в ближайшие 30 дней. Код 1 значит истечёт.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Криптографические инструменты."
+      },
+      {
+       "t": "x509",
+       "k": "sub",
+       "d": "Сертификаты X.509."
+      },
+      {
+       "t": "-in",
+       "k": "opt",
+       "d": "Файл сертификата."
+      },
+      {
+       "t": "cert.pem",
+       "k": "path",
+       "d": "Сертификат на 20 дней."
+      },
+      {
+       "t": "-noout",
+       "k": "opt",
+       "d": "Не печатать сертификат."
+      },
+      {
+       "t": "-checkend",
+       "k": "opt",
+       "d": "Истечёт ли сертификат в ближайшие N секунд. Да, код 1, нет, код 0."
+      },
+      {
+       "t": "2592000",
+       "k": "num",
+       "d": "30 дней в секундах, 30 * 86400."
+      }
+     ],
+     "run": "container",
+     "setup": "openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 20 -subj /CN=lab.example.com",
+     "output": "Certificate will expire"
+    },
+    {
+     "line": "openssl x509 -in /etc/ssl/certs/ISRG_Root_X1.pem -noout -issuer -enddate",
+     "d": "Посмотреть издателя и дату окончания корневого сертификата из системного хранилища.",
+     "parts": [
+      {
+       "t": "openssl",
+       "k": "cmd",
+       "d": "Криптографические инструменты."
+      },
+      {
+       "t": "x509",
+       "k": "sub",
+       "d": "Сертификаты X.509."
+      },
+      {
+       "t": "-in",
+       "k": "opt",
+       "d": "Файл сертификата."
+      },
+      {
+       "t": "/etc/ssl/certs/ISRG_Root_X1.pem",
+       "k": "path",
+       "d": "Корневой сертификат Let's Encrypt из пакета ca-certificates."
+      },
+      {
+       "t": "-noout",
+       "k": "opt",
+       "d": "Не печатать сертификат."
+      },
+      {
+       "t": "-issuer",
+       "k": "opt",
+       "d": "Кем выдан. У корневого издатель совпадает с владельцем."
+      },
+      {
+       "t": "-enddate",
+       "k": "opt",
+       "d": "Только дата окончания, notAfter."
+      }
+     ],
+     "run": "container",
+     "setup": "",
+     "output": "issuer=C = US, O = Internet Security Research Group, CN = ISRG Root X1\nnotAfter=Jun  4 11:04:38 2035 GMT"
+    }
+   ],
+   "script": null,
+   "mistakes": [
+    "<p>Проверяют файл с закрытым ключом вместо сертификата и получают ошибку чтения. Сертификат начинается со строки <code>BEGIN CERTIFICATE</code>.</p>",
+    "<p>Проверяют только свой сертификат, а цепочка содержит промежуточный, у которого срок меньше. В файле fullchain.pem openssl x509 читает только первый сертификат.</p>"
+   ],
+   "sources": [
+    "https://manpages.ubuntu.com/manpages/noble/man1/openssl-x509.1ssl.html"
+   ]
+  }
+ ]
+}
