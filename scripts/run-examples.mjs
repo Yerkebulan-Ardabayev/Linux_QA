@@ -10,7 +10,8 @@
  * Результат пишется обратно в content/NN-*.json, отчёт в _reports/run.md:
  * какие примеры завершились с ошибкой или ничего не вывели, их надо глянуть.
  *
- * Запуск: node scripts/run-examples.mjs [--only NN] [--jobs 6]
+ * Запуск: node scripts/run-examples.mjs [--only NN] [--slugs a,b] [--jobs 6]
+ * --slugs запускает только перечисленные карточки, вывод остальных не трогает.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,6 +24,7 @@ const REPORT = path.join(ROOT, '_reports/run.md');
 const arg = (name, dflt) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : dflt);
 const ONLY = arg('--only', null);
 const JOBS = Number(arg('--jobs', 6));
+const SLUGS = arg('--slugs', null) ? new Set(arg('--slugs', '').split(',')) : null;
 const IMAGE = 'linuxqa-lab';
 const TIMEOUT_S = 25;
 const MAX_LINES = 40;
@@ -102,6 +104,7 @@ const sections = files.map((f) => ({ file: f, data: JSON.parse(fs.readFileSync(p
 const jobs = [];
 for (const s of sections) {
   for (const c of s.data.cards) {
+    if (SLUGS && !SLUGS.has(c.slug)) continue;
     c.examples?.forEach((e, i) => {
       if (e.run === 'container') jobs.push({ where: `${s.file} ${c.slug} пример ${i + 1}`, target: e, setup: e.setup, line: e.line });
       else e.output = '';

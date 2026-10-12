@@ -64,6 +64,13 @@ const CardView = ({ card, onBack, onHome, onPrev, onNext, onOpenRef }: CardViewP
         dangerouslySetInnerHTML={{ __html: card.summary }}
       />
 
+      {card.diagram && (
+        <figure className="mb-8 rounded-lg border border-border overflow-hidden">
+          <figcaption className="px-3 py-1.5 text-[11px] text-muted-foreground bg-muted/50 border-b border-border">Схема</figcaption>
+          <pre className="bg-muted/20 text-secondary-foreground font-mono text-[13px] leading-5 px-4 py-3 overflow-x-auto">{card.diagram}</pre>
+        </figure>
+      )}
+
       {kinds.length > 0 && (
         <div className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs">
           <span className="text-muted-foreground">Цвета частей</span>

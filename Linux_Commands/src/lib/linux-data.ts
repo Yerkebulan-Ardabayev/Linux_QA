@@ -53,6 +53,8 @@ export interface Card {
   cmd: string;
   text: string;
   summary: string;
+  /** Схема из псевдографики, моноширинным шрифтом. Необязательна. */
+  diagram?: string;
   examples: Example[];
   script: Script | null;
   mistakes: string[];

@@ -99,6 +99,9 @@ for (const file of files) {
     if (!c.cmd?.trim()) errors.push(`${where}: пустой cmd`);
     if (!c.text?.trim()) errors.push(`${where}: пустой text`);
     if (!c.summary?.trim()) errors.push(`${where}: пустой summary`);
+    if (c.diagram !== undefined && (typeof c.diagram !== 'string' || !c.diagram.trim()))
+      errors.push(`${where}: diagram, если есть, должен быть непустой строкой`);
+    if (c.diagram?.split('\n').some((l) => l.length > 72)) errors.push(`${where}: строка diagram длиннее 72 символов`);
     if (!Array.isArray(c.sources) || c.sources.length === 0) errors.push(`${where}: нет sources`);
     for (const s of c.sources ?? []) if (!/^https:\/\//.test(s)) errors.push(`${where}: источник не https «${s}»`);
     const examples = c.examples ?? [];
@@ -131,6 +134,7 @@ for (const file of files) {
       cmd: c.cmd,
       text: c.text,
       summary: c.summary,
+      ...(c.diagram ? { diagram: c.diagram } : {}),
       examples,
       script: c.script ?? null,
       mistakes: c.mistakes ?? [],
