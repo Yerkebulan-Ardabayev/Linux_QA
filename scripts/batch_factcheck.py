@@ -7,7 +7,7 @@
 
 Команды:
   build                      собрать запросы и оценку цены, без сети
-  submit [--limit N]         отправить батч (N первых ещё не отправленных)
+  submit [--limit N]         отправить пачку до 50 запросов, только когда прошлая закончилась
   submit --only a,b          отправить эти slug (повтор или пилот)
   status                     состояние отправленных батчей
   collect                    забрать результаты, написать отчёт
@@ -40,6 +40,9 @@ REQUESTS = WORK / "requests.jsonl"
 RESULTS = WORK / "results.jsonl"
 REPORT = WORK / "report.md"
 KEY_FILE = Path.home() / ".config" / "anthropic-batch.key"
+# Пачка не больше 50 запросов и следующая только после завершения прошлой:
+# 10.10.2026 батч из 257 запросов дал 510 ударов в лимит запросов организации.
+CHUNK = 50
 
 MODEL = "claude-opus-5-5"
 MAX_TOKENS = 16000
@@ -220,8 +223,20 @@ def client():
     return anthropic.Anthropic(api_key=KEY_FILE.read_text().strip())
 
 
+def unfinished(m: dict) -> list[str]:
+    """Батчи из манифеста, которые Anthropic ещё обрабатывает."""
+    if not m["batches"]:
+        return []
+    c = client()
+    return [b["id"] for b in m["batches"]
+            if c.messages.batches.retrieve(b["id"]).processing_status != "ended"]
+
+
 def cmd_submit(a: argparse.Namespace) -> None:
     m = load_manifest()
+    busy = unfinished(m)
+    if busy:
+        sys.exit(f"Прошлый батч ещё идёт ({', '.join(busy)}). Дождитесь status: ended, потом submit.")
     done = set(m["submitted"])
     rows = [json.loads(l) for l in REQUESTS.read_text(encoding="utf-8").splitlines()]
     if a.only:
@@ -231,10 +246,14 @@ def cmd_submit(a: argparse.Namespace) -> None:
         if missing:
             sys.exit(f"Нет таких slug: {sorted(missing)}")
     else:
-        todo = [r for r in rows if r["custom_id"] not in done][: a.limit or None]
+        if not 0 < a.limit <= CHUNK:
+            sys.exit(f"--limit от 1 до {CHUNK}")
+        todo = [r for r in rows if r["custom_id"] not in done][: a.limit]
     if not todo:
         print("Все запросы уже отправлены.")
         return
+    if len(todo) > CHUNK:
+        sys.exit(f"В пачке {len(todo)} запросов, больше {CHUNK}. Разбейте --only на части.")
     batch = client().messages.batches.create(requests=todo)
     m["batches"].append({"id": batch.id, "count": len(todo)})
     m["submitted"] += [r["custom_id"] for r in todo if r["custom_id"] not in done]
@@ -354,7 +373,7 @@ def main() -> None:
     b.add_argument("--inline", action="store_true", help="вложить тексты источников из пакетов noble")
     b.set_defaults(fn=cmd_build)
     s = sub.add_parser("submit")
-    s.add_argument("--limit", type=int, default=0)
+    s.add_argument("--limit", type=int, default=CHUNK, help=f"сколько запросов в пачке, не больше {CHUNK}")
     s.add_argument("--only", help="отправить эти slug через запятую")
     s.set_defaults(fn=cmd_submit)
     sub.add_parser("status").set_defaults(fn=cmd_status)
