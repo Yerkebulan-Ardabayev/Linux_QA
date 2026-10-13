@@ -3338,7 +3338,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/ufw.8.html",
-    "https://documentation.ubuntu.com/server/how-to/security/firewalls/"
+    "https://ubuntu.com/server/docs/how-to/security/firewalls/"
    ]
   },
   {
@@ -3556,7 +3556,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/ufw.8.html",
-    "https://documentation.ubuntu.com/server/how-to/security/firewalls/"
+    "https://ubuntu.com/server/docs/how-to/security/firewalls/"
    ]
   },
   {
@@ -4359,7 +4359,7 @@
     "https://netplan.readthedocs.io/en/stable/netplan-yaml/",
     "https://netplan.readthedocs.io/en/stable/netplan-try/",
     "https://netplan.readthedocs.io/en/stable/netplan-apply/",
-    "https://documentation.ubuntu.com/server/explanation/networking/configuring-networks/"
+    "https://ubuntu.com/server/docs/explanation/networking/configuring-networks/"
    ]
   },
   {

@@ -83,7 +83,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
-    "https://documentation.ubuntu.com/server/how-to/software/package-management/"
+    "https://ubuntu.com/server/docs/how-to/software/package-management/"
    ]
   },
   {
@@ -199,7 +199,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/apt-get.8.html",
-    "https://documentation.ubuntu.com/server/how-to/software/package-management/"
+    "https://ubuntu.com/server/docs/how-to/software/package-management/"
    ]
   },
   {
@@ -319,7 +319,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/apt-get.8.html",
-    "https://documentation.ubuntu.com/server/tutorial/managing-software/"
+    "https://ubuntu.com/server/docs/tutorial/managing-software/"
    ]
   },
   {
@@ -448,7 +448,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/apt-get.8.html",
-    "https://documentation.ubuntu.com/server/tutorial/managing-software/"
+    "https://ubuntu.com/server/docs/tutorial/managing-software/"
    ]
   },
   {
@@ -566,7 +566,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/apt-cache.8.html",
-    "https://documentation.ubuntu.com/server/tutorial/managing-software/"
+    "https://ubuntu.com/server/docs/tutorial/managing-software/"
    ]
   },
   {
@@ -838,7 +838,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man1/dpkg.1.html",
     "https://manpages.ubuntu.com/manpages/noble/man1/dpkg-query.1.html",
-    "https://documentation.ubuntu.com/server/how-to/software/package-management/"
+    "https://ubuntu.com/server/docs/how-to/software/package-management/"
    ]
   },
   {
@@ -1286,9 +1286,9 @@
     "<p>Называть файл источника произвольно. По man sources.list имя должно оканчиваться на <code>.sources</code> или <code>.list</code> и содержать только латинские буквы, цифры, подчёркивание, дефис и точку, иначе файл игнорируется.</p>"
    ],
    "sources": [
-    "https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/",
+    "https://ubuntu.com/server/docs/explanation/software/third-party-repository-usage/",
     "https://manpages.ubuntu.com/manpages/noble/man5/sources.list.5.html",
-    "https://documentation.ubuntu.com/server/how-to/software/package-management/",
+    "https://ubuntu.com/server/docs/how-to/software/package-management/",
     "https://curl.se/docs/manpage.html"
    ]
   }

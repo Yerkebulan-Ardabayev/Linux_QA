@@ -123,7 +123,7 @@ docker run --rm linuxqa-lab bash -c 'cd /lab; <setup>; <line>'
 - Bash, `https://www.gnu.org/software/bash/manual/bash.html` с якорем раздела, например `#Pipelines`, `#Redirections`, `#Shell-Parameter-Expansion`.
 - GNU Coreutils, `https://www.gnu.org/software/coreutils/manual/html_node/<page>.html`.
 - GNU grep, sed, gawk, tar, findutils manuals на gnu.org.
-- Ubuntu Server docs `https://documentation.ubuntu.com/server/...`, systemd `https://www.freedesktop.org/software/systemd/man/latest/<unit>.html`, OpenSSH `https://man.openbsd.org/<cmd>`.
+- Ubuntu Server docs `https://ubuntu.com/server/docs/...` (старый адрес documentation.ubuntu.com перенаправляет сюда), systemd `https://www.freedesktop.org/software/systemd/man/latest/<unit>.html`, OpenSSH `https://man.openbsd.org/<cmd>`.
 
 Объяснение каждой опции должно совпадать с man-страницей. Опции, которой нет в man, нет в карточке. Ссылку ставить только ту, в существовании которой уверен.
 
