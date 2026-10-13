@@ -277,7 +277,7 @@
    "sources": [
     "https://man.openbsd.org/sshd",
     "https://man.openbsd.org/sshd_config",
-    "https://documentation.ubuntu.com/server/how-to/security/openssh-server/",
+    "https://ubuntu.com/server/docs/how-to/security/openssh-server/",
     "https://raw.githubusercontent.com/canonical/cloud-init/main/cloudinit/ssh_util.py"
    ]
   },
@@ -764,7 +764,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/unattended-upgrade.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/dpkg-reconfigure.8.html",
-    "https://documentation.ubuntu.com/server/how-to/software/automatic-updates/"
+    "https://ubuntu.com/server/docs/how-to/software/automatic-updates/"
    ]
   },
   {
@@ -900,7 +900,7 @@
    ],
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/aa-status.8.html",
-    "https://documentation.ubuntu.com/server/how-to/security/apparmor/"
+    "https://ubuntu.com/server/docs/how-to/security/apparmor/"
    ]
   },
   {
@@ -996,7 +996,7 @@
    "sources": [
     "https://manpages.ubuntu.com/manpages/noble/man8/aa-complain.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/aa-enforce.8.html",
-    "https://documentation.ubuntu.com/server/how-to/security/apparmor/",
+    "https://ubuntu.com/server/docs/how-to/security/apparmor/",
     "https://gitlab.com/apparmor/apparmor/-/wikis/AppArmor_Failures"
    ]
   },

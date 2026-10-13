@@ -2201,7 +2201,7 @@
     "https://manpages.ubuntu.com/manpages/noble/man8/pvcreate.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/vgcreate.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/lvcreate.8.html",
-    "https://documentation.ubuntu.com/server/how-to/storage/manage-logical-volumes/"
+    "https://ubuntu.com/server/docs/how-to/storage/manage-logical-volumes/"
    ]
   },
   {
@@ -2374,7 +2374,7 @@
     "https://manpages.ubuntu.com/manpages/noble/man8/lvextend.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/resize2fs.8.html",
     "https://manpages.ubuntu.com/manpages/noble/man8/vgs.8.html",
-    "https://documentation.ubuntu.com/server/how-to/storage/manage-logical-volumes/"
+    "https://ubuntu.com/server/docs/how-to/storage/manage-logical-volumes/"
    ]
   },
   {

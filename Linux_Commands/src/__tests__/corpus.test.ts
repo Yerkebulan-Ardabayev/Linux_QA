@@ -53,8 +53,8 @@ function walk(parts: Part[] | undefined, fn: (p: Part) => void) {
 }
 
 describe('целостность корпуса', () => {
-  it('карточки есть и разложены по 18 разделам', () => {
-    expect(data.categories.length).toBe(18);
+  it('карточки есть и разложены по 20 разделам', () => {
+    expect(data.categories.length).toBe(20);
     expect(data.cards.length).toBeGreaterThanOrEqual(250);
   });
 
